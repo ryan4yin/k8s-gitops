@@ -66,8 +66,7 @@ flux --help
 
 ## TODO
 
-- [ ] Add victoriametrics, grafana, certificates, longhorn, kubevirt, etc.
-   - Old config: [ryan4yin/nix-config/pulumi](https://github.com/ryan4yin/nix-config/tree/b7845ef85ede902691fae8fdd21d6d2e8e1516f4/pulumi)
+- [ ] Add longhorn, etc.
 - [ ] Add alert-manager config for fluxcd itself.
 - [ ] Web UI for monitoring fluxcd and cluster's status.
 
