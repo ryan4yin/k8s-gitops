@@ -4,5 +4,5 @@ kind: Kustomization
 resources:
   # deploy monitoring stack first
   - ../../base/victoria-metrics/
-  # deploy kong gateway
+  - ../../base/cert-manager/
   - ../../base/kong-gateway/

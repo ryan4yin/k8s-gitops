@@ -4,8 +4,10 @@ Repository for my personal kubernetes clusters.
 
 ## Prerequisites
 
+All my Kubernetes Clusters are deployed via [ryan4yin/nix-config/hosts/k8s](https://github.com/ryan4yin/nix-config/tree/main/hosts/k8s).
+
 ```bash
-nix shell nixpkgs#fluxcd nixpkgs#nushell
+nix shell nixpkgs#fluxcd
 ```
 
 ## Bootstrap
@@ -80,6 +82,11 @@ This is a known issue, most likely because the URL path is miswritten, it needs 
 A known issue too, the v prefix in oci image tags is not supported by Helm nor Flux, see [flux2/issues/3766](https://github.com/fluxcd/flux2/issues/3766) for details.
 
 To fix the issue, you have to rename the tag to remove the v prefix.
+
+### Will Flux2 Overwrite My Existing Resources?
+
+No, flux2 will refuse to deploy if there are existing resources with the same name in the cluster.
+To get flux2 to overwrite the existing resources, you need to delete the existing resources first.
 
 ## References
 

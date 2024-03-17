@@ -2,9 +2,14 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: kong
+  name: monitoring
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: monitoring
+  name: cert-manager
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kong
