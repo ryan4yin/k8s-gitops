@@ -14,7 +14,7 @@ Steps to bootstrap a new cluster:
 
 1. Add a new folder in `clusters/` with the name of the cluster.
 1. Add the bootstrap configs into the new folder.
-1. Run the bootstrap script(via `ssh-agent`):
+1. Run the bootstrap script(via `ssh-agent`) to bootstrap or update the cluster:
    ```bash
    flux bootstrap git \
    --components-extra image-reflector-controller,image-automation-controller \
@@ -35,8 +35,6 @@ Add your configs into those directories, fluxcd will take care of the rest:
 ├── clusters         # cluster-wide configs
 │   └── k3s-prod-1   # cluster name
 ├── infra            # cluster-wide infra files(monitoring, networking, certificates, etc.)
-├── mock             # mock files for testing
-└── scripts          # useful scripts
 ```
 
 CLI usage:
