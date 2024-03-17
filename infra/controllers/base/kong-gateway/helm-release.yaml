@@ -1,0 +1,32 @@
+# https://fluxcd.io/flux/components/helm/helmreleases/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: kong
+  namespace: kong
+spec:
+  install:
+    crds: CreateReplace
+    replace: true
+  # https://github.com/kong/kubernetes-ingress-controller
+  releaseName: kong-ingress-controller
+  interval: 30m
+  chart:
+    spec:
+      chart: ingress
+      sourceRef:
+        kind: HelmRepository
+        name: kong
+        namespace: flux-system
+      interval: 12h
+  values:
+    gatewayDiscovery:
+      generateAdminApiService: true
+    ingressController:
+      env:
+        # https://docs.konghq.com/kubernetes-ingress-controller/3.1.x/reference/feature-gates/
+        feature_gates: FillIDs=true,RewriteURIs=true
+    gateway:
+      serviceMonitor:
+        enabled: false

@@ -12,8 +12,3 @@ metadata:
   name: prod
   labels:
     eventing.knative.dev/injection: enabled
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: external

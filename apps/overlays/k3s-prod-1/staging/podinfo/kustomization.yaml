@@ -7,4 +7,4 @@ commonLabels:
   app.kubernetes.io/version: latest
 resources:
   - ../../../../base/podinfo/
-  # - ./httproute.yaml
+  - ./httproute.yaml

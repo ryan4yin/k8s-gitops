@@ -69,6 +69,23 @@ flux --help
 - [ ] Add alert-manager config for fluxcd itself.
 - [ ] Web UI for monitoring fluxcd and cluster's status.
 
+## FAQ
+
+### 401: unauthorized - Helm charts fetched from an OCI Registry
+
+This is a known issue, most likely because the URL path is miswritten, it needs to separate the prefix part of the OCI URL from the image name.
+
+### unable to locate any tags in provided repository: oci://xxx
+
+A known issue too, the v prefix in oci image tags is not supported by Helm nor Flux, see [flux2/issues/3766](https://github.com/fluxcd/flux2/issues/3766) for details.
+
+To fix the issue, you have to rename the tag to remove the v prefix.
+
+## References
+
+- [Kustomize Tutorial: Comprehensive Guide For Beginners](https://devopscube.com/kustomize-tutorial/): A comprehensive guide for beginners to understand and use Kustomize for Kubernetes deployments, but it do not cover all the features of Kustomize.
+- [Kustomize Official Examples](https://github.com/kubernetes-sigs/kustomize/blob/master/examples/README.md)
+
 
 ## LICENSE
 
