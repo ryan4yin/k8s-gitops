@@ -87,6 +87,17 @@ To fix the issue, you have to rename the tag to remove the v prefix.
 No, flux2 will refuse to deploy if there are existing resources with the same name in the cluster.
 To get flux2 to overwrite the existing resources, you need to delete the existing resources first.
 
+### Namespace stuck in `Terminating` status
+
+```
+  NamespaceDeletionDiscoveryFailure            True    Tue, 19 Mar 2024 01:12:15 +0800  DiscoveryFailed         Discovery failed for some groups, 2 failing: unable t
+o retrieve the complete list of server APIs: subresources.kubevirt.io/v1: stale GroupVersion discovery: subresources.kubevirt.io/v1, subresources.kubevirt.io/v1alpha
+3: stale GroupVersion discovery: subresources.kubevirt.io/v1alpha3
+```
+
+Seems related to <https://github.com/kubevirt/kubevirt/issues/9725>
+
+
 ## References
 
 - [Kustomize Tutorial: Comprehensive Guide For Beginners](https://devopscube.com/kustomize-tutorial/): A comprehensive guide for beginners to understand and use Kustomize for Kubernetes deployments, but it do not cover all the features of Kustomize.
