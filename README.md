@@ -89,13 +89,36 @@ To get flux2 to overwrite the existing resources, you need to delete the existin
 
 ### Namespace stuck in `Terminating` status
 
+Problem 1:
+
 ```
-  NamespaceDeletionDiscoveryFailure            True    Tue, 19 Mar 2024 01:12:15 +0800  DiscoveryFailed         Discovery failed for some groups, 2 failing: unable t
+kubectl describe ns cert-managear
+
+  aNamespaceDeletionDiscoveryFailure            True    Tue, 19 Mar 2024 01:12:15 +0800  DiscoveryFailed         Discovery failed for some groups, 2 failing: unable t
 o retrieve the complete list of server APIs: subresources.kubevirt.io/v1: stale GroupVersion discovery: subresources.kubevirt.io/v1, subresources.kubevirt.io/v1alpha
 3: stale GroupVersion discovery: subresources.kubevirt.io/v1alpha3
 ```
 
 Seems related to <https://github.com/kubevirt/kubevirt/issues/9725>
+
+Problem 2:
+
+```
+kubectl describe ns monitoring
+
+...
+
+  NamespaceContentRemaining                    True    Tue, 19 Mar 2024 01:12:11 +0800  SomeResourcesRemain   Some resources are remaining: configmaps. has 3 resourc
+e instances, deployments.apps has 3 resource instances, persistentvolumeclaims. has 1 resource instances, secrets. has 4 resource instances, serviceaccounts. has 4 r
+esource instances, services. has 4 resource instances, statefulsets.apps has 1 resource instances, vmagents.operator.victoriametrics.com has 1 resource instances, vm
+alertmanagers.operator.victoriametrics.com has 1 resource instances, vmalerts.operator.victoriametrics.com has 1 resource instances, vmsingles.operator.victoriametri
+cs.com has 1 resource instances
+  NamespaceFinalizersRemaining                 True    Tue, 19 Mar 2024 01:12:11 +0800  SomeFinalizersRemain  Some content in the namespace has finalizers remaining:
+ apps.victoriametrics.com/finalizer in 24 resource instances
+```
+
+So it seems I have to deleete all the statefulsets, pv, crds, configmaps and secrets manually,
+and then Kubernetes will confirm all the finalizers are finished and delete the namespace completely.
 
 
 ## References
