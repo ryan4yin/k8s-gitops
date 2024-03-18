@@ -7,3 +7,4 @@ resources:
   - ../../base/cert-manager/
   - ../../base/kong-gateway/
   - ../../base/kubevirt/
+  - ../../base/longhorn/
