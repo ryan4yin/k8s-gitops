@@ -89,7 +89,26 @@ To get flux2 to overwrite the existing resources, you need to delete the existin
 
 ### Namespace stuck in `Terminating` status
 
-Problem 1:
+> https://kubernetes.io/blog/2021/05/14/using-finalizers-to-control-deletion/
+
+Deleting objects in Kubernetes can be challenging. 
+You may think you’ve deleted something, only to find it still persists. 
+
+The simplest way to resolve this is to delete the finalizer from the object:
+
+```bash
+kubectl patch ns <namespace-to-delete> \
+    --type json \
+    --patch='[{"op": "remove", "path": "/metadata/finalizers"}]'
+```
+
+But the command above will ignore the finalizers and delete the namespace directly, which:
+
+1. may cause some resources to be left behind.
+2. will delete all the data you may want to keep, such as pv, secrets, crds, configmap, etc.
+
+
+#### 1. Problem 1
 
 ```
 kubectl describe ns cert-managear
@@ -101,7 +120,7 @@ o retrieve the complete list of server APIs: subresources.kubevirt.io/v1: stale 
 
 Seems related to <https://github.com/kubevirt/kubevirt/issues/9725>
 
-Problem 2:
+#### 2. Problem 2
 
 ```
 kubectl describe ns monitoring
