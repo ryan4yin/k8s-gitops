@@ -1,0 +1,10 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: bitnamicharts
+  namespace: cluster-network-addons
+spec:
+  type: oci
+  interval: 30m0s
+  url: oci://registry-1.docker.io/bitnamicharts

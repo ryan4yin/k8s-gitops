@@ -1,0 +1,22 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: multus-cni
+  namespace: cluster-network-addons
+spec:
+  chart:
+    spec:
+      chart: multus-cni
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: bitnamicharts
+      version: 2.0.*
+  # https://artifacthub.io/packages/helm/bitnami/multus-cni
+  values:
+    CNIVersion: 1.0.0
+    # Change to `/opt/cni/bin` for non k3s
+    hostCNIBinDir: /var/lib/rancher/k3s/data/current/bin
+    # Change to `/etc/cni/net.d` for non k3s
+    hostCNINetDir: /var/lib/rancher/k3s/agent/etc/cni/net.d

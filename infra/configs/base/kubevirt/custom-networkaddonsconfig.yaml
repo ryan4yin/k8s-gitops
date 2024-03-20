@@ -3,5 +3,8 @@ kind: NetworkAddonsConfig
 metadata:
   name: cluster
 spec:
-  multus: {} # multi-network plugin
   ovs: {} # openvswitch cni plugin
+  # multus-cni is required by ovs cni plugin.
+  # We need to customize some parameters of multus-cni,
+  # so, install it via helm chart bitnami/multus-cni instead
+  # multus: {}
