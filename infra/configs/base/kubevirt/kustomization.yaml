@@ -5,18 +5,18 @@ resources:
   # ========================================
   # Install KubeVirt
   # https://github.com/kubevirt/kubevirt/releases
+  # https://github.com/kubevirt/kubevirt/releases/download/v1.2.0/kubevirt-cr.yaml
   # ========================================
-  - https://github.com/kubevirt/kubevirt/releases/download/v1.2.0/kubevirt-operator.yaml
+  - ./custom-kubevirt-cr.yaml
+
   # ========================================
   # Install CDI(Containerized Data Importer)
   # https://github.com/kubevirt/containerized-data-importer
   # ========================================
-  - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.58.1/cdi-operator.yaml
+  - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.58.1/cdi-cr.yaml
 
   # ========================================
   # Install Cluster Network Addons Operator
   # https://github.com/kubevirt/cluster-network-addons-operator/tree/main?tab=readme-ov-file#deployment
   # ========================================
-  - https://github.com/kubevirt/cluster-network-addons-operator/releases/download/v0.91.0/namespace.yaml
-  - https://github.com/kubevirt/cluster-network-addons-operator/releases/download/v0.91.0/network-addons-config.crd.yaml
-  - https://github.com/kubevirt/cluster-network-addons-operator/releases/download/v0.91.0/operator.yaml
+  - ./custom-networkaddonsconfig.yaml

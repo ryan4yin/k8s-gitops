@@ -97,7 +97,7 @@ You may think you’ve deleted something, only to find it still persists.
 The simplest way to resolve this is to delete the finalizer from the object:
 
 ```bash
-kubectl patch ns <namespace-to-delete> \
+kubectl patch ns cert-manager \
     --type json \
     --patch='[{"op": "remove", "path": "/metadata/finalizers"}]'
 ```
