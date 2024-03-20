@@ -3,8 +3,6 @@ apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
   name: ovs-net
-  annotations:
-    k8s.v1.cni.cncf.io/resourceName: ovs-cni.network.kubevirt.io/ovsbr1
 spec:
   config: '{
       "cniVersion": "1.0.0",
