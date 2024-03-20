@@ -20,3 +20,8 @@ resources:
   # https://github.com/kubevirt/cluster-network-addons-operator/tree/main?tab=readme-ov-file#deployment
   # ========================================
   - ./custom-networkaddonsconfig.yaml
+
+  # ========================================
+  # Network CRs
+  # ========================================
+  - ./ovs-net.yaml
