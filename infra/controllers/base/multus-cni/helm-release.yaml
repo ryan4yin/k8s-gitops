@@ -13,6 +13,7 @@ spec:
         kind: HelmRepository
         name: bitnamicharts
       version: 2.0.*
+  interval: 12h
   # https://artifacthub.io/packages/helm/bitnami/multus-cni
   values:
     CNIVersion: 1.0.0
