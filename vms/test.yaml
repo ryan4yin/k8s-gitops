@@ -26,10 +26,16 @@ spec:
           - disk:
               bus: virtio
             name: cloudinitdisk
+          interfaces:
+          - name: defaultnetwork
+            masquerade: {}
+          - name: ovs-net
+            bridge: {}
       networks:
+      - name: defaultnetwork
+        pod: {}
       - name: ovs-net
-        multus: # Multus network as default
-          default: true
+        multus:
           networkName: ovsbr1
       volumes:
       - name: containerdisk
