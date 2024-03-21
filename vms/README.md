@@ -50,9 +50,11 @@ kubectl get vmi -n <namespace>
 virtctl console -n <namesapce> <vmi-name>
 ```
 
-## VM's Snapshots & Restore
+## VM's Snapshot, Restore, and Export
 
 > https://kubevirt.io/user-guide/operations/snapshot_restore_api/
+
+> https://kubevirt.io/user-guide/operations/export_api/
 
 TODO
 
