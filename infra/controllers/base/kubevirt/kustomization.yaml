@@ -15,6 +15,13 @@ resources:
   # ========================================
   # Install Cluster Network Addons Operator
   # ========================================
-  - ./cluster-network-addons-namespace-v0.91.0.yaml
+  # - ./cluster-network-addons-namespace-v0.91.0.yaml
   - ./cluster-network-addons-operator-v0.91.0.yaml
   - ./cluster-network-addons-config.crd-v0.91.0.yaml
+
+patches:
+  # We have create the those namespace in ./infra/namespaces,
+  # so we need to delete the namespaces' creation in kubevirt-operator.yaml
+  - path: delete-ns-kubevirt.yaml
+  - path: delete-ns-cdi.yaml
+  # - path: delete-ns-cluster-network-addons.yaml

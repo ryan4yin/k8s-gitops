@@ -28,6 +28,6 @@ curl -Lo cdi-cr-${CDI_VERSION}.yaml https://github.com/kubevirt/containerized-da
 export CNAO_VERSION=$(curl -s https://api.github.com/repos/kubevirt/cluster-network-addons-operator/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 echo "The latest Cluster Network Addons Operator's version is $CNAO_VERSION"
 
-curl -Lo cluster-network-addons-namespace-${CNAO_VERSION}.yaml https://github.com/kubevirt/cluster-network-addons-operator/releases/download/${CNAO_VERSION}/namespace.yaml
+# curl -Lo cluster-network-addons-namespace-${CNAO_VERSION}.yaml https://github.com/kubevirt/cluster-network-addons-operator/releases/download/${CNAO_VERSION}/namespace.yaml
 curl -Lo cluster-network-addons-config.crd-${CNAO_VERSION}.yaml https://github.com/kubevirt/cluster-network-addons-operator/releases/download/${CNAO_VERSION}/network-addons-config.crd.yaml
 curl -Lo cluster-network-addons-operator-${CNAO_VERSION}.yaml https://github.com/kubevirt/cluster-network-addons-operator/releases/download/${CNAO_VERSION}/operator.yaml
