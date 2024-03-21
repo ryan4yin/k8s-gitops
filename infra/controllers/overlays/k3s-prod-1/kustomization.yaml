@@ -10,4 +10,4 @@ resources:
   - ../../base/kubevirt/
   - ../../base/longhorn/
   - ../../base/multus-cni/
-  # - ../../base/ovs-cni/
+  - ../../base/ovs-cni/
