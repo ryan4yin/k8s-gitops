@@ -23,9 +23,6 @@ spec:
           - name: emptydisk
             disk:
               bus: virtio
-          - disk:
-              bus: virtio
-            name: cloudinitdisk
           interfaces:
           - name: defaultnetwork
             masquerade: {}
@@ -36,7 +33,8 @@ spec:
         pod: {}
       - name: ovs-net
         multus:
-          networkName: ovsbr1
+          # References to a NetworkAttachmentDefinition CRD object
+          networkName: ovs-conf
       volumes:
       - name: containerdisk
         containerDisk:

@@ -2,7 +2,7 @@
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
-  name: ovs-net
+  name: ovs-conf
 spec:
   config: '{
       "cniVersion": "1.0.0",
