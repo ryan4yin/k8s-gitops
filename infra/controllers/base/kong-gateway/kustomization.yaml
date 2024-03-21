@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   # https://docs.konghq.com/kubernetes-ingress-controller/3.1.x/get-started/
   # Install the Gateway API CRDs before installing Kong Ingress Controller.
-  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.0.0/standard-install.yaml
+  # - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.0.0/standard-install.yaml
+  - ./gateway-api-v1.0.0-standard-install.yaml
   - ./helm-repo.yaml
   - ./helm-release.yaml
