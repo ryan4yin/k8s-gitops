@@ -28,6 +28,7 @@ spec:
       defaultDashboardsTimezone: utc+8
       ingress:
         enabled: true
+        ingressClassName: kong
         hosts:
           - k8s-grafana.writefor.fun
       persistence:
@@ -50,6 +51,8 @@ spec:
       # vmsingle = vmcluster(vmselect + vmstorage + vminsert)
       enabled: true
       ingress:
+        enabled: true
+        ingressClassName: kong
         hosts:
           - vm.writefor.fun
       spec:

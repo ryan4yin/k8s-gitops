@@ -14,3 +14,8 @@ spec:
         name: longhorn-repo
       version: 1.6.0
   interval: 30m0s
+  values:
+    ingress:
+      enabled: true
+      ingressClassName: kong
+      host: longhorn.writefor.fun

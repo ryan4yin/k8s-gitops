@@ -1,0 +1,56 @@
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: k3s-test-1-master-1
+spec:
+  runStrategy: Always
+  template:
+    metadata:
+      labels:
+        kubevirt.io/vm: k3s-test-1-master-1
+    spec:
+      terminationGracePeriodSeconds: 30
+      domain:
+        cpu:
+          # this sets the cores
+          cores: 2
+          # get CPU on the VM close to the node one
+          model: host-model
+        resources:
+          requests:
+            memory: 2048M
+        devices:
+          disks:
+          - name: rootdisk
+            disk:
+              bus: virtio
+          interfaces:
+          - name: defaultnetwork
+            masquerade: {}
+          - name: ovs-net
+            bridge: {}
+      networks:
+      - name: defaultnetwork
+        pod: {}
+      - name: ovs-net
+        multus:
+          # References to a NetworkAttachmentDefinition CRD object
+          networkName: ovs-conf
+      volumes:
+      - dataVolume:
+          name: k3s-test-1-master-1-disk
+        name: rootdisk
+  dataVolumeTemplates:
+  - metadata:
+      name: k3s-test-1-master-1-disk
+    spec:
+      pvc:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Gi
+      source:
+        http:
+          url: http://file.writefor.fun/vms/kubevirt-k3s-test-1-master-1.qcow2

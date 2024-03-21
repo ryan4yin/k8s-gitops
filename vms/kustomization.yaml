@@ -5,3 +5,4 @@ namespace: vms
 resources:
   - ./ovs-conf.yaml
   - ./test.yaml
+  - ./k3s-test-1-master-1.yaml

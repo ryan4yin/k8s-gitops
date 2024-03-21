@@ -28,7 +28,9 @@ spec:
       allowPostCopy: false
       unsafeMigrationOverride: false
     developerConfiguration:
-      featureGates: []
+      featureGates: 
+        - Snapshot
+        - VMExport
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
   workloadUpdateStrategy: {}
