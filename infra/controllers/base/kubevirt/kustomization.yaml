@@ -22,6 +22,8 @@ resources:
   - https://github.com/kubevirt/cluster-network-addons-operator/releases/download/v0.91.0/operator.yaml
 
 patches:
-  # We have create the kubevirt namespace in ./infra/namespaces,
-  # so we need to delete the namespace creation in kubevirt-operator.yaml
+  # We have create the those namespace in ./infra/namespaces,
+  # so we need to delete the namespaces' creation in kubevirt-operator.yaml
   - path: delete-ns-kubevirt.yaml
+  - path: delete-ns-cdi.yaml
+  - path: delete-ns-cluster-network-addons.yaml
