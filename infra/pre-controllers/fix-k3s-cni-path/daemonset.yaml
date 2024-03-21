@@ -1,3 +1,5 @@
+# https://github.com/k8snetworkplumbingwg/multus-cni/issues/1089#issuecomment-1853441424
+#
 # This is required for multus to work on k3s.
 # k3s does not use standard directory locations for cni configurations and binaries
 # This symlinks the standard directories to the k3s directories
