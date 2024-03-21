@@ -4,8 +4,9 @@ kind: NetworkAttachmentDefinition
 metadata:
   name: ovs-conf
 spec:
-  config: '{
+  config: |
+    {
       "cniVersion": "1.0.0",
       "type": "ovs",
-      "bridge": "ovsbr1",
-    }'
+      "bridge": "ovsbr1"
+    }
