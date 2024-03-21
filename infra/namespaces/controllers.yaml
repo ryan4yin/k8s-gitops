@@ -18,13 +18,4 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: longhorn-system
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: kubevirt
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: cluster-network-addons
+
