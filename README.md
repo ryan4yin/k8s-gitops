@@ -46,7 +46,7 @@ CLI usage:
 flux stats
 
 # show stats for a specific resource, such as kustomization
-flux get kustomization
+flux get ks
 
 # show k8s events (reconcile, build, deploy, etc)
 flux events
@@ -59,6 +59,9 @@ flux get all
 
 # show image automation status
 flux get images all
+
+# retry a failed kustomization, such as infra-controllers
+flux reconcile ks infra-controllers
 
 # show more details
 flux --help
