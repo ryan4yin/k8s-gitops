@@ -3,6 +3,5 @@ kind: NetworkAddonsConfig
 metadata:
   name: cluster
 spec:
-  # install ovs and multus manually, so that we can customize the CNIBinDir and other options
-  # ovs: {} # openvswitch cni plugin
-  # multus: {}
+  ovs: {} # openvswitch cni plugin
+  multus: {} # required by ovs-cni
