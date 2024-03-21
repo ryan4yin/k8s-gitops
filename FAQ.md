@@ -92,8 +92,8 @@ kubectl patch --type merge --patch '{"metadata":{"finalizers":null}}' -n kubevir
 # If you have too much protected resources,
 # and you're pretty sure that you don't need them anymore,
 # you can force delete them all:
-RES=$(kubectl api-resources --verbs=list --namespaced -o name   | xargs -n 1 kubectl get --show-kind --ignore-not-found -n monitoring | grep -v NAME | awk '{print $1}')
-kubectl patch --type merge --patch '{"metadata":{"finalizers":null}}' -n monitoring $RES
+RES=$(kubectl api-resources --verbs=list --namespaced -o name   | xargs -n 1 kubectl get --show-kind --ignore-not-found -n kubevirt | grep -v NAME | awk '{print $1}')
+kubectl patch --type merge --patch '{"metadata":{"finalizers":null}}' -n kubevirt $RES
 ```
 
 Then the namespace will be deleted automatically.

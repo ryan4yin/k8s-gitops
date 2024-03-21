@@ -7,7 +7,7 @@ resources:
   - ../../base/victoria-metrics/
   - ../../base/cert-manager/
   - ../../base/kong-gateway/
-  # - ../../base/kubevirt/
+  - ../../base/kubevirt/
   - ../../base/longhorn/
   - ../../base/multus-cni/
   - ../../base/ovs-cni/
