@@ -23,6 +23,9 @@ spec:
           - name: emptydisk
             disk:
               bus: virtio
+          - name: cloudinitdisk
+            disk:
+              bus: virtio
           interfaces:
           - name: defaultnetwork
             masquerade: {}
