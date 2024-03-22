@@ -55,10 +55,10 @@ flux events
 flux reconcile source git flux-system
 
 # get all other resources' status
-flux get all
+flux get all -A
 
 # show image automation status
-flux get images all
+flux get images all -A
 
 # retry a failed kustomization, such as infra-controllers
 flux reconcile ks infra-controllers
