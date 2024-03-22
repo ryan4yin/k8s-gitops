@@ -59,6 +59,8 @@ flux get all -A
 
 # show image automation status
 flux get images all -A
+# reconcile a specific image automation
+flux reconcile image update <image-automation-name>
 
 # retry a failed kustomization, such as infra-controllers
 flux reconcile ks infra-controllers
