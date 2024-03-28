@@ -18,6 +18,11 @@ Steps to bootstrap a new cluster:
 1. Add the bootstrap configs into the new folder.
 1. Run the bootstrap script(via `ssh-agent`) to bootstrap or update the cluster:
    ```bash
+   # To get all nodes ready, cilium(network plugin) has to be installed first.
+   helm repo add cilium https://helm.cilium.io/
+   helm search repo cilium/cilium -l | head
+   helm install cilium cilium/cilium --version 1.15.3 --namespace kube-system
+
    flux bootstrap git \
    --components-extra image-reflector-controller,image-automation-controller \
    --url=ssh://git@github.com/ryan4yin/k8s-gitops \
