@@ -1,0 +1,19 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: vms # virtual machines
+  namespace: flux-system
+spec:
+  interval: 5m
+  dependsOn:
+    - name: infra-namespaces
+    - name: infra-controllers
+    - name: infra-configs
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./vms/
+  prune: true
+  wait: true
+  timeout: 1m
