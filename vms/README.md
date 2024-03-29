@@ -64,3 +64,19 @@ TODO
 
 TODO
 
+
+## Migrate from Proxmox to KubeVirt
+
+```bash
+# 1. export and convert the proxmox VM's disk to qcow2
+# qemu-img is provided by qemu.
+export DISK_NAME=vm-114-disk-1
+ssh root@192.168.5.172 "cat /dev/pve/${DISK_NAME} | zstd -z --stdout" | zstd -d -o ${DISK_NAME}.img
+qemu-img convert -O qcow2 ${DISK_NAME}.img ${DISK_NAME}.qcow2
+
+# 2. upload to my caddy server
+rsync -avz --progress --copy-links ${DISK_NAME}.qcow2 root@rakushun:/var/lib/caddy/fileserver/vms/${DISK_NAME}.qcow2
+```
+
+
+
