@@ -19,6 +19,7 @@ spec:
         kind: HelmRepository
         name: kong
         namespace: flux-system
+      version: 0.12.0
       interval: 12h
   values:
     gatewayDiscovery:

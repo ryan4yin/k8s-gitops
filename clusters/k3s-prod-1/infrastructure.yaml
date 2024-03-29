@@ -28,7 +28,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infra/pre-controllers/
+  path: ./infra/pre-controllers/overlays/k3s-prod-1
   prune: true
   wait: true
 ---

@@ -28,7 +28,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infra/pre-controllers/
+  path: ./infra/pre-controllers/overlays/kubevirt-lab-1
   prune: true
   wait: true
 ---
