@@ -21,3 +21,6 @@ docker run --network host --rm ghcr.io/kube-vip/kube-vip:$KVVERSION \
   --arp \
   --leaderElection | tee daemonset.yaml
 
+# Allocaate VIP for K8s services with type=LoadBalancer
+# https://kube-vip.io/docs/usage/cloud-provider/
+curl -o cloud-controller.yaml https://raw.githubusercontent.com/kube-vip/kube-vip-cloud-provider/main/manifest/kube-vip-cloud-controller.yaml
