@@ -8,7 +8,8 @@ spec:
   workloads:
     nodePlacement:
       nodeSelector:
-        node-type: worker
+        kubernetes.io/os: linux
+        node-purpose: kubevirt
   certificateRotateStrategy: {}
   configuration:
     network:
