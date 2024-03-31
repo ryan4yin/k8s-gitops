@@ -90,7 +90,7 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 50Gi
+            storage: 70Gi
       source:
         http:
           url: http://file.writefor.fun/vms/windows-11-work.qcow2
