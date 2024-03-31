@@ -50,7 +50,7 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 20Gi
+            storage: 50Gi
       source:
         http:
           url: http://file.writefor.fun/vms/kubevirt-k3s-test-1-master-1.qcow2
