@@ -3,6 +3,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: vms
 resources:
-  - ./network-ovs-conf.yaml
-  - ./k8s/
-  - ./test/
+  - ./k3s-test-1-master-1.yaml
