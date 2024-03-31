@@ -5,3 +5,4 @@ namespace: vms
 resources:
   - ./network-ovs-conf.yaml
   - ./k8s/
+  - ./windows/

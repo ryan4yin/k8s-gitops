@@ -44,10 +44,10 @@ It supports those ways to import `qcow2` images:
 
 ```bash
 # list all VMIs
-kubectl get vmi -n <namespace>
+kubectl get vmi -n vms
 
 # connect to a VMI's console
-virtctl console -n <namesapce> <vmi-name>
+virtctl console -n vms <vmi-name>
 ```
 
 ## VM's Snapshot, Restore, and Export
