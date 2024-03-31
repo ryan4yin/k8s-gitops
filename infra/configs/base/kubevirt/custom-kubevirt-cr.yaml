@@ -32,6 +32,9 @@ spec:
       featureGates: 
         - Snapshot
         - VMExport
+        # required by windows
+        ## persisting backend state files of VMs, such as the contents of the vTPM
+        - VMPersistentState
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
   workloadUpdateStrategy: {}

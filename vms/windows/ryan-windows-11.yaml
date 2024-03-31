@@ -43,6 +43,7 @@ spec:
           bootloader:
             efi:
               persistent: true
+              secureBoot: false
         devices:
           tpm:
             persistent: true
