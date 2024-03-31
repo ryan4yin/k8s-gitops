@@ -1,0 +1,95 @@
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: ryan-windows-11
+spec:
+  runStrategy: Always
+  template:
+    metadata:
+      labels:
+        kubevirt.io/vm: ryan-windows-11
+        kubevirt.io/os: win11
+    spec:
+      terminationGracePeriodSeconds: 30
+      domain:
+        cpu:
+          # this sets the cores
+          cores: 4
+          # get CPU on the VM close to the node one
+          model: host-model
+        resources:
+          requests:
+            memory: 8192M
+        features:
+          acpi: {}
+          apic: {}
+          hyperv:
+            relaxed: {}
+            vapic: {}
+            spinlocks:
+              spinlocks: 8191
+        clock:
+          utc: {}
+          timer:
+            hpet:
+              present: false
+            pit:
+              tickPolicy: delay
+            rtc:
+              tickPolicy: catchup
+            hyperv: {}
+        firmware:
+          bootloader:
+            efi:
+              persistent: true
+        devices:
+          tpm:
+            persistent: true
+          disks:
+          - name: rootdisk
+            disk:
+              bus: virtio
+          - name: virtiocontainerdisk
+            # Any other disk you want to use, must go before virtioContainerDisk.
+            # KubeVirt boots from disks in order ther are defined.
+            # Therefore virtioContainerDisk, must be after bootable disk.
+            # Other option is to choose boot order explicitly:
+            #  - https://kubevirt.io/api-reference/v0.13.2/definitions.html#_v1_disk
+            # NOTE: You either specify bootOrder explicitely or sort the items in
+            #       disks. You can not do both at the same time.
+            # bootOrder: 2
+            cdrom:
+              bus: sata
+          interfaces:
+          - name: defaultnetwork
+            masquerade: {}
+          - name: ovs-net
+            bridge: {}
+      networks:
+      - name: defaultnetwork
+        pod: {}
+      - name: ovs-net
+        multus:
+          # References to a NetworkAttachmentDefinition CRD object
+          networkName: ovs-conf
+      volumes:
+      - dataVolume:
+          name: ryan-windows-11-disk
+        name: rootdisk
+      - containerDisk:
+          image: quay.io/kubevirt/virtio-container-disk
+        name: virtiocontainerdisk
+  dataVolumeTemplates:
+  - metadata:
+      name: ryan-windows-11-disk
+    spec:
+      pvc:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 50Gi
+      source:
+        http:
+          url: http://file.writefor.fun/vms/windows-11-work.qcow2
