@@ -29,12 +29,14 @@ spec:
       allowPostCopy: false
       unsafeMigrationOverride: false
     developerConfiguration:
+      # https://github.com/kubevirt/kubevirt/blob/main/pkg/virt-config/feature-gates.go#L26
       featureGates: 
         - Snapshot
         - VMExport
         # required by windows
         ## persisting backend state files of VMs, such as the contents of the vTPM
         - VMPersistentState
+        - "HypervStrictCheck"
     vmStateStorageClass: longhorn
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
