@@ -63,12 +63,15 @@ spec:
           tpm:
             persistent: true
           disks:
-            - name: rootdisk
-              disk:
-                bus: virtio
             - name: windows-11-iso
               cdrom:
                 bus: sata
+              # boot from iso image to install windows
+              # you need to remove this disk after installation
+              bootOrder: 1
+            - name: rootdisk
+              disk:
+                bus: virtio
             - name: virtiocontainerdisk
               # Any other disk you want to use, must go before virtioContainerDisk.
               # KubeVirt boots from disks in order ther are defined.
