@@ -26,13 +26,18 @@ spec:
       terminationGracePeriodSeconds: 30
       domain:
         cpu:
-          # this sets the cores
-          cores: 4
-          # get CPU on the VM close to the node one
-          model: host-model
+          # enable CPU pinning
+          dedicatedCpuPlacement: true
+          # isolate the emulator's thread and the VM's vCPUs
+          # so that the emulator thread does not interfere with the VM's vCPUs
+          isolateEmulatorThread: true
+          # https://kubevirt.io/user-guide/virtual_machines/virtual_hardware/#labeling-nodes-with-cpu-models-and-cpu-features
+          # this passthrough the node CPU to the VM
+          model: host-passthrough
         resources:
-          requests:
-            memory: 8192M
+          limits:
+            cpu: 4
+            memory: 8Gi
         features:
           acpi: {}
           apic: {}
@@ -60,6 +65,7 @@ spec:
               secureBoot: false
           uuid: 5d307ca9-b3ef-428c-8861-06e72d69f223
         devices:
+          rng: {}
           tpm:
             persistent: true
           disks:
