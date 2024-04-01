@@ -56,7 +56,8 @@ spec:
           bootloader:
             efi:
               persistent: true
-              secureBoot: true
+              # disable secure boot to start from iso image
+              secureBoot: false
           uuid: 5d307ca9-b3ef-428c-8861-06e72d69f223
         devices:
           tpm:
