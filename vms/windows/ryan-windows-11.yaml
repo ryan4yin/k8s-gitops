@@ -38,6 +38,9 @@ spec:
           limits:
             cpu: 4
             memory: 8Gi
+          requests:
+            cpu: 4
+            memory: 8Gi
         features:
           acpi: {}
           apic: {}

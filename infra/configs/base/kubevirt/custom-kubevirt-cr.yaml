@@ -37,7 +37,8 @@ spec:
         ## persisting backend state files of VMs, such as the contents of the vTPM
         - VMPersistentState
         - "HypervStrictCheck"
-        # https://kubevirt.io/user-guide/virtual_machines/dedicated_cpu_resources/ 
+        # https://kubevirt.io/user-guide/virtual_machines/dedicated_cpu_resources/
+        # To use this feature, we have to set kubelet's cpu-manager policy to static
         - CPUManager
         - Sidecar
     vmStateStorageClass: longhorn
