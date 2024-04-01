@@ -14,6 +14,7 @@ How to create a Windows virtual machine:
    2. Click on "Load driver" and select the VirtIO CD-ROM, select the appropriate driver folder(e.g. `amd64/win10`).
    3. Install on the drivers Windows Setup has found.
    4. After the drivers are installed, Windows will detect the disk and you can proceed with the installation.
+   5. More details: [Windows virtio drivers - KubeVirt Docs](https://kubevirt.io/user-guide/virtual_machines/windows_virtio_drivers/)
 8. After the installation is complete
    1. Adjust your vm's boot order to boot from the root disk, and remove the Windows installation ISO & VirtIO drivers CD-ROM.
 
