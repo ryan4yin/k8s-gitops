@@ -26,9 +26,10 @@ spec:
           apic: {}
           hyperv:
             relaxed: {}
-            vapic: {}
             spinlocks:
               spinlocks: 8191
+            vapic: {}
+          smm: {}  # required by secure boot
         clock:
           utc: {}
           timer:
@@ -43,54 +44,60 @@ spec:
           bootloader:
             efi:
               persistent: true
-              secureBoot: false
+              secureBoot: true
+          uuid: 5d307ca9-b3ef-428c-8861-06e72d69f223
         devices:
           tpm:
             persistent: true
           disks:
-          - name: rootdisk
-            disk:
-              bus: virtio
-          - name: virtiocontainerdisk
-            # Any other disk you want to use, must go before virtioContainerDisk.
-            # KubeVirt boots from disks in order ther are defined.
-            # Therefore virtioContainerDisk, must be after bootable disk.
-            # Other option is to choose boot order explicitly:
-            #  - https://kubevirt.io/api-reference/v0.13.2/definitions.html#_v1_disk
-            # NOTE: You either specify bootOrder explicitely or sort the items in
-            #       disks. You can not do both at the same time.
-            # bootOrder: 2
-            cdrom:
-              bus: sata
+            - name: rootdisk
+              disk:
+                bus: virtio
+            - name: windows-11-iso
+              cdrom:
+                bus: sata
+            - name: virtiocontainerdisk
+              # Any other disk you want to use, must go before virtioContainerDisk.
+              # KubeVirt boots from disks in order ther are defined.
+              # Therefore virtioContainerDisk, must be after bootable disk.
+              # Other option is to choose boot order explicitly:
+              #  - https://kubevirt.io/api-reference/v0.13.2/definitions.html#_v1_disk
+              # NOTE: You either specify bootOrder explicitely or sort the items in
+              #       disks. You can not do both at the same time.
+              # bootOrder: 2
+              cdrom:
+                bus: sata
           interfaces:
-          - name: defaultnetwork
-            masquerade: {}
-          - name: ovs-net
-            bridge: {}
+            - name: defaultnetwork
+              masquerade: {}
+              model: e1000
+            - name: ovs-net
+              bridge: {}
+              model: e1000
       networks:
-      - name: defaultnetwork
-        pod: {}
-      - name: ovs-net
-        multus:
-          # References to a NetworkAttachmentDefinition CRD object
-          networkName: ovs-conf
+        - name: defaultnetwork
+          pod: {}
+        - name: ovs-net
+          multus:
+            # References to a NetworkAttachmentDefinition CRD object
+            networkName: ovs-conf
       volumes:
-      - dataVolume:
-          name: ryan-windows-11-disk
-        name: rootdisk
-      - containerDisk:
-          image: quay.io/kubevirt/virtio-container-disk
-        name: virtiocontainerdisk
+        - dataVolume:
+            name: ryan-windows-11-disk
+          name: rootdisk
+        - containerDisk:
+            image: quay.io/kubevirt/virtio-container-disk
+          name: virtiocontainerdisk
   dataVolumeTemplates:
-  - metadata:
-      name: ryan-windows-11-disk
-    spec:
-      pvc:
-        accessModes:
-        - ReadWriteOnce
-        resources:
-          requests:
-            storage: 70Gi
-      source:
-        http:
-          url: http://file.writefor.fun/vms/windows-11-work.qcow2
+    - metadata:
+        name: ryan-windows-11-disk
+      spec:
+        pvc:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 70Gi
+        source:
+          http:
+            url: "http://file.writefor.fun/iso/zh-cn_windows_11_consumer_editions_version_22h2_updated_oct_2022_x64_dvd_8f62ad3d.iso"
