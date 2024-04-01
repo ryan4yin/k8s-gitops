@@ -35,6 +35,7 @@ spec:
         # required by windows
         ## persisting backend state files of VMs, such as the contents of the vTPM
         - VMPersistentState
+    vmStateStorageClass: longhorn
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
   workloadUpdateStrategy: {}
