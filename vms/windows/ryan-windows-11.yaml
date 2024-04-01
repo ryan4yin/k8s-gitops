@@ -1,4 +1,16 @@
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ryan-windows-11-rootdisk
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 30Gi
+  storageClassName: longhorn
+---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
@@ -82,22 +94,25 @@ spec:
             # References to a NetworkAttachmentDefinition CRD object
             networkName: ovs-conf
       volumes:
+        - name: rootdisk
+          persistentVolumeClaim:
+            claimName: ryan-windows-11-rootdisk
         - dataVolume:
-            name: ryan-windows-11-disk
-          name: rootdisk
+            name: windows-11-iso
+          name: windows-11-iso
         - containerDisk:
             image: quay.io/kubevirt/virtio-container-disk
           name: virtiocontainerdisk
   dataVolumeTemplates:
     - metadata:
-        name: ryan-windows-11-disk
+        name: windows-11-iso
       spec:
         pvc:
           accessModes:
             - ReadWriteOnce
           resources:
             requests:
-              storage: 70Gi
+              storage: 10Gi
         source:
           http:
             url: "http://file.writefor.fun/iso/zh-cn_windows_11_consumer_editions_version_22h2_updated_oct_2022_x64_dvd_8f62ad3d.iso"
