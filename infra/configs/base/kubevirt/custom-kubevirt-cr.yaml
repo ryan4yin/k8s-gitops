@@ -36,7 +36,7 @@ spec:
         # required by windows
         ## persisting backend state files of VMs, such as the contents of the vTPM
         - VMPersistentState
-        - "HypervStrictCheck"
+        - HypervStrictCheck
         # https://kubevirt.io/user-guide/virtual_machines/dedicated_cpu_resources/
         # To use this feature, we have to set kubelet's cpu-manager policy to static
         - CPUManager
@@ -44,6 +44,9 @@ spec:
         # required to increase PVC's size
         # otherwise increase PVC's size will not be reflected in VM.
         - ExpandDisks
+        # passthrough devices
+        - HostDevices
+        - HostDisk
     vmStateStorageClass: longhorn
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
