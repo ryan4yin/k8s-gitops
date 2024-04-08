@@ -41,6 +41,9 @@ spec:
         # To use this feature, we have to set kubelet's cpu-manager policy to static
         - CPUManager
         - Sidecar
+        # required to increase PVC's size
+        # otherwise increase PVC's size will not be reflected in VM.
+        - ExpandDisks
     vmStateStorageClass: longhorn
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
