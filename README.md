@@ -92,11 +92,22 @@ To fix the issue, you have to rename the tag to remove the v prefix.
 No, flux2 will refuse to deploy if there are existing resources with the same name in the cluster.
 To get flux2 to overwrite the existing resources, you need to delete the existing resources first.
 
+### Will Flux2 Revert My Changes If I Manually Change The Resources via `kubectl`?
+
+> https://fluxcd.io/flux/components/kustomize/kustomizations/#controlling-the-apply-behavior-of-resources
+
+Yes, flux2 will revert your changes if you manually change the resources via `kubectl`.
+
+You can control this behavior by add `kustomize.toolkit.fluxcd.io/ssa: Merge` to the resource's annotation,
+to prevent flux2 from reverting the changes on the filed that is not defined in Git repository.
+This is useful when you want to change `spec.replicas` of some CRDs manually.
+
+
 ## References
 
 - [Kustomize Tutorial: Comprehensive Guide For Beginners](https://devopscube.com/kustomize-tutorial/): A comprehensive guide for beginners to understand and use Kustomize for Kubernetes deployments, but it do not cover all the features of Kustomize.
 - [Kustomize Official Examples](https://github.com/kubernetes-sigs/kustomize/blob/master/examples/README.md)
-
+- [Kustomization API - FluxCD](https://fluxcd.io/flux/components/kustomize/kustomizations/)
 
 ## LICENSE
 
