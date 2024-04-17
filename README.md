@@ -107,6 +107,7 @@ This is useful when you want to change `spec.replicas` of some CRDs manually.
 
 - [Kustomize Tutorial: Comprehensive Guide For Beginners](https://devopscube.com/kustomize-tutorial/): A comprehensive guide for beginners to understand and use Kustomize for Kubernetes deployments, but it do not cover all the features of Kustomize.
 - [Kustomize Official Examples](https://github.com/kubernetes-sigs/kustomize/blob/master/examples/README.md)
+- [JSON Patch - Docs](https://jsonpatch.com/)
 - [Kustomization API - FluxCD](https://fluxcd.io/flux/components/kustomize/kustomizations/)
 
 ## LICENSE
