@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: failed
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: failed
+  template:
+    metadata:
+      labels:
+        app: failed
+    spec:
+      containers:
+      - name: failedd
+        image: alpine:latest
+        command:
+        - /bin/sh
+        - -c
+        - exit 1
+

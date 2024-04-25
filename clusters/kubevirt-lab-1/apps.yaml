@@ -13,7 +13,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/overlays/k3s-prod-1
+  path: ./apps/overlays/kubevirt-lab-1
   prune: true
   wait: true
   timeout: 1m

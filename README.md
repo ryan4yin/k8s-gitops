@@ -22,7 +22,7 @@ Steps to bootstrap a new cluster:
    --components-extra image-reflector-controller,image-automation-controller \
    --url=ssh://git@github.com/ryan4yin/k8s-gitops \
    --branch=main \
-   --path=clusters/k3s-prod-1
+   --path=clusters/k3s-test-1
    ```
 1. Add the printed public key to the git repository, as a deploy key with write access.
 
@@ -35,7 +35,7 @@ Add your configs into those directories, fluxcd will take care of the rest:
 .
 ├── apps             # app-specific configs
 ├── clusters         # cluster-wide configs
-│   └── k3s-prod-1   # cluster name
+│   └── k3s-test-1   # cluster name
 ├── infra            # cluster-wide infra files(monitoring, networking, certificates, etc.)
 ```
 

@@ -28,7 +28,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infra/pre-controllers/overlays/k3s-prod-1
+  path: ./infra/pre-controllers/overlays/k3s-test-1
   prune: true
   wait: true
 ---
@@ -47,7 +47,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infra/controllers/overlays/k3s-prod-1
+  path: ./infra/controllers/overlays/k3s-test-1
   prune: true
   wait: true
 ---
@@ -65,5 +65,5 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infra/configs/overlays/k3s-prod-1
+  path: ./infra/configs/overlays/k3s-test-1
   prune: true
