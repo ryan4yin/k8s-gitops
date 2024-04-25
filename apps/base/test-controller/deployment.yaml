@@ -16,6 +16,7 @@ spec:
       containers:
         - name: test-controller
           image: ryan4yin/kunbernates-python-client:latest
+          imagePullPolicy: Always
           command:
             - /bin/sh
             - -c
