@@ -10,6 +10,11 @@ All my Kubernetes Clusters are deployed via [ryan4yin/nix-config/hosts/k8s](http
 nix shell nixpkgs#fluxcd
 ```
 
+My personal container images: 
+
+- Dockerfile & CI: <https://github.com/ryan4yin/containers>
+- Docker Hub: <https://hub.docker.com/r/ryan4yin>
+
 ## Bootstrap
 
 Steps to bootstrap a new cluster:
