@@ -1,0 +1,77 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: test-controller
+# imagePullSecrets:
+  # - name: "xxx"
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: test-controller
+rules:
+  # read-only access to all core resources in the current namespace
+  - apiGroups:
+      - ""
+    resources: ["*"]
+    verbs:
+      - get
+      - list
+      - watch
+  # read-write access to horizontal pod autoscalers in the current namespace
+  # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.29/
+  # https://github.com/kubernetes-client/python/blob/master/kubernetes/README.md
+  - apiGroups: ["autoscaling"]
+    resources: ["*"]
+    verbs: ["*"]
+  - apiGroups: ["apps.kruise.io"]
+    resources: ["*"]
+    verbs: ["*"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: test-controller
+subjects:
+  - kind: ServiceAccount
+    name: test-controller
+roleRef:
+  kind: Role
+  name: test-controller
+  apiGroup: rbac.authorization.k8s.io
+
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  labels:
+    k8s-app: test-controller
+  name: test-controller
+rules:
+  # read-only access to all core resources
+  - apiGroups:
+      - ""
+    resources: ["*"]
+    verbs:
+      - get
+      - list
+      - watch
+  # allow to delete abnormal nodes
+  - apiGroups:
+      - ""
+    resources: ["nodes"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: test-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: test-controller
+subjects:
+  - kind: ServiceAccount
+    name: test-controller
+    namespace: staging

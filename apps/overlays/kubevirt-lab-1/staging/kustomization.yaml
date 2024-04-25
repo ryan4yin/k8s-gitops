@@ -6,3 +6,4 @@ commonLabels:
   app.kubernetes.io/env: staging
 resources:
   - ./failed/
+  - ./test-controller/

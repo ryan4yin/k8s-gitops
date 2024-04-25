@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-controller
+  template:
+    metadata:
+      labels:
+        app: test-controller
+    spec:
+      serviceAccountName: test-controller
+      containers:
+        - name: test-controller
+          image: ryan4yin/kunbernates-python-client:latest
+          command:
+            - /bin/sh
+            - -c
+            - while true; do echo "wait..."; sleep 10; done
+          securityContext:
+            runAsUser: 99 # nobody
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            # readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
