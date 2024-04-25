@@ -14,7 +14,11 @@ for pod in res.items:
     print(pod)
 
     restart_count = pod.status.container_statuses[0].restart_count
-    ready = pod.status.container_statuses[0].ready
+    ready = all(
+        status.ready for status in pod.status.container_statuses
+    )
     node_name = pod.spec.node_name
     pod_name = pod.metadata.name
-    print(f"Pod: {pod_name} on node: {node_name} has restart count: {restart_count} and is ready: {ready}")
+    print(
+        f"Pod: {pod_name} on node: {node_name} has restart count: {restart_count} and is ready: {ready}"
+    )
