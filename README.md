@@ -10,7 +10,7 @@ All my Kubernetes Clusters are deployed via [ryan4yin/nix-config/hosts/k8s](http
 nix shell nixpkgs#fluxcd
 ```
 
-My personal container images: 
+My personal container images:
 
 - Dockerfile & CI: <https://github.com/ryan4yin/containers>
 - Docker Hub: <https://hub.docker.com/r/ryan4yin>
@@ -84,6 +84,23 @@ flux --help
 
 See [FAQ](./FAQ.md).
 
+## Cluster Security & Stability
+
+To prevent damage to the cluster, we have to follow some rules:
+
+1. **Do not use `kubectl apply` to apply changes to the cluster.**
+   FluxCD will take care of the changes, and it will revert the changes if you apply them manually.
+1. **Do not allow push to the `main` branch directly.**
+   All changes should be made via PRs, and the PRs should be reviewed by at least one person.
+1. **Do not enable flux's `prune` on critical resources, such as namespaces.**
+   Prune will delete the resources that are not defined in the Git repository, which may cause damage to the cluster.
+1. **Deploy resources that contains finalizers carefully.**
+   Deleting resources with finalizers may cause the namespace stuck in `Terminating` status.
+1. **Use `dependsOn` in `kustomization.yaml` to control the order of deployment and deletion.**
+   1. For CRDs provided by operators, you have to delete the CRs first, and then delete the operators and namespace, otherwise the namespace will stuck in `Terminating` status.
+   1. For PV/PVC with `kubernetes.io/pv-protection` finalizer, you have to make sure the PV/PVC is not needed anymore, and then delete the finalizer manually.
+   1. For operators that adds its admission webhook to the CRs, you have to delete ther CR & admission webhook first, and then delete the operator and namespace.
+      Otherwise, the CRs will fail to be deleted, and the namespace will stuck in `Terminating` status.
 
 ## References
 
