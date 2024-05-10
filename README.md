@@ -82,30 +82,7 @@ flux --help
 
 ## FAQ
 
-### 401: unauthorized - Helm charts fetched from an OCI Registry
-
-This is a known issue, most likely because the URL path is miswritten, it needs to separate the prefix part of the OCI URL from the image name.
-
-### unable to locate any tags in provided repository: oci://xxx
-
-A known issue too, the v prefix in oci image tags is not supported by Helm nor Flux, see [flux2/issues/3766](https://github.com/fluxcd/flux2/issues/3766) for details.
-
-To fix the issue, you have to rename the tag to remove the v prefix.
-
-### Will Flux2 Overwrite My Existing Resources?
-
-No, flux2 will refuse to deploy if there are existing resources with the same name in the cluster.
-To get flux2 to overwrite the existing resources, you need to delete the existing resources first.
-
-### Will Flux2 Revert My Changes If I Manually Change The Resources via `kubectl`?
-
-> https://fluxcd.io/flux/components/kustomize/kustomizations/#controlling-the-apply-behavior-of-resources
-
-Yes, flux2 will revert your changes if you manually change the resources via `kubectl`.
-
-You can control this behavior by add `kustomize.toolkit.fluxcd.io/ssa: Merge` to the resource's annotation,
-to prevent flux2 from reverting the changes on the filed that is not defined in Git repository.
-This is useful when you want to change `spec.replicas` of some CRDs manually.
+See [FAQ](./FAQ.md).
 
 
 ## References
