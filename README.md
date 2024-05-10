@@ -110,6 +110,7 @@ This is useful when you want to change `spec.replicas` of some CRDs manually.
 
 ## References
 
+- Flux Official Example: [fluxcd/flux2-kustomize-helm-example](https://github.com/fluxcd/flux2-kustomize-helm-example)
 - [Kustomize Tutorial: Comprehensive Guide For Beginners](https://devopscube.com/kustomize-tutorial/): A comprehensive guide for beginners to understand and use Kustomize for Kubernetes deployments, but it do not cover all the features of Kustomize.
 - [Kustomize Official Examples](https://github.com/kubernetes-sigs/kustomize/blob/master/examples/README.md)
 - [JSON Patch - Docs](https://jsonpatch.com/)
