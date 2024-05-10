@@ -101,6 +101,7 @@ To prevent damage to the cluster, we have to follow some rules:
    1. For PV/PVC with `kubernetes.io/pv-protection` finalizer, you have to make sure the PV/PVC is not needed anymore, and then delete the finalizer manually.
    1. For operators that adds its admission webhook to the CRs, you have to delete ther CR & admission webhook first, and then delete the operator and namespace.
       Otherwise, the CRs will fail to be deleted, and the namespace will stuck in `Terminating` status.
+1. CI for PRs: [fluxcd/flux2-kustomize-helm-example/workflows](https://github.com/fluxcd/flux2-kustomize-helm-example/tree/main/.github/workflows)
 
 ## References
 
