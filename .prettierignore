@@ -1,0 +1,7 @@
+LICENSE
+flake.lock
+cache
+temp
+.temp
+.github/
+
