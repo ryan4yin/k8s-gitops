@@ -92,6 +92,7 @@ To prevent damage to the cluster, we have to follow some rules:
    FluxCD will take care of the changes, and it will revert the changes if you apply them manually.
 1. **Do not allow push to the `main` branch directly(except flux itself, or more accurately,, flux's deploy key).**
    All changes should be made via PRs, and the PRs should be reviewed by at least one person.
+   - NOTE: if you're using gitlab, the creator of the deploy key will gains the same access as the deploy key! So, **please create the deploy key with a separate account**.
 1. **Do not enable flux's `prune` on critical resources, such as namespaces.**
    Prune will delete the resources that are not defined in the Git repository, which may cause damage to the cluster.
 1. **Deploy resources that contains finalizers carefully.**
