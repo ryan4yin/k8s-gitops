@@ -1,0 +1,16 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: longhorn-critical
+parameters:
+  dataLocality: strict-local
+  fromBackup: ""
+  fsType: ext4
+  numberOfReplicas: "2"
+  staleReplicaTimeout: "30"
+  unmapMarkSnapChainRemoved: ignored
+provisioner: driver.longhorn.io
+# Retain critical volumes after deletion
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+allowVolumeExpansion: true

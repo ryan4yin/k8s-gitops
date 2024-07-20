@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - ../../base/gateways/
   - ../../base/kubevirt/
+  - ../../base/storageclasses/
