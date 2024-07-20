@@ -29,6 +29,14 @@ spec:
       # -- Reclaim policy that provides instructions for handling of a volume after its claim is released. (Options: "Retain", "Delete")
       reclaimPolicy: Delete
       migratable: false # disable by default, security concern
+    defaultSettings:
+      # https://longhorn.io/docs/1.6.2/high-availability/auto-balance-replicas/
+      replicaAutoBalance: "best-effort"
+      defaultReplicaCount: 2
+      defaultDataLocality: strict-local
+      snapshotDataIntegrity: fast-check
+      # we have btrfs snapshot for host backup, so longhorn's snapshot is not necessary.
+      snapshotMaxCount: 2
     ingress:
       enabled: true
       ingressClassName: kong
