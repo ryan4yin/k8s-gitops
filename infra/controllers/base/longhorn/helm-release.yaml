@@ -12,7 +12,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: longhorn-repo
-      version: 1.6.0
+      version: 1.6.2
   interval: 30m0s
   values:
     ingress:
