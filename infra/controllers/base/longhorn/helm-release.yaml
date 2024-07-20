@@ -14,7 +14,21 @@ spec:
         name: longhorn-repo
       version: 1.6.2
   interval: 30m0s
+  # https://github.com/longhorn/charts/blob/v1.6.x/charts/longhorn/values.yaml
   values:
+    # https://longhorn.io/docs/1.6.2/best-practices/#volume-performance-optimization
+    persistence:
+      defaultClass: true
+      # -- Filesystem type of the default Longhorn StorageClass.
+      defaultFsType: ext4
+      # 2 replicas to achieve data availability with better disk space usage or less impact to system performance
+      defaultClassReplicaCount: 2
+      # -- Data locality of the default Longhorn StorageClass. (Options: "disabled", "best-effort", "strict-local")
+      # https://longhorn.io/docs/1.6.2/high-availability/data-locality/
+      defaultDataLocality: strict-local # to gain better io performance
+      # -- Reclaim policy that provides instructions for handling of a volume after its claim is released. (Options: "Retain", "Delete")
+      reclaimPolicy: Delete
+      migratable: false # disable by default, security concern
     ingress:
       enabled: true
       ingressClassName: kong
