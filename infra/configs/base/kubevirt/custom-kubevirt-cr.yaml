@@ -47,7 +47,15 @@ spec:
         # passthrough devices
         - HostDevices
         - HostDisk
+        - LiveMigration
     vmStateStorageClass: longhorn
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
-  workloadUpdateStrategy: {}
+  workloadUpdateStrategy:
+    # live migration is preferred
+    # if live migration is not possible, evict the VM
+    workloadUpdateMethods:
+      - LiveMigrate
+      - Evict
+    batchEvictionSize: 10
+    batchEvictionInterval: "1m"
