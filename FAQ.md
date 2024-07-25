@@ -132,3 +132,48 @@ Then the namespace will be deleted automatically.
    1. Create the PVC with `spec.volumeName` field set to the PV's name, thus the PVC will know which PV to use.
    1. Create the PVC with the same yaml file that was used to create the PV, then the PVC will generate the same name as the PV, and bind to the PV automatically.
 
+
+### How to add imagePullSecrets to all Pods?
+
+Add the following to the `kustomization.yaml` file:
+
+```yaml
+patches:
+  - patch: |-
+      kind: will-be-ignored
+      metadata:
+        name: will-be-ignored
+      imagePullSecrets:
+      - name: xxx
+    target:
+      kind: ServiceAccount
+```
+
+Or you can add `imagePullSecrets` to all the Deployments & Daemonsets either:
+
+```yaml
+patches:
+  - patch: |-
+      kind: Deployment
+      metadata:
+        name: will-be-ignored
+      spec:
+        template:
+          spec:
+            imagePullSecrets:
+            - name: xxx
+    target:
+      kind: Deployment
+  - patch: |-
+      kind: DaemonSet
+      metadata:
+        name: will-be-ignored
+      spec:
+        template:
+          spec:
+            imagePullSecrets:
+            - name: xxx
+    target:
+      kind: DaemonSet
+```
+
