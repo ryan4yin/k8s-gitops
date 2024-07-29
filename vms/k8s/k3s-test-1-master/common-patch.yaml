@@ -1,0 +1,42 @@
+kind: will-be-ignored
+metadata:
+  name: will-be-ignored
+spec:
+  preference:
+    kind: VirtualMachineClusterPreference
+    name: virtio
+  runStrategy: Always
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: k3s-test-1-master
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - k3s-test-1-master
+              topologyKey: kubernetes.io/hostname
+      terminationGracePeriodSeconds: 30
+      domain:
+        devices:
+          disks:
+            - name: rootdisk
+              disk:
+                bus: virtio
+          interfaces:
+            - name: defaultnetwork
+              masquerade: {}
+            - name: ovs-net
+              bridge: {}
+      networks:
+        - name: defaultnetwork
+          pod: {}
+        - name: ovs-net
+          multus:
+            # References to a NetworkAttachmentDefinition CRD object
+            networkName: ovs-conf
