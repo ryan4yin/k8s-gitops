@@ -9,7 +9,7 @@ spec:
   resources:
     requests:
       storage: 60Gi
-  storageClassName: longhorn
+  storageClassName: longhorn-critical
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -92,6 +92,7 @@ spec:
         name: windows-11-iso
       spec:
         pvc:
+          storageClassName: longhorn-critical
           accessModes:
             - ReadWriteOnce
           resources:

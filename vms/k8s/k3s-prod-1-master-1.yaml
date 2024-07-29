@@ -44,6 +44,7 @@ spec:
       name: k3s-prod-1-master-1-disk
     spec:
       pvc:
+        storageClassName: longhorn-critical
         accessModes:
         - ReadWriteOnce
         resources:
