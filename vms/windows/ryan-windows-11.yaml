@@ -3,6 +3,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ryan-windows-11-rootdisk
+  annotations:
+    # fluxcd - merge the server-side configs
+    kustomize.toolkit.fluxcd.io/ssa: Merge
 spec:
   accessModes:
     - ReadWriteOnce
