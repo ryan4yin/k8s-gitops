@@ -13,8 +13,6 @@ spec:
     #   - host-passthrough  - get the same CPU as the node
     #   - host-model        - get CPU closest to the node one
     model: host-model
-    # tune the VMI for lower latency
-    # realtime: true
   memory:
     # The delta between MaxGuest and Guest is the amount of memory that can be hot(un)plugged.
     guest: 16Gi

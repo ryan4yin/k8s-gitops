@@ -13,8 +13,6 @@ spec:
     #   - host-passthrough  - get the same CPU as the node
     #   - host-model        - get CPU closest to the node one
     model: host-passthrough
-    # tune the VMI for lower latency
-    realtime: true
     # place the VirtualMachineInstance on a node with enough dedicated pCPUs and pin the vCPUs to it.
     dedicatedCPUPlacement: true
     # requests one more dedicated pCPU to be allocated for the VMI to place the emulator thread on it.
