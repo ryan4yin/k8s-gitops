@@ -1,6 +1,6 @@
 # Cilium - Pod network
 
-To use cilium as the network plugin, you has to install it via helm first:
+To use cilium as the network plugin, you have to install it via helm first:
 
 ```bash
 # To get all nodes ready, cilium(network plugin) has to be installed first.
