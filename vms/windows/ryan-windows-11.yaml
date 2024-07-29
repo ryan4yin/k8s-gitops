@@ -92,7 +92,8 @@ spec:
         name: windows-11-iso
       spec:
         pvc:
-          storageClassName: longhorn-critical
+          # iso will be used only once, it's useless after installation
+          storageClassName: longhorn
           accessModes:
             - ReadWriteOnce
           resources:

@@ -44,6 +44,7 @@ spec:
       name: k3s-prod-1-master-1-disk
     spec:
       pvc:
+        # this is the rootdisk of the node, it contains critical data
         storageClassName: longhorn-critical
         accessModes:
         - ReadWriteOnce
