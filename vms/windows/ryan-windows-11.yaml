@@ -16,6 +16,12 @@ kind: VirtualMachine
 metadata:
   name: ryan-windows-11
 spec:
+  instancetype:
+    kind: VirtualMachineInstancetype
+    name: hpc-4vcpu-8gb
+  preference:
+    kind: VirtualMachinePreference
+    name: windows
   runStrategy: Always
   template:
     metadata:
@@ -25,41 +31,6 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       domain:
-        cpu:
-          # enable CPU pinning
-          dedicatedCpuPlacement: true
-          # isolate the emulator's thread and the VM's vCPUs
-          # so that the emulator thread does not interfere with the VM's vCPUs
-          isolateEmulatorThread: true
-          # https://kubevirt.io/user-guide/virtual_machines/virtual_hardware/#labeling-nodes-with-cpu-models-and-cpu-features
-          # this passthrough the node CPU to the VM
-          model: host-passthrough
-        resources:
-          limits:
-            cpu: 4
-            memory: 8Gi
-          requests:
-            cpu: 4
-            memory: 8Gi
-        features:
-          acpi: {}
-          apic: {}
-          hyperv:
-            relaxed: {}
-            spinlocks:
-              spinlocks: 8191
-            vapic: {}
-          smm: {}  # required by secure boot
-        clock:
-          utc: {}
-          timer:
-            hpet:
-              present: false
-            pit:
-              tickPolicy: delay
-            rtc:
-              tickPolicy: catchup
-            hyperv: {}
         firmware:
           bootloader:
             efi:
