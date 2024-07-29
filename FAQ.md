@@ -141,11 +141,8 @@ Then the namespace will be deleted automatically.
 1. Make sure the PV's state is `Available`, otherwise please detach the PV first.
 1. Remove the `spec.claimRef` field from the PV, otherwise the PV will be bound to the PVC
    and cannot be used by other PVCs.`
-1. There are two ways to create the PVC:
-   1. Create the PVC with `spec.volumeName` field set to the PV's name, thus the PVC will
-      know which PV to use.
-   1. Create the PVC with the same yaml file that was used to create the PV, then the PVC
-      will generate the same name as the PV, and bind to the PV automatically.
+1. Create the PVC with `spec.volumeName` field set to the PV's name, thus the PVC will
+   know which PV to use.
 
 ### How to add imagePullSecrets to all Pods?
 
