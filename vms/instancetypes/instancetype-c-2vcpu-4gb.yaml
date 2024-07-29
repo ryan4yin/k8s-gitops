@@ -1,0 +1,22 @@
+# https://kubevirt.io/user-guide/user_workloads/instancetypes/#virtualmachineinstancetype
+---
+apiVersion: instancetype.kubevirt.io/v1beta1
+kind: VirtualMachineClusterInstancetype
+metadata:
+  name: c-2vcpu-4gb
+spec:
+  # https://kubevirt.io/api-reference/main/definitions.html#_v1beta1_cpuinstancetype
+  cpu:
+    # Required number of vCPUs to expose to the guest.
+    guest: 2
+    # Model specifies the CPU model inside the VMI.
+    #   - host-passthrough  - get the same CPU as the node
+    #   - host-model        - get CPU closest to the node one
+    model: host-passthrough
+    # tune the VMI for lower latency
+    realtime: true
+  memory:
+    # The delta between MaxGuest and Guest is the amount of memory that can be hot(un)plugged.
+    guest: 2Gi
+    maxGuest: 4Gi
+    # hugepages: true

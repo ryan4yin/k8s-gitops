@@ -2,7 +2,7 @@
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
-  name: k3s-test-1-master-1
+  name: k3s-prod-1-master-2
 spec:
   instancetype:
     kind: VirtualMachineInstancetype
@@ -14,7 +14,7 @@ spec:
   template:
     metadata:
       labels:
-        kubevirt.io/vm: k3s-test-1-master-1
+        kubevirt.io/vm: k3s-prod-1-master-2
     spec:
       terminationGracePeriodSeconds: 30
       domain:
@@ -37,11 +37,11 @@ spec:
           networkName: ovs-conf
       volumes:
       - dataVolume:
-          name: k3s-test-1-master-1-disk
+          name: k3s-prod-1-master-2-disk
         name: rootdisk
   dataVolumeTemplates:
   - metadata:
-      name: k3s-test-1-master-1-disk
+      name: k3s-prod-1-master-2-disk
     spec:
       pvc:
         accessModes:
@@ -51,4 +51,4 @@ spec:
             storage: 50Gi
       source:
         http:
-          url: http://file.writefor.fun/vms/kubevirt-k3s-test-1-master-1.qcow2
+          url: http://file.writefor.fun/vms/kubevirt-k3s-prod-1-master-2.qcow2

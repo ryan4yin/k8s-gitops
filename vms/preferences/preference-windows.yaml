@@ -1,0 +1,36 @@
+# https://github.com/kubevirt/kubevirt/blob/main/examples/windows.yaml
+---
+apiVersion: instancetype.kubevirt.io/v1beta1
+kind: VirtualMachineClusterPreference
+metadata:
+  name: windows
+spec:
+  clock:
+    preferredClockOffset:
+      utc: {}
+    preferredTimer:
+      hpet:
+        present: false
+      hyperv: {}
+      pit:
+        tickPolicy: delay
+      rtc:
+        tickPolicy: catchup
+  cpu:
+    preferredCPUTopology: sockets
+  devices:
+    preferredDiskBus: sata
+    preferredInterfaceModel: e1000
+    preferredTPM: {}
+  features:
+    preferredAcpi: {}
+    preferredApic: {}
+    preferredHyperv:
+      relaxed: {}
+      spinlocks:
+        spinlocks: 8191
+      vapic: {}
+    preferredSmm: {}
+  firmware:
+    preferredUseEfi: true
+    preferredUseSecureBoot: true
