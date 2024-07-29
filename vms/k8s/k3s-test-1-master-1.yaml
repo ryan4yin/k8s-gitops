@@ -5,10 +5,10 @@ metadata:
   name: k3s-test-1-master-1
 spec:
   instancetype:
-    kind: VirtualMachineInstancetype
+    kind: VirtualMachineClusterInstancetype
     name: s-2vcpu-2gb
   preference:
-    kind: VirtualMachinePreference
+    kind: VirtualMachineClusterPreference
     name: virtio
   runStrategy: Always
   template:

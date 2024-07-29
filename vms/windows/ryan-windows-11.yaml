@@ -17,10 +17,10 @@ metadata:
   name: ryan-windows-11
 spec:
   instancetype:
-    kind: VirtualMachineInstancetype
+    kind: VirtualMachineClusterInstancetype
     name: hpc-4vcpu-8gb
   preference:
-    kind: VirtualMachinePreference
+    kind: VirtualMachineClusterPreference
     name: windows
   runStrategy: Always
   template:
