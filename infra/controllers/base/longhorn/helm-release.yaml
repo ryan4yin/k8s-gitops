@@ -25,7 +25,7 @@ spec:
       defaultClassReplicaCount: 2
       # -- Data locality of the default Longhorn StorageClass. (Options: "disabled", "best-effort", "strict-local")
       # https://longhorn.io/docs/1.6.2/high-availability/data-locality/
-      defaultDataLocality: strict-local # to gain better io performance
+      defaultDataLocality: best-effort # to gain better io performance
       # -- Reclaim policy that provides instructions for handling of a volume after its claim is released. (Options: "Retain", "Delete")
       reclaimPolicy: Delete
       migratable: false # disable by default, security concern

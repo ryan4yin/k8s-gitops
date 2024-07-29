@@ -3,7 +3,9 @@ kind: StorageClass
 metadata:
   name: longhorn-critical
 parameters:
-  dataLocality: strict-local
+  # -- Data locality of the default Longhorn StorageClass. (Options: "disabled", "best-effort", "strict-local")
+  # https://longhorn.io/docs/1.6.2/high-availability/data-locality/
+  dataLocality: best-effort
   fromBackup: ""
   fsType: ext4
   numberOfReplicas: "2"
