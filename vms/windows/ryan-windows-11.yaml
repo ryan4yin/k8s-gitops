@@ -43,12 +43,12 @@ spec:
           tpm:
             persistent: true
           disks:
-            - name: windows-11-iso
-              cdrom:
-                bus: sata
-              # boot from iso image to install windows
-              # you need to remove this disk after installation
-              bootOrder: 1
+            # - name: windows-11-iso
+            #   cdrom:
+            #     bus: sata
+            #   # boot from iso image to install windows
+            #   # you need to remove this disk after installation
+            #   bootOrder: 1
             - name: rootdisk
               disk:
                 bus: virtio
@@ -81,24 +81,24 @@ spec:
         - name: rootdisk
           persistentVolumeClaim:
             claimName: ryan-windows-11-rootdisk
-        - dataVolume:
-            name: windows-11-iso
-          name: windows-11-iso
+        # - dataVolume:
+        #     name: windows-11-iso
+        #   name: windows-11-iso
         - containerDisk:
             image: quay.io/kubevirt/virtio-container-disk
           name: virtiocontainerdisk
-  dataVolumeTemplates:
-    - metadata:
-        name: windows-11-iso
-      spec:
-        pvc:
-          # iso will be used only once, it's useless after installation
-          storageClassName: longhorn
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 10Gi
-        source:
-          http:
-            url: "http://file.writefor.fun/iso/zh-cn_windows_11_consumer_editions_version_22h2_updated_oct_2022_x64_dvd_8f62ad3d.iso"
+  # dataVolumeTemplates:
+  #   - metadata:
+  #       name: windows-11-iso
+  #     spec:
+  #       pvc:
+  #         # iso will be used only once, it's useless after installation
+  #         storageClassName: longhorn
+  #         accessModes:
+  #           - ReadWriteOnce
+  #         resources:
+  #           requests:
+  #             storage: 10Gi
+  #       source:
+  #         http:
+  #           url: "http://file.writefor.fun/iso/zh-cn_windows_11_consumer_editions_version_22h2_updated_oct_2022_x64_dvd_8f62ad3d.iso"
