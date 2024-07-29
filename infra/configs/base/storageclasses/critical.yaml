@@ -14,5 +14,5 @@ parameters:
 provisioner: driver.longhorn.io
 # Retain critical volumes after deletion
 reclaimPolicy: Retain
-volumeBindingMode: Immediate
+volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
