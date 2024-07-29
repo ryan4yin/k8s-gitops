@@ -4,3 +4,4 @@ kind: Kustomization
 namespace: vms
 resources:
   - ./k3s-prod-1-master/
+  - ./k3s-prod-1-worker/

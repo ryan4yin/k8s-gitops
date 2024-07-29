@@ -1,0 +1,33 @@
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: k3s-prod-1-worker-1
+spec:
+  instancetype:
+    kind: VirtualMachineClusterInstancetype
+    name: hpc-8vcpu-16gb
+  template:
+    metadata:
+      labels:
+        kubevirt.io/vm: k3s-prod-1-worker-1
+    spec:
+      volumes:
+        - dataVolume:
+            name: k3s-prod-1-worker-1-disk
+          name: rootdisk
+  dataVolumeTemplates:
+    - metadata:
+        name: k3s-prod-1-worker-1-disk
+      spec:
+        pvc:
+          # this is the rootdisk of the node, it contains critical data
+          storageClassName: longhorn-critical
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 50Gi
+        source:
+          http:
+            url: http://file.writefor.fun/vms/kubevirt-k3s-prod-1-worker-1.qcow2
