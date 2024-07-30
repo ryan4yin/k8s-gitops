@@ -1,0 +1,18 @@
+kind: will-be-ignored
+metadata:
+  name: will-be-ignored
+spec:
+  values:
+    # https://github.com/VictoriaMetrics/helm-charts/tree/master/charts/victoria-metrics-k8s-stack
+    grafana:
+      ingress:
+        enabled: true
+        ingressClassName: kong
+        hosts:
+          - prod1-grafana.writefor.fun
+    vmsingle:
+      ingress:
+        enabled: true
+        ingressClassName: kong
+        hosts:
+          - prod1-vm.writefor.fun
