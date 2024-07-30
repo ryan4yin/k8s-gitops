@@ -47,8 +47,10 @@ spec:
         # passthrough devices
         - HostDevices
         - HostDisk
+        - VMLiveUpdateFeatures
         - LiveMigration
     vmStateStorageClass: longhorn
+    vmRolloutStrategy: "LiveUpdate"
     permittedHostDevices:
       # https://kubevirt.io/user-guide/compute/host-devices/#exposing-usb-devices
       usb:
