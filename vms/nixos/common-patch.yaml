@@ -5,7 +5,7 @@ spec:
   preference:
     kind: VirtualMachineClusterPreference
     name: virtio
-  runStrategy: Always
+  runStrategy: RerunOnFailure # https://kubevirt.io/user-guide/compute/run_strategies/
   template:
     spec:
       terminationGracePeriodSeconds: 30

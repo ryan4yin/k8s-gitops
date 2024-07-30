@@ -27,7 +27,7 @@ spec:
   preference:
     kind: VirtualMachineClusterPreference
     name: windows
-  runStrategy: Always
+  runStrategy: RerunOnFailure # https://kubevirt.io/user-guide/compute/run_strategies/
   template:
     metadata:
       labels:
