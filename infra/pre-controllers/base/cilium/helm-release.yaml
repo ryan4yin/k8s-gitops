@@ -18,5 +18,9 @@ spec:
         namespace: flux-system
       interval: 12h
   # https://artifacthub.io/packages/helm/cilium/cilium/1.15.3
-  # values:
+  values:
+    cni:
+      # disable this one for istio-cni
+      # https://istio.io/latest/docs/ambient/install/platform-prerequisites/#cilium
+      exclusive: false
 
