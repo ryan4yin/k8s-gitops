@@ -1,0 +1,20 @@
+# https://fluxcd.io/flux/components/helm/helmreleases/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: istio-ingress
+  namespace: istio-ingress
+spec:
+  releaseName: istio-ingress
+  interval: 30m
+  chart:
+    spec:
+      chart: gateway
+      sourceRef:
+        kind: HelmRepository
+        name: istio
+        namespace: flux-system
+      interval: 12h
+  values:
+    profile: ambient

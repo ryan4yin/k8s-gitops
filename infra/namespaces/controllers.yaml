@@ -22,6 +22,16 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: istio-system
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-ingress
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: kubevirt
 ---
 apiVersion: v1
