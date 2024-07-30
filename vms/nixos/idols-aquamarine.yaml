@@ -1,0 +1,45 @@
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: idols-aquamarine
+spec:
+  instancetype:
+    kind: VirtualMachineClusterInstancetype
+    name: hpc-4vcpu-8gb
+  preference:
+    kind: VirtualMachineClusterPreference
+    name: virtio
+  template:
+    metadata:
+      labels:
+        kubevirt.io/vm: idols-aquamarine
+    spec:
+      nodeSelector:
+        # run on the node with the USB storage device
+        kubernetes.io/hostname: kubevirt-youko
+      domain:
+        devices:
+          # pass through the USB storage device
+          hostDevices:
+            - deviceName: kubevirt.io/usb-storage-unitek
+              name: usb-storage
+      volumes:
+        - dataVolume:
+            name: idols-aquamarine-disk
+          name: rootdisk
+  dataVolumeTemplates:
+    - metadata:
+        name: idols-aquamarine-disk
+      spec:
+        pvc:
+          # this is the rootdisk of the node, it contains critical data
+          storageClassName: longhorn-critical
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 50Gi
+        source:
+          http:
+            url: http://file.writefor.fun/vms/kubevirt-aquamarine.qcow2

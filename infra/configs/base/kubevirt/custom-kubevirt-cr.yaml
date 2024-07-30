@@ -55,7 +55,7 @@ spec:
         # To get the vendor and product ID of the USB device,
         # run the following command on the host machine:
         #   lsusb -vvv | egrep -2 'Vendor|Product'
-        - resourceName: kubevirt.io/
+        - resourceName: kubevirt.io/usb-storage-unitek
           selectors:
             - vendor: "152d" # JMicron Technology Corp. / JMicron USA Technology Corp.
               product: "0567" # JMS567 SATA 6Gb/s bridge

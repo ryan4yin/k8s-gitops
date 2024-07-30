@@ -8,3 +8,4 @@ resources:
   - ./preferences/
   - ./k8s/
   - ./windows/
+  - ./nixos/

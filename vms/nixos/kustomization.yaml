@@ -1,0 +1,13 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: vms
+resources:
+  - ./idol-aquamarine.yaml
+
+patches:
+  # add podAntiAffinity to all master nodes
+  - path: ./common-patch.yaml
+    target:
+      group: kubevirt.io
+      kind: VirtualMachine

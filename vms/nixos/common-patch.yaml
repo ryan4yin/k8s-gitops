@@ -1,0 +1,29 @@
+kind: will-be-ignored
+metadata:
+  name: will-be-ignored
+spec:
+  preference:
+    kind: VirtualMachineClusterPreference
+    name: virtio
+  runStrategy: Always
+  template:
+    spec:
+      terminationGracePeriodSeconds: 30
+      domain:
+        devices:
+          disks:
+            - name: rootdisk
+              disk:
+                bus: virtio
+          interfaces:
+            - name: defaultnetwork
+              masquerade: {}
+            - name: ovs-net
+              bridge: {}
+      networks:
+        - name: defaultnetwork
+          pod: {}
+        - name: ovs-net
+          multus:
+            # References to a NetworkAttachmentDefinition CRD object
+            networkName: ovs-conf
