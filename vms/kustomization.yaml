@@ -7,5 +7,5 @@ resources:
   - ./instancetypes/
   - ./preferences/
   - ./k8s/
-  - ./windows/
-  - ./nixos/
+  # - ./windows/
+  # - ./nixos/
