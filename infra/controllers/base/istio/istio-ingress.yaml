@@ -6,6 +6,12 @@ metadata:
   name: istio-ingress
   namespace: istio-ingress
 spec:
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
   releaseName: istio-ingress
   interval: 30m
   chart:
