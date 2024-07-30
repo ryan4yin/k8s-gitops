@@ -33,7 +33,7 @@ spec:
       # https://longhorn.io/docs/1.6.2/high-availability/auto-balance-replicas/
       replicaAutoBalance: "best-effort"
       defaultReplicaCount: 2
-      defaultDataLocality: strict-local
+      defaultDataLocality: best-effort # to gain better io performance
       snapshotDataIntegrity: fast-check
       # we have btrfs snapshot for host backup, so longhorn's snapshot is not necessary.
       snapshotMaxCount: 2

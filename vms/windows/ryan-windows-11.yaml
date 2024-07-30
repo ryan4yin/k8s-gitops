@@ -96,7 +96,7 @@ spec:
   #     spec:
   #       pvc:
   #         # iso will be used only once, it's useless after installation
-  #         storageClassName: longhorn
+  #         storageClassName: longhorn-critical
   #         accessModes:
   #           - ReadWriteOnce
   #         resources:
