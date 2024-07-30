@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: vms
 resources:
   - ./k3s-test-1-master-1.yaml
-  - ./k3s-test-1-master-2.yaml
+  # - ./k3s-test-1-master-2.yaml
   - ./k3s-test-1-master-3.yaml
 
 patches:

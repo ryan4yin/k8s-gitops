@@ -5,7 +5,7 @@ namespace: vms
 resources:
   - ./k3s-prod-1-master-1.yaml
   - ./k3s-prod-1-master-2.yaml
-  - ./k3s-prod-1-master-3.yaml
+  # - ./k3s-prod-1-master-3.yaml
 
 patches:
   # add podAntiAffinity to all master nodes

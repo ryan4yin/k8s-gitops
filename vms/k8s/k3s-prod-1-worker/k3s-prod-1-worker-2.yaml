@@ -6,9 +6,9 @@ metadata:
 spec:
   instancetype:
     kind: VirtualMachineClusterInstancetype
-    name: s-4vcpu-4gb
+    name: s-2vcpu-2gb
     # https://kubevirt.io/user-guide/user_workloads/instancetypes/#versioning
-    # revisionName: "" # we need to set this to empty when updating the instancetype
+    revisionName: "" # we need to set this to empty when updating the instancetype
   template:
     metadata:
       labels:
@@ -33,6 +33,9 @@ spec:
           resources:
             requests:
               storage: 50Gi
+          # NOTE: lock down the volume name to avoid creating a new one
+          # This should only be used when you want to reuse the volume(like recreating the VM).
+          volumeName: pvc-4e5c32d6-b94b-4daf-b4a4-00ed8ac52b60
         source:
           http:
             url: http://file.writefor.fun/vms/kubevirt-k3s-prod-1-worker-2.qcow2
