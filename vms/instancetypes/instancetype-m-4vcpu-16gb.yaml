@@ -15,7 +15,7 @@ spec:
     model: host-model
   memory:
     # The delta between MaxGuest and Guest is the amount of memory that can be hot(un)plugged.
-    guest: 2Gi
+    guest: 16Gi
     maxGuest: 16Gi
     hugepages:
       # PageSize specifies the hugepage size, for x86_64 architecture valid values are 1Gi and 2Mi.

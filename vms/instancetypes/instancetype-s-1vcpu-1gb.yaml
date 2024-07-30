@@ -15,7 +15,7 @@ spec:
     model: host-model
   memory:
     # The delta between MaxGuest and Guest is the amount of memory that can be hot(un)plugged.
-    guest: 512Mi
+    guest: 1Gi
     maxGuest: 1Gi
 
 
