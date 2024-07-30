@@ -81,7 +81,6 @@ flux --help
 
 ## TODO
 
-- [ ] Add longhorn, etc.
 - [ ] Add alert-manager config for fluxcd itself.
 - [ ] Web UI for monitoring fluxcd and cluster's status.
 
