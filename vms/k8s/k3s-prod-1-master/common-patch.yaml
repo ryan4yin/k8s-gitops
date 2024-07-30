@@ -2,9 +2,6 @@ kind: will-be-ignored
 metadata:
   name: will-be-ignored
 spec:
-  instancetype:
-    kind: VirtualMachineClusterInstancetype
-    name: c-2vcpu-4gb
   preference:
     kind: VirtualMachineClusterPreference
     name: virtio

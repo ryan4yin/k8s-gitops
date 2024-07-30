@@ -4,6 +4,9 @@ kind: VirtualMachine
 metadata:
   name: k3s-prod-1-master-1
 spec:
+  instancetype:
+    kind: VirtualMachineClusterInstancetype
+    name: c-2vcpu-4gb
   template:
     metadata:
       labels:
