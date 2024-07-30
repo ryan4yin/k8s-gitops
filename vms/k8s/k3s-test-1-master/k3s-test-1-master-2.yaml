@@ -7,6 +7,8 @@ spec:
   instancetype:
     kind: VirtualMachineClusterInstancetype
     name: c-4vcpu-8gb
+    # https://kubevirt.io/user-guide/user_workloads/instancetypes/#versioning
+    # revisionName: "" # we need to set this to empty when updating the instancetype
   template:
     metadata:
       labels:
