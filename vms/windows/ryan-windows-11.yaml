@@ -13,6 +13,8 @@ spec:
     requests:
       storage: 60Gi
   storageClassName: longhorn-critical
+  # NOTE: lock down the volume name to avoid creating a new one
+  volumeName: pvc-54f6c5bd-70ef-4f46-84fe-1f1237083e59
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
