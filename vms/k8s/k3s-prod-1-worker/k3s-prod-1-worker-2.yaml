@@ -6,12 +6,15 @@ metadata:
 spec:
   instancetype:
     kind: VirtualMachineClusterInstancetype
-    name: c-8vcpu-16gb
+    name: c-4vcpu-8gb
   template:
     metadata:
       labels:
         kubevirt.io/vm: k3s-prod-1-worker-2
     spec:
+      nodeSelector:
+        # run on the node with the USB storage device
+        kubernetes.io/hostname: kubevirt-youko
       volumes:
         - dataVolume:
             name: k3s-prod-1-worker-2-disk
