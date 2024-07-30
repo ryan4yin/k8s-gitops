@@ -6,3 +6,6 @@ spec:
   devices:
     preferredDiskBus: virtio
     preferredInterfaceModel: virtio
+    # use entropy collected by cluster nodes inside guest
+    # to improve the quality of random numbers
+    preferredRng: {}

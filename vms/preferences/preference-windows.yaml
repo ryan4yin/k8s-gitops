@@ -19,9 +19,13 @@ spec:
   cpu:
     preferredCPUTopology: sockets
   devices:
+    preferredCdromBus: sata
     preferredDiskBus: sata
     preferredInterfaceModel: e1000
     preferredTPM: {}
+    # use entropy collected by cluster nodes inside guest
+    # to improve the quality of random numbers
+    preferredRng: {}
   features:
     preferredAcpi: {}
     preferredApic: {}
