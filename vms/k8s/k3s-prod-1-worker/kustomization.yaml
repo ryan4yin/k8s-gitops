@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: vms
 resources:
   - ./k3s-prod-1-worker-1.yaml
-  # - ./k3s-prod-1-worker-2.yaml
+  - ./k3s-prod-1-worker-2.yaml
   - ./k3s-prod-1-worker-3.yaml
 
 patches:

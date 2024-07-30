@@ -28,6 +28,9 @@ spec:
           resources:
             requests:
               storage: 50Gi
+          # NOTE: lock down the volume name to avoid creating a new one
+          # This should only be used when you want to reuse the volume(like recreating the VM).
+          volumeName: pvc-438b153c-dfcf-4195-8f24-fd5951be4822
         source:
           http:
             url: http://file.writefor.fun/vms/kubevirt-k3s-test-1-master-1.qcow2
