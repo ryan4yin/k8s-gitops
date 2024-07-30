@@ -6,3 +6,4 @@ resources:
   - ./istio-ingress.yaml
   - ./istiod.yaml
   - ./ztunnel.yaml
+  - ./cilium-allow-ambient.yaml
