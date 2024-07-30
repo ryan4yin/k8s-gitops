@@ -30,7 +30,7 @@ spec:
       unsafeMigrationOverride: false
     developerConfiguration:
       # https://github.com/kubevirt/kubevirt/blob/main/pkg/virt-config/feature-gates.go#L26
-      featureGates: 
+      featureGates:
         - Snapshot
         - VMExport
         # required by windows
@@ -49,6 +49,16 @@ spec:
         - HostDisk
         - LiveMigration
     vmStateStorageClass: longhorn
+    permittedHostDevices:
+      # https://kubevirt.io/user-guide/compute/host-devices/#exposing-usb-devices
+      usb:
+        # To get the vendor and product ID of the USB device,
+        # run the following command on the host machine:
+        #   lsusb -vvv | egrep -2 'Vendor|Product'
+        - resourceName: kubevirt.io/
+          selectors:
+            - vendor: "152d" # JMicron Technology Corp. / JMicron USA Technology Corp.
+              product: "0567" # JMS567 SATA 6Gb/s bridge
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
   workloadUpdateStrategy:
