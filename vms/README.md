@@ -47,6 +47,7 @@ It supports those ways to import `qcow2` images:
 kubectl get vmi -n vms
 
 # connect to a VMI's console
+# NOTE: The escape sequence is ^] (Ctrl + ]).
 virtctl console -n vms <vmi-name>
 
 # connect to a VMI's graphical console
