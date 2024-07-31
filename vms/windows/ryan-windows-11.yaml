@@ -107,4 +107,4 @@ spec:
   #             storage: 10Gi
   #       source:
   #         http:
-  #           url: "http://file.writefor.fun/iso/zh-cn_windows_11_consumer_editions_version_22h2_updated_oct_2022_x64_dvd_8f62ad3d.iso"
+  #           url: "http://kubevirt-file.writefor.fun/iso/zh-cn_windows_11_consumer_editions_version_22h2_updated_oct_2022_x64_dvd_8f62ad3d.iso"

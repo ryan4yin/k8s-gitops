@@ -33,4 +33,4 @@ spec:
           volumeName: pvc-c93c86f1-8c7d-42e1-a7a6-689a138579eb
         source:
           http:
-            url: http://file.writefor.fun/vms/kubevirt-k3s-prod-1-master-1.qcow2
+            url: http://kubevirt-file.writefor.fun/vms/kubevirt-k3s-prod-1-master-1.qcow2

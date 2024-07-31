@@ -33,4 +33,4 @@ spec:
           volumeName: pvc-3094547c-8033-44a3-8086-aa659af1e7a8
         source:
           http:
-            url: http://file.writefor.fun/vms/kubevirt-k3s-prod-1-worker-3.qcow2
+            url: http://kubevirt-file.writefor.fun/vms/kubevirt-k3s-prod-1-worker-3.qcow2
