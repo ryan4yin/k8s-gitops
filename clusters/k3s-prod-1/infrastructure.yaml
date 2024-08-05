@@ -12,7 +12,10 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./infra/namespaces
-  prune: true
+  # NOTE: Namespaces are very likely to have stateful resources that
+  # will prevent deletion if they are not empty.
+  # So, we should not prune them automatically!
+  prune: false
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -29,7 +32,11 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./infra/pre-controllers/overlays/k3s-prod-1
-  prune: true
+  # NOTE: infra-pre-controllers contains critical resources that provides
+  # networking, storage, etc. for the rest of the cluster.
+  # So, we should not prune them automatically!
+  # Otherwise, the cluster will be broken!
+  prune: false
   wait: true
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
