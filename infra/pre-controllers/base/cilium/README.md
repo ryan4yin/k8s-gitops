@@ -6,7 +6,7 @@ To use cilium as the network plugin, you have to install it via helm first:
 # To get all nodes ready, cilium(network plugin) has to be installed first.
 helm repo add cilium https://helm.cilium.io/
 helm search repo cilium/cilium -l | head
-helm install cilium cilium/cilium --version 1.15.3 --namespace kube-system
+helm install cilium cilium/cilium --version 1.16.0 --namespace kube-system
 ```
 
 And then you can deploy fluxcd and use it to manage cilium's configs.
