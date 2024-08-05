@@ -95,7 +95,7 @@ To prevent damage to the cluster, we have to follow some rules:
 1. **Do not use `kubectl apply` to apply changes to the cluster.** FluxCD will take care
    of the changes, and it will revert the changes if you apply them manually.
 1. **Do not allow push to the `main` branch directly(except flux itself, or more
-   accurately,, flux's deploy key).** All changes should be made via PRs, and the PRs
+   accurately, flux's deploy key).** All changes should be made via PRs, and the PRs
    should be reviewed by at least one person.
    - NOTE: if you're using gitlab, the creator of the deploy key will gains the same
      access as the deploy key! So, **please create the deploy key with a separate
