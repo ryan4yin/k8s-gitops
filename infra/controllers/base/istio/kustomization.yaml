@@ -8,3 +8,16 @@ resources:
   - ./istiod.yaml
   - ./ztunnel.yaml
   - ./cilium-allow-ambient.yaml
+
+
+patches:
+  # set the version of all the istio components
+  - patch: |-
+      kind: will-be-ignored
+      metadata:
+        name: will-be-ignored
+      spec:
+        interval: 3d
+        version: "1.22.3"
+    target:
+      kind: HelmRelease

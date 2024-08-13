@@ -18,6 +18,3 @@ spec:
       interval: 12h
   values:
     profile: ambient
-    cni:
-      cniConfDir: /var/lib/rancher/k3s/agent/etc/cni/net.d
-      cniBinDir: /var/lib/rancher/k3s/data/current/bin/
