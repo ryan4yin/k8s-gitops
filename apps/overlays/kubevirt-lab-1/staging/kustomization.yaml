@@ -7,3 +7,4 @@ commonLabels:
 resources:
   - ./failed/
   - ./test-controller/
+  - ./../../../base/debug/

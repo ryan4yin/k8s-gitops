@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debug
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: debug
+  template:
+    metadata:
+      labels:
+        app: debug
+    spec:
+      serviceAccountName: debug
+      containers:
+        - name: debug
+          image: ryan4yin/kunbernates-python-client:latest
+          imagePullPolicy: Always
+          command:
+            - /bin/bash
+            - -c
+            - while true; do echo "wait..."; sleep 10; done
+          securityContext:
+            runAsUser: 0 # root
+            runAsNonRoot: false
+            allowPrivilegeEscalation: false
+
