@@ -1,4 +1,5 @@
 # https://istio.io/latest/docs/ambient/install/platform-prerequisites/#cilium
+# TODO: this config will break the pod network!
 ---
 apiVersion: "cilium.io/v2"
 kind: CiliumClusterwideNetworkPolicy
