@@ -14,7 +14,7 @@ patches:
       metadata:
         name: will-be-ignored
       spec:
-        interval: 3d
+        interval: 72h
         version: "1.22.3"
     target:
       kind: HelmRelease
