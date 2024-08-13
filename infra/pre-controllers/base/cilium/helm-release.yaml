@@ -17,10 +17,12 @@ spec:
         name: cilium
         namespace: flux-system
       interval: 12h
-  # https://artifacthub.io/packages/helm/cilium/cilium/1.16.0
+  # https://github.com/cilium/cilium/tree/v1.16.0/install/kubernetes/cilium
   values:
+    # To intergrate with Istio, set the following values:
+    # https://docs.cilium.io/en/latest/network/servicemesh/istio/
     cni:
-      # disable this one for istio-cni
-      # https://istio.io/latest/docs/ambient/install/platform-prerequisites/#cilium
       exclusive: false
+    socketLB:
+      hostNamespaceOnly: true
 
