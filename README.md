@@ -118,6 +118,8 @@ To prevent damage to the cluster, we have to follow some rules:
       status.
 1. CI for PRs:
    [fluxcd/flux2-kustomize-helm-example/workflows](https://github.com/fluxcd/flux2-kustomize-helm-example/tree/main/.github/workflows)
+1. Be especially careful when using flux to deploy **network plugins**, as network failures
+   may prevent flux from accessing the git repositories or pulling the helm charts.
 
 ## References
 
