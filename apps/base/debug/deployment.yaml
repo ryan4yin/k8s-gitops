@@ -12,7 +12,6 @@ spec:
       labels:
         app: debug
     spec:
-      serviceAccountName: debug
       containers:
         - name: debug
           image: ryan4yin/kunbernates-python-client:latest
