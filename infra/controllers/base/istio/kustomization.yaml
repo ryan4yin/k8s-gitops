@@ -14,6 +14,8 @@ patches:
         name: will-be-ignored
       spec:
         interval: 72h
-        version: "1.22.3"
+        chart:
+          spec:
+            version: "1.22.3"
     target:
       kind: HelmRelease
