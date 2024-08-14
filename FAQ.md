@@ -183,7 +183,7 @@ Add this annotation to the resource's yaml file:
 ```yaml
 metadata:
   annotations:
-    kustomize.toolkit.fluxcd.io/force: "true"
+    kustomize.toolkit.fluxcd.io/force: "Enabled"
 ```
 
 To force recreate all StorageClasses, you can add the following to the `kustomization.yaml`
@@ -195,8 +195,9 @@ patches:
       metadata:
         name: will-be-ignored
         annotations:
-          kustomize.toolkit.fluxcd.io/force: "true"
+          kustomize.toolkit.fluxcd.io/force: "Enabled"
     target:
+      group: storage.k8s.io
       kind: StorageClass
 ```
 
