@@ -186,3 +186,17 @@ metadata:
     kustomize.toolkit.fluxcd.io/force: "true"
 ```
 
+To force recreate all StorageClasses, you can add the following to the `kustomization.yaml`
+
+```yaml
+patches:
+  - patch: |-
+      kind: will-be-ignored
+      metadata:
+        name: will-be-ignored
+        annotations:
+          kustomize.toolkit.fluxcd.io/force: "true"
+    target:
+      kind: StorageClass
+```
+
