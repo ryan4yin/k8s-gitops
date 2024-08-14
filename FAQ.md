@@ -173,3 +173,16 @@ patches:
     target:
       kind: ServiceAccount
 ```
+
+### How to force recreate resources(such as StorageClasses)?
+
+> https://fluxcd.io/flux/components/kustomize/kustomizations/#controlling-the-apply-behavior-of-resources
+
+Add this annotation to the resource's yaml file:
+
+```yaml
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/force: "true"
+```
+
