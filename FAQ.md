@@ -188,6 +188,8 @@ metadata:
 
 To force recreate all StorageClasses, you can add the following to the `kustomization.yaml`
 
+> It's ok to force recreate storageclasses, the PVCs & PVs will not be affected.
+
 ```yaml
 patches:
   - patch: |-
