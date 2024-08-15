@@ -17,5 +17,8 @@ spec:
     # The delta between MaxGuest and Guest is the amount of memory that can be hot(un)plugged.
     guest: 1Gi
     maxGuest: 1Gi
+    # Requests only 40% of the memory to be allocated to the VMI,
+    # let the VMI pod comsume the other 60% of the memory when needed.
+    overcommitPercent: 60
 
 

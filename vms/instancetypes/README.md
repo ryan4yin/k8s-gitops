@@ -10,3 +10,9 @@ The following instance types are available:
 2. `c-xxx`: Compute Series (CPU:MEM = 1:2)
 3. `hpc-xxx`: High Performance Computing Series (CPU:MEM = 1:2)
 4. `m-xxx`: Memory Optimized Series (CPU:MEM = 1:4)
+
+
+# Hugepages
+
+Use Hugepages for all Instance Types that memory is greater ot equal to 4GB.
+
