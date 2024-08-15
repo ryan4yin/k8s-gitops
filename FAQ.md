@@ -203,3 +203,10 @@ patches:
       kind: StorageClass
 ```
 
+
+### Why my VirtualMachineInstance stuck in `CrashLoopBackOff` status?
+
+Everything looks fine, but the VirtualMachineInstance still stuck in `CrashLoopBackOff`, the causes may be:
+
+1. `OOM Killed`: The host machine is out of memory, and the VirtualMachineInstance is killed by the OOM killer, check `dmesg` to confirm.
+
