@@ -3,7 +3,7 @@
 apiVersion: instancetype.kubevirt.io/v1beta1
 kind: VirtualMachineClusterInstancetype
 metadata:
-  name: m-8vcpu-32gb
+  name: m-6vcpu-22gb
 spec:
   # https://kubevirt.io/api-reference/main/definitions.html#_v1beta1_cpuinstancetype
   cpu:
