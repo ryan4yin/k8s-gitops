@@ -15,7 +15,7 @@ resources:
   # -- Memory Optimized Instance Types --#
   - instancetype-m-2vcpu-8gb.yaml
   - instancetype-m-4vcpu-16gb.yaml
-  - instancetype-m-8vcpu-32gb.yaml
+  - instancetype-m-6vcpu-22gb.yaml
   # -- Standard Instance Types --#
   - instancetype-s-1vcpu-1gb.yaml
   - instancetype-s-2vcpu-2gb.yaml

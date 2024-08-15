@@ -19,4 +19,5 @@ spec:
     maxGuest: 4Gi
     # Requests only 40% of the memory to be allocated to the VMI,
     # let the VMI pod comsume the other 60% of the memory when needed.
+    # NOTE: hugepages cannot be used with overcommitPercent!
     overcommitPercent: 60

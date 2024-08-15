@@ -8,18 +8,15 @@ spec:
   # https://kubevirt.io/api-reference/main/definitions.html#_v1beta1_cpuinstancetype
   cpu:
     # Required number of vCPUs to expose to the guest.
-    guest: 8
+    guest: 6
     # Model specifies the CPU model inside the VMI.
     #   - host-passthrough  - get the same CPU as the node
     #   - host-model        - get CPU closest to the node one
     model: host-model
   memory:
     # The delta between MaxGuest and Guest is the amount of memory that can be hot(un)plugged.
-    guest: 32Gi
-    maxGuest: 32Gi
-    # Requests only 60% of the memory to be allocated to the VMI,
-    # let the VMI pod comsume the other 60% of the memory when needed.
-    overcommitPercent: 40
+    guest: 22Gi
+    maxGuest: 22Gi
     hugepages:
       # PageSize specifies the hugepage size, for x86_64 architecture valid values are 1Gi and 2Mi.
       pageSize: 1Gi
