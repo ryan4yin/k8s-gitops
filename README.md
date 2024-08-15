@@ -77,6 +77,10 @@ flux reconcile ks infra-controllers
 
 # show more details
 flux --help
+
+# suspend and resume a kustomization's sync
+flux suspend ks vms
+flux resume ks vms
 ```
 
 ## TODO
