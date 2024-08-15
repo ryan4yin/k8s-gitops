@@ -29,6 +29,8 @@ spec:
       allowPostCopy: false
       unsafeMigrationOverride: false
     developerConfiguration:
+      # https://kubevirt.io/user-guide/compute/node_overcommit/#node-cpu-allocation-ratio
+      cpuAllocationRatio: 10 # 1vcpu = 1/10 cpu core
       # https://github.com/kubevirt/kubevirt/blob/main/pkg/virt-config/feature-gates.go#L26
       featureGates:
         - Snapshot
