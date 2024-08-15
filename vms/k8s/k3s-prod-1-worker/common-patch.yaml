@@ -11,16 +11,16 @@ spec:
       labels:
         app.kubernetes.io/name: k3s-prod-1-worker
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: app.kubernetes.io/name
-                    operator: In
-                    values:
-                      - k3s-prod-1-worker
-              topologyKey: kubernetes.io/hostname
+      # affinity:
+      #   podAntiAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       - labelSelector:
+      #           matchExpressions:
+      #             - key: app.kubernetes.io/name
+      #               operator: In
+      #               values:
+      #                 - k3s-prod-1-worker
+      #         topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 30
       domain:
         devices:

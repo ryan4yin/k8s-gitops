@@ -5,6 +5,7 @@ namespace: vms
 resources:
   # -- CPU Optimized Instance Types --#
   - instancetype-c-1vcpu-2gb.yaml
+  - instancetype-c-2vcpu-3gb.yaml
   - instancetype-c-2vcpu-4gb.yaml
   - instancetype-c-4vcpu-8gb.yaml
   - instancetype-c-8vcpu-16gb.yaml

@@ -6,7 +6,7 @@ metadata:
 spec:
   instancetype:
     kind: VirtualMachineClusterInstancetype
-    name: s-2vcpu-2gb
+    name: c-4vcpu-8gb
     # https://kubevirt.io/user-guide/user_workloads/instancetypes/#versioning
     revisionName: "" # we need to set this to empty when updating the instancetype
   template:
@@ -14,9 +14,6 @@ spec:
       labels:
         kubevirt.io/vm: k3s-prod-1-worker-2
     spec:
-      nodeSelector:
-        # run on the node with the USB storage device
-        kubernetes.io/hostname: kubevirt-youko
       volumes:
         - dataVolume:
             name: k3s-prod-1-worker-2-disk
