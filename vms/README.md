@@ -52,8 +52,8 @@ virtctl console -n vms <vmi-name>
 
 # connect to a VMI's graphical console
 virtctl vnc -n vms --proxy-only --port 60440 ryan-windows-11
-# then connect to the VNC server via virt-viewer or vncviewer:
-# address: vnc://127.0.0.1:60440
+# then connect to the VNC server via remote-viewer(provided by virt-viewer):
+#   remote-viewer vnc://127.0.0.1:60440
 ```
 
 ## VM's Snapshot, Restore, and Export
