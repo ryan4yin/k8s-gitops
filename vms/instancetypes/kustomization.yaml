@@ -11,8 +11,8 @@ resources:
   - instancetype-c-8vcpu-16gb.yaml
   # -- High Performance Instance Types --#
   - instancetype-hpc-4vcpu-8gb.yaml
-  - instancetype-hpc-4vcpu-11gb.yaml
   - instancetype-hpc-4vcpu-16gb.yaml
+  - instancetype-hpc-8vcpu-11gb.yaml
   - instancetype-hpc-8vcpu-16gb.yaml
   # -- Memory Optimized Instance Types --#
   - instancetype-m-2vcpu-8gb.yaml

@@ -3,12 +3,12 @@
 apiVersion: instancetype.kubevirt.io/v1beta1
 kind: VirtualMachineClusterInstancetype
 metadata:
-  name: hpc-4vcpu-11gb
+  name: hpc-8vcpu-11gb
 spec:
   # https://kubevirt.io/api-reference/main/definitions.html#_v1beta1_cpuinstancetype
   cpu:
     # Required number of vCPUs to expose to the guest.
-    guest: 4
+    guest: 8
     # Model specifies the CPU model inside the VMI.
     #   - host-passthrough  - get the same CPU as the node
     #   - host-model        - get CPU closest to the node one
