@@ -1,0 +1,27 @@
+# https://kubevirt.io/user-guide/user_workloads/instancetypes/#virtualmachineinstancetype
+---
+apiVersion: instancetype.kubevirt.io/v1beta1
+kind: VirtualMachineClusterInstancetype
+metadata:
+  name: hpc-4vcpu-11gb
+spec:
+  # https://kubevirt.io/api-reference/main/definitions.html#_v1beta1_cpuinstancetype
+  cpu:
+    # Required number of vCPUs to expose to the guest.
+    guest: 4
+    # Model specifies the CPU model inside the VMI.
+    #   - host-passthrough  - get the same CPU as the node
+    #   - host-model        - get CPU closest to the node one
+    model: host-passthrough
+    # place the VirtualMachineInstance on a node with enough dedicated pCPUs and pin the vCPUs to it.
+    dedicatedCPUPlacement: true
+    # requests one more dedicated pCPU to be allocated for the VMI to place the emulator thread on it.
+    isolateEmulatorThread: true
+  memory:
+    # The delta between MaxGuest and Guest is the amount of memory that can be hot(un)plugged.
+    guest: 11Gi
+    maxGuest: 11Gi
+    hugepages:
+      # PageSize specifies the hugepage size, for x86_64 architecture valid values are 1Gi and 2Mi.
+      pageSize: 1Gi
+

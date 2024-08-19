@@ -6,7 +6,9 @@ metadata:
 spec:
   instancetype:
     kind: VirtualMachineClusterInstancetype
-    name: hpc-4vcpu-8gb
+    name: hpc-4vcpu-11gb
+    # https://kubevirt.io/user-guide/user_workloads/instancetypes/#versioning
+    revisionName: "" # we need to set this to empty when updating the instancetype
   preference:
     kind: VirtualMachineClusterPreference
     name: virtio
