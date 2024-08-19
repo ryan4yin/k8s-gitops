@@ -8,3 +8,11 @@ resources:
   - ../../base/kong-gateway/
   - ../../base/kubevirt/
   - ../../base/longhorn/
+
+patches:
+  - path: ./helmrelease-victoria-metrics.yaml
+    target:
+      group: helm.toolkit.fluxcd.io
+      kind: HelmRelease
+      name: victoria-metrics-k8s-stack
+      namespace: monitoring
