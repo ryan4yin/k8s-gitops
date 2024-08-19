@@ -5,7 +5,7 @@ resources:
   # deploy monitoring stack first
   - ../../base/victoria-metrics/
   - ../../base/cert-manager/
-  - ../../base/kong-gateway/
+  # - ../../base/kong-gateway/
   - ../../base/istio/
 
 patches:
