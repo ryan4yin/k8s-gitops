@@ -21,7 +21,7 @@ spec:
   podMetricsEndpoints:
     - path: /stats/prometheus
       interval: 15s
-      relabelings:
+      relabelConfigs:
         - action: keep
           sourceLabels: [__meta_kubernetes_pod_container_name]
           regex: "istio-proxy"
