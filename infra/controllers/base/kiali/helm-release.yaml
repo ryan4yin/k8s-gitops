@@ -1,0 +1,29 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: istio-base
+  namespace: istio-system
+spec:
+  # The base chart contains the basic CRDs and cluster roles required to set up Istio
+  # This should be installed prior to any other Istio component.
+  releaseName: kiali-operator
+  interval: 30m
+  chart:
+    spec:
+      chart: base
+      sourceRef:
+        kind: HelmRepository
+        name: istio
+        namespace: flux-system
+      # istio <=> kiali Version Compatibility
+      # https://kiali.io/docs/installation/installation-guide/prerequisites/
+      # version: ""
+      interval: 12h
+  values:
+    cr:
+      create: true
+      namespace: istio-system
+      spec:
+        auth:
+          strategy: anonymous

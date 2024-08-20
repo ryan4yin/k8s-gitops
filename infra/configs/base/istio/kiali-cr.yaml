@@ -1,0 +1,94 @@
+# https://kiali.io/docs/configuration/kialis.kiali.io/
+apiVersion: kiali.io/v1alpha1
+kind: Kiali
+metadata:
+  name: kiali
+spec:
+  istio_namespace: "istio-system"
+  version: "default"
+
+  auth:
+    strategy: "anonymous"
+
+  deployment:
+    ingress:
+      enabled: false
+    instance_name: "kiali"
+    namespace: "istio-system"
+    replicas: 1
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "640Mi"
+      limits:
+        memory: "1Gi"
+    service_type: "NodePort"
+    view_only_mode: false
+
+  external_services:
+    istio:
+      component_status:
+        enabled: true
+      config_map_name: "istio"
+      egress_gateway_namespace: "istio-egress"
+      envoy_admin_local_port: 15000
+      gateway_api_classes: []
+      ingress_gateway_namespace: "istio-ingress"
+      istio_api_enabled: true
+      istiod_deployment_name: "istiod"
+      root_namespace: "istio-system"
+    # [Required] Kiali requires Prometheus to generate the topology graph,
+    # show metrics, calculate health and for several other features.
+    # If Prometheus is missing or Kiali can’t reach it, Kiali won’t work properly.
+    prometheus:
+      auth:
+        ca_file: &ca_file |
+          -----BEGIN CERTIFICATE-----
+          MIIBajCB8QIJAIwL98is2nQPMAoGCCqGSM49BAMEMB8xHTAbBgNVBAMMFFJ5YW40
+          WWluJ3MgUm9vdCBDQSAxMB4XDTI0MDQwMzA4NDgzM1oXDTM0MDQwMTA4NDgzM1ow
+          HzEdMBsGA1UEAwwUUnlhbjRZaW4ncyBSb290IENBIDEwdjAQBgcqhkjOPQIBBgUr
+          gQQAIgNiAAQ6ixMbsGZ/u/ZnwzOZ49naVL7rQxm9C74SboGytKcYBH03JjC7tgZ3
+          DylirxSLcTYHHtCz9ajdamP6+sgiGVpUODtfGSO+WmS+gAbLjCS37T41bkUhkx88
+          JU4NsGhjPXcwCgYIKoZIzj0EAwQDaAAwZQIwDrGLSdO+p/1uywkzqzdM/OnZs8bp
+          n60uBhUI7EZzDmrouOFeGx+dXYI5yy5AD/qDAjEA7fTQx+jccyOj4dimq1iU9+71
+          e/gWYg0rexfy/+9dQY6kvwMzv8Lnm6URaRMbE1Q/
+          -----END CERTIFICATE-----
+        insecure_skip_verify: false
+      cache_duration: 10
+      cache_enabled: true
+      cache_expiration: 300
+      health_check_url: ""
+      is_core: true
+      query_scope:
+        cluster: "k3s-test-1"
+      url: "https://prometheus.writefor.fun"
+    # [Optional] Kiali will query Grafana and try to fetch the configured Istio dashboards.
+    # For this reason Kiali must be able to reach Grafana, authenticate, and find the Istio dashboards.
+    # https://kiali.io/docs/configuration/p8s-jaeger-grafana/grafana/
+    grafana:
+      auth:
+        ca_file: *ca_file
+        insecure_skip_verify: false
+      enabled: false
+      is_core: false
+      url: "https://grafana.writefor.fun"
+    # [Optional] Jaeger is a highly recommended service because Kiali uses distributed tracing data for
+    # several features, providing an enhanced experience.
+    tracing:
+      enabled: false
+
+  kiali_feature_flags:
+    istio_annotation_action: true
+    istio_injection_action: true
+    istio_upgrade_action: false
+    ui_defaults:
+      i18n:
+        language: "en"
+        show_selector: false
+
+  server:
+    audit_log: true
+    gzip_enabled: true
+    node_port: 32475
+    port: 20001
+    web_fqdn: ""
