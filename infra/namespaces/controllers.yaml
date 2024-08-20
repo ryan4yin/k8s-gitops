@@ -32,6 +32,11 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: kiali-operator
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: kubevirt
 ---
 apiVersion: v1
