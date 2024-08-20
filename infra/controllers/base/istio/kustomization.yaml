@@ -8,6 +8,8 @@ resources:
   - ./istiod.yaml
   - ./ztunnel.yaml
   - ./istio-metrics.yaml
+  # - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.0.0/standard-install.yaml
+  - ./gateway-api-v1.1.0-standard-install.yaml
   # - ./cilium-allow-ambient.yaml
 
 patches:
