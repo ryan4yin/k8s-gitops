@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: istio-base
+  name: kiali
   namespace: istio-system
 spec:
   # The base chart contains the basic CRDs and cluster roles required to set up Istio
