@@ -3,6 +3,7 @@ apiVersion: kiali.io/v1alpha1
 kind: Kiali
 metadata:
   name: kiali
+  namespace: kiali-operator
 spec:
   istio_namespace: "istio-system"
   version: "default"

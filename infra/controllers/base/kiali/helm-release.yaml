@@ -18,12 +18,14 @@ spec:
         namespace: flux-system
       # istio <=> kiali Version Compatibility
       # https://kiali.io/docs/installation/installation-guide/prerequisites/
-      # version: ""
+      version: "*"
       interval: 12h
   values:
     cr:
       create: true
-      namespace: istio-system
+      # the namespace where the CR will be created
+      # (the default will be the operator namespace).
+      namespace: kiali-operator
       spec:
         auth:
           strategy: anonymous
