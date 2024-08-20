@@ -11,10 +11,10 @@ spec:
   interval: 30m
   chart:
     spec:
-      chart: base
+      chart: kiali-operator
       sourceRef:
         kind: HelmRepository
-        name: istio
+        name: kiali
         namespace: flux-system
       # istio <=> kiali Version Compatibility
       # https://kiali.io/docs/installation/installation-guide/prerequisites/
