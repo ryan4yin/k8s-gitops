@@ -23,6 +23,9 @@ spec:
         namespace: flux-system
       interval: 12h
   values:
+    labels:
+      # this label is used by kiali to find the ingress gateway
+      istio-component: ingressgateway
     service:
       type: NodePort
       ports:

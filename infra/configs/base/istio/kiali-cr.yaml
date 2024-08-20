@@ -74,6 +74,11 @@ spec:
     tracing:
       enabled: false
 
+  # Custom templates for the Kiali to find the Istio resources
+  istio_labels:
+    egress_gateway_label: "istio-component=egressgateway"
+    ingress_gateway_label: "istio-component=ingressgateway"
+
   kiali_feature_flags:
     istio_annotation_action: true
     istio_injection_action: true
