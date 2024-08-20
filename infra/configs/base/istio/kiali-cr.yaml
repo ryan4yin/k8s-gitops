@@ -15,7 +15,7 @@ spec:
     ingress:
       enabled: false
     instance_name: "kiali"
-    namespace: "istio-system"
+    namespace: "kiali-operator"
     replicas: 1
     resources:
       requests:
