@@ -4,4 +4,3 @@ kind: Kustomization
 resources:
   - ./kiali-cr.yaml
   - ./kiali-secrets.yaml
-  - ./waypoint-default.yaml
