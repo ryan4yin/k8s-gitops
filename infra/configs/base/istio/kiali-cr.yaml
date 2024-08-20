@@ -23,6 +23,12 @@ spec:
         memory: "640Mi"
       limits:
         memory: "1Gi"
+    # Defines additional secrets that are to be mounted in the Kiali pod.
+    # These are useful to contain certs that are used by Kiali to securely connect to third party systems
+    custom_secrets:
+    - name: "kiali-certs"
+      mount: "/data/certs"
+      optional: false
     service_type: "NodePort"
     view_only_mode: false
 
@@ -43,17 +49,7 @@ spec:
     # If Prometheus is missing or Kiali can’t reach it, Kiali won’t work properly.
     prometheus:
       auth:
-        ca_file: &ca_file |
-          -----BEGIN CERTIFICATE-----
-          MIIBajCB8QIJAIwL98is2nQPMAoGCCqGSM49BAMEMB8xHTAbBgNVBAMMFFJ5YW40
-          WWluJ3MgUm9vdCBDQSAxMB4XDTI0MDQwMzA4NDgzM1oXDTM0MDQwMTA4NDgzM1ow
-          HzEdMBsGA1UEAwwUUnlhbjRZaW4ncyBSb290IENBIDEwdjAQBgcqhkjOPQIBBgUr
-          gQQAIgNiAAQ6ixMbsGZ/u/ZnwzOZ49naVL7rQxm9C74SboGytKcYBH03JjC7tgZ3
-          DylirxSLcTYHHtCz9ajdamP6+sgiGVpUODtfGSO+WmS+gAbLjCS37T41bkUhkx88
-          JU4NsGhjPXcwCgYIKoZIzj0EAwQDaAAwZQIwDrGLSdO+p/1uywkzqzdM/OnZs8bp
-          n60uBhUI7EZzDmrouOFeGx+dXYI5yy5AD/qDAjEA7fTQx+jccyOj4dimq1iU9+71
-          e/gWYg0rexfy/+9dQY6kvwMzv8Lnm6URaRMbE1Q/
-          -----END CERTIFICATE-----
+        ca_file: /data/certs/ca.crt
         insecure_skip_verify: false
       cache_duration: 10
       cache_enabled: true
@@ -68,7 +64,7 @@ spec:
     # https://kiali.io/docs/configuration/p8s-jaeger-grafana/grafana/
     grafana:
       auth:
-        ca_file: *ca_file
+        ca_file: /data/certs/ca.crt
         insecure_skip_verify: false
       enabled: false
       is_core: false
