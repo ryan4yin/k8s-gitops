@@ -1,0 +1,30 @@
+# https://kubevirt.io/user-guide/user_workloads/component_monitoring/
+#
+# Scrape metrics from this service:
+#   kubectl get svc -n kubevirt kubevirt-prometheus-metrics -oyaml
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: kubevirt-prometheus-metrics
+  namespace: kubevirt
+spec:
+  jobLabel: kubevirt
+  targetLabels: [app]
+  selector:
+    matchLabels:
+      prometheus.kubevirt.io: "true"
+  namespaceSelector:
+    matchNames:
+      - kubevirt
+  endpoints:
+    - port: metrics
+      path: /metrics
+      scheme: https
+      tlsConfig:
+        insecureSkipVerify: false
+        ca:
+          configMap:
+            name: kubevirt-ca
+            key: tls.crt
+      interval: 15s
