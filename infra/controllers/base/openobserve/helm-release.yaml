@@ -40,3 +40,12 @@ spec:
       ZO_META_POSTGRES_DSN: "postgres://user:pass@postgres.writefor.fun:5432/database?sslmode=verify-full&sslrootcert=/data/posgresql/ca.crt"
       ZO_S3_ACCESS_KEY: "xxx"
       ZO_S3_SECRET_KEY: "xxx"
+
+    nats:
+      enabled: true # if true then nats will be deployed as part of openobserve
+      config:
+        jetstream:
+          fileStore:
+            pvc:
+              size: 20Gi
+              storageClassName: longhorn-critical
