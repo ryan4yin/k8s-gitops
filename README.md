@@ -103,6 +103,8 @@ kubectl create secret generic sops-age \
 --from-file=age.agekey=/dev/stdin
 ```
 
+To encrypt specific values in a yaml file:
+
 ```bash
 export AGE_RECIPIENT=age1l5ml2kesuwzx9zdeh4sla7ftxd2nx0zq8ypvw8s0rttzm9s6hyks044vwr
 
@@ -111,6 +113,10 @@ sops --age=${AGE_RECIPIENT} --encrypt \
   --encrypted-regex '^(data|stringData)$' --in-place basic-auth.yaml
 ```
 
+Examples:
+
+- <./infra/controllers/overlays/k3s-test-1/helmrelease-openobserve.yaml>
+- <./infra/controllers/overlays/k3s-test-1/helmrelease-openobserve-collector.yaml>
 
 ## TODO
 
