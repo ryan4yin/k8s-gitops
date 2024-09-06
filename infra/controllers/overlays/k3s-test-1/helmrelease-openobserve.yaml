@@ -3,6 +3,19 @@ metadata:
   name: will-be-ignored
 spec:
   values:
+    ingress:
+      enabled: true
+      className: "kong"
+      hosts:
+        - host: openobserve.writefor.fun
+          paths:
+            - path: /
+              pathType: Prefix
+      # tls:
+      #   - secretName: openobserve.writefor.fun-tls
+      #     hosts:
+      #       - openobserve.writefor.fun
+
     config:
       ZO_S3_BUCKET_PREFIX: k3s-test-1
     # All auth values are encrypted via sops command:
