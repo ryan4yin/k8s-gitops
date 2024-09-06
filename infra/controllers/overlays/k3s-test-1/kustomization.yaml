@@ -8,6 +8,7 @@ resources:
   # - ../../base/kong-gateway/
   - ../../base/istio/
   - ../../base/kiali/
+  - ../../base/openobserve/
 
 patches:
   - path: ./helmrelease-victoria-metrics.yaml
@@ -16,3 +17,9 @@ patches:
       kind: HelmRelease
       name: victoria-metrics-k8s-stack
       namespace: monitoring
+  - path: ./helmrelease-openobserve.yaml
+    target:
+      group: helm.toolkit.fluxcd.io
+      kind: HelmRelease
+      name: openobserve
+      namespace: openobserve

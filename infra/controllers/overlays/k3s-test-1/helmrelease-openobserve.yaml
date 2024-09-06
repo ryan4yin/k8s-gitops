@@ -1,0 +1,40 @@
+kind: will-be-ignored
+metadata:
+  name: will-be-ignored
+spec:
+  values:
+    config:
+      ZO_S3_BUCKET_PREFIX: k3s-test-1
+    # All auth values are encrypted via sops command:
+    #   sops --age=${AGE_RECIPIENT} --encrypt --in-place \
+    #   --encrypted-regex "ZO_META_POSTGRES_DSN|ZO_S3_ACCESS_KEY|ZO_S3_SECRET_KEY" helmrelease-openobserve.yaml
+    # Read repo's README.md for more details about how to encrypt the values.
+    auth:
+      # https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNECT-SSLROOTCERT
+      # Update the password for openobserve's user:
+      #   ALTER USER o2_k3s_test_1 WITH PASSWORD 'your_new_password';
+      # Format:
+      #   "postgres://user:pass@postgres.writefor.fun:5432/database?sslmode=verify-full&sslrootcert=/data/posgresql/ca.crt"
+      ZO_META_POSTGRES_DSN: ENC[AES256_GCM,data:zo/RddiuhlzLl4rvQU2B0TA1xHsvRy3QxGICGLu13v0t1BYJj/PFIFTgVedtXbr6EKdHFV57jeJhee/nJy0jAW8Ra8k4G9zxDW+c+KFBOXFoyDhSORriFa/3+DNGm4J2lJF1JxfPO//gTI0dJ58kqMY/dlZvn4NSe2Z/A9e49GP9PAZmVP69VPIF596S,iv:gngkIGFmT2OxHmuxJtOnJkrbnZbt77UDTOaqgIJ5TKY=,tag:/v//QPUXkbu7i2+ZPNs3WA==,type:str]
+      ZO_S3_ACCESS_KEY: ENC[AES256_GCM,data:dDIa0jx1sPMF+GJeh3dsYjWLfp0=,iv:ECY1qp4IGg8yRekwfW4rrf6gKT0KZ6MofqIClwtUJ+Q=,tag:CRl7J4n+pYUS8dvrR35/uw==,type:str]
+      ZO_S3_SECRET_KEY: ENC[AES256_GCM,data:tJVxQOac4zWsYtg4GJzT2HDOYltPo2j1MoQjEnyRN/yw1U/rAgVptw==,iv:Iap6IE8K5ktTX8D0S7GuIR5IpiWTergQhGaysin036Q=,tag:4SnV1viTyZeW1RHZTCG3Ww==,type:str]
+sops:
+  kms: []
+  gcp_kms: []
+  azure_kv: []
+  hc_vault: []
+  age:
+    - recipient: age1l5ml2kesuwzx9zdeh4sla7ftxd2nx0zq8ypvw8s0rttzm9s6hyks044vwr
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBMNklpK1hTbllVOStsNkto
+        OU9DV0tMZVVoRDlhMXM4aURDY0c2a2UvNWpjCnBQZENwQVRRM1RIZEJFK0E1cEZp
+        OTVuVVVmbjJNTTBaaEMxc08wYno0bm8KLS0tIHdBQitEYnVXbEdBa0xxL0EvMUdC
+        MENUNVJ5dU1na3ZLQTd6NkYxZm1UREkKE746WPxO80mPaPi0gqxQLO9E8wH7suYh
+        uAmgAKVwtG+gTClsXGdnxtG+AkASWqlDrg7snLkMXVx41fIwE9uJoQ==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2024-09-06T06:20:27Z"
+  mac: ENC[AES256_GCM,data:TDpGwoy3ewRJsbEoaeaB2hVbrFm/E/ahOfvzaWAO2A1nsInn7F8dly2upTHC8j+1ipyBfH15jSrMyn3uodgLZYZARHTrqrx5nqafjMqf0X6YRH3C1x8TCJ36jsj2PdFEa/ZVgTxA0lICbGykxzcKF/SkxYO6lyGcXP+GSCco9tg=,iv:Xq9DtKytq2Et7GFxOYT3kVUZY8nPUUeGgzjrNxHWkuI=,tag:g8UccL6taY5W+ykJJ3I8zw==,type:str]
+  pgp: []
+  encrypted_regex: ZO_META_POSTGRES_DSN|ZO_S3_ACCESS_KEY|ZO_S3_SECRET_KEY
+  version: 3.8.1
