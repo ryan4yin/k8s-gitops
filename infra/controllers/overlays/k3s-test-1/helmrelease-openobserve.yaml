@@ -15,9 +15,10 @@ spec:
       #   ALTER USER o2_k3s_test_1 WITH PASSWORD 'your_new_password';
       # Format:
       #   "postgres://user:pass@postgres.writefor.fun:5432/database?sslmode=verify-full&sslrootcert=/data/posgresql/ca.crt"
-      ZO_META_POSTGRES_DSN: ENC[AES256_GCM,data:zo/RddiuhlzLl4rvQU2B0TA1xHsvRy3QxGICGLu13v0t1BYJj/PFIFTgVedtXbr6EKdHFV57jeJhee/nJy0jAW8Ra8k4G9zxDW+c+KFBOXFoyDhSORriFa/3+DNGm4J2lJF1JxfPO//gTI0dJ58kqMY/dlZvn4NSe2Z/A9e49GP9PAZmVP69VPIF596S,iv:gngkIGFmT2OxHmuxJtOnJkrbnZbt77UDTOaqgIJ5TKY=,tag:/v//QPUXkbu7i2+ZPNs3WA==,type:str]
-      ZO_S3_ACCESS_KEY: ENC[AES256_GCM,data:dDIa0jx1sPMF+GJeh3dsYjWLfp0=,iv:ECY1qp4IGg8yRekwfW4rrf6gKT0KZ6MofqIClwtUJ+Q=,tag:CRl7J4n+pYUS8dvrR35/uw==,type:str]
-      ZO_S3_SECRET_KEY: ENC[AES256_GCM,data:tJVxQOac4zWsYtg4GJzT2HDOYltPo2j1MoQjEnyRN/yw1U/rAgVptw==,iv:Iap6IE8K5ktTX8D0S7GuIR5IpiWTergQhGaysin036Q=,tag:4SnV1viTyZeW1RHZTCG3Ww==,type:str]
+      # This chart do not support add custom volume mounts for the secrets, so diable ssl verification.
+      ZO_META_POSTGRES_DSN: ENC[AES256_GCM,data:PVVQPrsPt1Yn3rPBMtuOhWzkQpTrxa+sigIMNfgVLxi09aSzvCtRVyQYyhdS+uYj1tOYIQQjaKFGL8gc2GkIKl56qk3bH5Lui2iM+p/UYutiNis/NZgFEc92B8+9KDkacG42UOZR,iv:oo2AXeGyPrHcy+/etm3iudui9E5SQE8fMrauVAygnj8=,tag:rR64ISopjeP+Ik0DsoW45Q==,type:str]
+      ZO_S3_ACCESS_KEY: ENC[AES256_GCM,data:p01vJbhoA6/3STKPeDtL9ru+uFA=,iv:B+11j4RWuNNfNrL0yJqCeKWh9yjcvmmn5I49Ptv6/sM=,tag:CZKJc+W+9oyeyQr3xpSUGQ==,type:str]
+      ZO_S3_SECRET_KEY: ENC[AES256_GCM,data:VJSui+CreopN8Y/t29VNJpSgt8+GVASd8htoKm28XqNOLNZvl+D2pA==,iv:3xXexETffaIZdovwnfD7MEBRwNryBqvuGGdAcemhL6o=,tag:YLMIZ9tGm5tAyMU6AG8nSw==,type:str]
 sops:
   kms: []
   gcp_kms: []
@@ -27,14 +28,14 @@ sops:
     - recipient: age1l5ml2kesuwzx9zdeh4sla7ftxd2nx0zq8ypvw8s0rttzm9s6hyks044vwr
       enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBMNklpK1hTbllVOStsNkto
-        OU9DV0tMZVVoRDlhMXM4aURDY0c2a2UvNWpjCnBQZENwQVRRM1RIZEJFK0E1cEZp
-        OTVuVVVmbjJNTTBaaEMxc08wYno0bm8KLS0tIHdBQitEYnVXbEdBa0xxL0EvMUdC
-        MENUNVJ5dU1na3ZLQTd6NkYxZm1UREkKE746WPxO80mPaPi0gqxQLO9E8wH7suYh
-        uAmgAKVwtG+gTClsXGdnxtG+AkASWqlDrg7snLkMXVx41fIwE9uJoQ==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBhWkNzNEx3dXV5OGJETFNr
+        WmRFQ0JIVEJpb2pGQkhVcmZLalBYQm5CNFZNCmY3UDVvRUtpejQ2Y1UxRVdVSFZ6
+        R1prbno3VXEyRnVOYzBFY3VtZk5sYVEKLS0tIEZteHJZSml4ZHR3ZzE1dWhNc1hP
+        U0tJNDd3Wm1wRGhJc0I3aU1qdWhVeFUKsyzs7GBRwkMXP5k/04j5F0fKiGI/Zhbn
+        BrAiwQAAjaXElB0mYg5Pxo2n7jJKxIlqJCpQr6lsg+Xd0PPBXBy0qQ==
         -----END AGE ENCRYPTED FILE-----
-  lastmodified: "2024-09-06T06:20:27Z"
-  mac: ENC[AES256_GCM,data:TDpGwoy3ewRJsbEoaeaB2hVbrFm/E/ahOfvzaWAO2A1nsInn7F8dly2upTHC8j+1ipyBfH15jSrMyn3uodgLZYZARHTrqrx5nqafjMqf0X6YRH3C1x8TCJ36jsj2PdFEa/ZVgTxA0lICbGykxzcKF/SkxYO6lyGcXP+GSCco9tg=,iv:Xq9DtKytq2Et7GFxOYT3kVUZY8nPUUeGgzjrNxHWkuI=,tag:g8UccL6taY5W+ykJJ3I8zw==,type:str]
+  lastmodified: "2024-09-06T07:23:45Z"
+  mac: ENC[AES256_GCM,data:UOmf4o0bAthpeDFvc/QHddkWopmP7prTLpZJLc7FEvPv2MpRmJhy+1t+JYdQqkZ2DHaIc4juylb8ToMldiaH550mudfZFxxoG7Vg6ER0AvOGM4OcRV6SCXJabkkwTKt7nkf+VAL3tSvHGicqjpJbIF8iTXpJ69GE0HixHTqw5pY=,iv:NB4opn4t1EYE5bX2j3argOC/x8LceNlCsKXHz5PRSLM=,tag:rPpqhjysZiU70RLEibprxw==,type:str]
   pgp: []
   encrypted_regex: ZO_META_POSTGRES_DSN|ZO_S3_ACCESS_KEY|ZO_S3_SECRET_KEY
   version: 3.8.1
