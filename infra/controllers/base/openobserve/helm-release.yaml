@@ -44,12 +44,12 @@ spec:
     ingester:
       persistence:
         size: 10Gi
-        storageClass: longhorn-test
+        storageClass: ""
 
     querier:
       persistence: # If enabled it will be used for disk cache. Highly recommend to enable this for production
         size: 20Gi
-        storageClass: "longhorn-test"
+        storageClass: ""
 
     nats:
       enabled: true # if true then nats will be deployed as part of openobserve
@@ -58,4 +58,4 @@ spec:
           fileStore:
             pvc:
               size: 20Gi
-              storageClassName: longhorn-test
+              storageClassName: ""
