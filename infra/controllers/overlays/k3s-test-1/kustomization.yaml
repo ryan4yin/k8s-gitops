@@ -9,6 +9,7 @@ resources:
   - ../../base/istio/
   - ../../base/kiali/
   - ../../base/openobserve/
+  - ../../base/openobserve-collector/
 
 patches:
   - path: ./helmrelease-victoria-metrics.yaml
@@ -23,3 +24,9 @@ patches:
       kind: HelmRelease
       name: openobserve
       namespace: openobserve
+  - path: ./helmrelease-openobserve-collector.yaml
+    target:
+      group: helm.toolkit.fluxcd.io
+      kind: HelmRelease
+      name: openobserve-collector
+      namespace: openobserve-collector
