@@ -7,14 +7,14 @@ spec:
       enabled: true
       className: "kong"
       hosts:
-        - host: openobserve.writefor.fun
+        - host: o2-test.writefor.fun
           paths:
             - path: /
               pathType: Prefix
       # tls:
-      #   - secretName: openobserve.writefor.fun-tls
+      #   - secretName: o2-test.writefor.fun-tls
       #     hosts:
-      #       - openobserve.writefor.fun
+      #       - o2-test.writefor.fun
 
     config:
       ZO_S3_BUCKET_PREFIX: k3s-test-1
