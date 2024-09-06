@@ -1,0 +1,42 @@
+# https://fluxcd.io/flux/components/helm/helmreleases/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openobserve
+  namespace: openobserve
+spec:
+  install:
+    crds: CreateReplace
+    replace: true
+  releaseName: openobserve
+  interval: 30m
+  chart:
+    spec:
+      chart: openobserve
+      version: "0.11.*"
+      sourceRef:
+        kind: HelmRepository
+        name: openobserve
+        namespace: flux-system
+      interval: 12h
+  # https://github.com/openobserve/openobserve-helm-chart/blob/main/charts/openobserve/values.yaml
+  values:
+    postgres:
+      enabled: false # disable bundled PostgreSQL
+
+    config:
+      # meta store - postgresql
+      ZO_META_STORE: "postgres"
+      # opbject store - s3
+      ZO_S3_PROVIDER: "minio"
+      ZO_S3_SERVER_URL: "https://minio.writefor.fun"
+      ZO_S3_BUCKET_NAME: "openobserve"
+      ZO_S3_REGION_NAME: "us-east-1"
+      ZO_S3_BUCKET_PREFIX: "replace_me_by_cluster_name"
+
+    # All auth values are defined in each cluster's overlays.
+    auth:
+      ZO_META_POSTGRES_DSN: "postgres://user:pass@postgres.writefor.fun:5432/database?sslmode=verify-full&sslrootcert=/data/posgresql/ca.crt"
+      ZO_S3_ACCESS_KEY: "xxx"
+      ZO_S3_SECRET_KEY: "xxx"

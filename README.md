@@ -83,6 +83,35 @@ flux suspend ks vms
 flux resume ks vms
 ```
 
+## Secrets Management
+
+> https://fluxcd.io/flux/guides/mozilla-sops/#encrypting-secrets-using-age
+
+We use sops & age to manage secrets, so prerequisites:
+
+```bash
+nix shell nixpkgs#sops nixpkgs#age
+```
+
+Generate a new age key first, add the age key into the cluster:
+
+```bash
+age-keygen -o k8s-gitops.agekey
+cat k8s-gitops.agekey |
+kubectl create secret generic sops-age \
+--namespace=flux-system \
+--from-file=age.agekey=/dev/stdin
+```
+
+```bash
+export AGE_RECIPIENT=age1l5ml2kesuwzx9zdeh4sla7ftxd2nx0zq8ypvw8s0rttzm9s6hyks044vwr
+
+# encryp a secret cr file
+sops --age=${AGE_RECIPIENT} --encrypt \
+  --encrypted-regex '^(data|stringData)$' --in-place basic-auth.yaml
+```
+
+
 ## TODO
 
 - [ ] Add alert-manager config for fluxcd itself.
