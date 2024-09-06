@@ -41,6 +41,16 @@ spec:
       ZO_S3_ACCESS_KEY: "xxx"
       ZO_S3_SECRET_KEY: "xxx"
 
+    ingester:
+      persistence:
+        size: 10Gi
+        storageClass: longhorn-test
+
+    querier:
+      persistence: # If enabled it will be used for disk cache. Highly recommend to enable this for production
+        size: 20Gi
+        storageClass: "longhorn-test"
+
     nats:
       enabled: true # if true then nats will be deployed as part of openobserve
       config:
@@ -48,4 +58,4 @@ spec:
           fileStore:
             pvc:
               size: 20Gi
-              storageClassName: longhorn-critical
+              storageClassName: longhorn-test
