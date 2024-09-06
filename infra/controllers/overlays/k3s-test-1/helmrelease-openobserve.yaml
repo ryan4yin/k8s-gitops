@@ -1,50 +1,52 @@
 kind: will-be-ignored
 metadata:
-    name: will-be-ignored
+  name: will-be-ignored
 spec:
-    values:
-        ingress:
-            enabled: true
-            className: kong
-            hosts:
-                - host: test1-openobserve.writefor.fun
-                  paths:
-                    - path: /
-                      pathType: Prefix
-        config:
-            ZO_S3_BUCKET_PREFIX: ENC[AES256_GCM,data:/8u2eukUBpJKPg==,iv:zSZKrREBINzc0s5xHKCOJpLc6dYNAJDojnT4CAyEp5Y=,tag:1fH3Z5KKkcwZcZwxAqXKhg==,type:str]
-        # All auth values are encrypted via sops command:
-        #   sops --age=${AGE_RECIPIENT} --encrypt --in-place --encrypted-regex "ZO_*" helmrelease-openobserve.yaml
-        # Read repo's README.md for more details about how to encrypt the values.
-        auth:
-            # https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNECT-SSLROOTCERT
-            # Update the password for openobserve's user:
-            #   ALTER USER o2_k3s_test_1 WITH PASSWORD 'your_new_password';
-            # Format:
-            #   "postgres://user:pass@postgres.writefor.fun:5432/database?sslmode=verify-full&sslrootcert=/data/posgresql/ca.crt"
-            # This chart do not support add custom volume mounts for the secrets, so diable ssl verification.
-            ZO_META_POSTGRES_DSN: ENC[AES256_GCM,data:HGuTh98US7h+pgPzcyqMmz/ddomQMPovSEfJ7hNJW0yKHRcom/wKh5lt0rYxzoJGRtgCbCqQROLPuyoNxky7u9+y3nCq8NtrRDL9EMzXepYylMwH2pjKFw+7Ke7tD0QxpgB2I/QG,iv:PF9mRFKRahTzGgN/i54FH3hI+X2rNX51RnqzMRnmQTU=,tag:Gc1pGGobQZK3dHbsmlvh6A==,type:str]
-            ZO_S3_ACCESS_KEY: ENC[AES256_GCM,data:Vkw13LHs0YGrahsn9eq8MVGjWkk=,iv:3uKKlELTEhjxgxg7FBZwzHD/NY7cuKCSxZO1y0Nwjtw=,tag:8Yp1wmVj1ozD6X+6hPjk+A==,type:str]
-            ZO_S3_SECRET_KEY: ENC[AES256_GCM,data:86Lh7oOyB/y3MRs+z72Hul+QKL7cVLkH5Imkze8ec4Iv24/C6lhtdw==,iv:8vgnTSu7mjKRCXMfwj5/pjC8jAoNiIVynn62PpTpBMg=,tag:q/cqU89ZnibUVF+2+gFeUQ==,type:str]
-            ZO_ROOT_USER_EMAIL: ENC[AES256_GCM,data:6PbJnnaIBQ2d5qDqlvY4jw==,iv:8RfueHWdLDtw+tSU+RaYWGcP7ZW1HYoM5AEu/wt+vyE=,tag:YQ6PvNy222SbSzW/rRy47Q==,type:str]
-            ZO_ROOT_USER_PASSWORD: ENC[AES256_GCM,data:Iey4JEinGVjhIu+GJv38fXBNK5s=,iv:r7dQmGPraTWrDQxR5KUFnLpdCAwNJo2z1Ckwam59wZs=,tag:Sew/8j9XfkXeTUV2GYD6GQ==,type:str]
+  values:
+    ingress:
+      enabled: true
+      className: kong
+      hosts:
+        - host: test1-openobserve.writefor.fun
+          paths:
+            - path: /
+              pathType: Prefix
+    config:
+      ZO_S3_BUCKET_PREFIX: k3s-test-1
+    # All auth values are encrypted via sops command:
+    #   sops --age=${AGE_RECIPIENT} --encrypt --in-place --encrypted-regex "auth" helmrelease-openobserve.yaml
+    # Read repo's README.md for more details about how to encrypt the values.
+    #
+    # PostgreSQL DSN:
+    #   https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNECT-SSLROOTCERT
+    #   Update the password for openobserve's user:
+    #     ALTER USER o2_k3s_test_1 WITH PASSWORD 'your_new_password';
+    #   Format:
+    #     "postgres://user:pass@postgres.writefor.fun:5432/database?sslmode=verify-full&sslrootcert=/data/posgresql/ca.crt"
+    #   This chart do not support add custom volume mounts for the secrets, so diable ssl verification.
+    auth:
+      ZO_META_POSTGRES_DSN: ENC[AES256_GCM,data:eMZEAIEP3TGkntrrMwSCcDyzvvSBqAgQhccwicKuYkwCuG5NYKSlYrIg5JmeJT0/LJcA7fW8Dhxzsxb5+csIp3B0aJRKjKSA8UXeOdqDvIr/Fsw+av7WgvvT+bZEpOErSu2I8Mft,iv:CD7pSIVSQVkNtbiI+XkGinEjmGusO2nFZ9iJ3XeCZK8=,tag:vwDXxSHzKnFt36pUDjDjTA==,type:str]
+      ZO_S3_ACCESS_KEY: ENC[AES256_GCM,data:RnOsdtIJIahInrjuTZt039qbOfc=,iv:5hMMn1IWPpTwSh4awhRbMXNTOTkXwgPpWl0M59IwNTE=,tag:byDj0xie01PYHVTvLoHZhg==,type:str]
+      ZO_S3_SECRET_KEY: ENC[AES256_GCM,data:l52kRBJaLccdgt+Mz+uHPnnNbMXatGYWQ3l/tIpdkjrvFURascvnDw==,iv:yyM4eIxUuzxaIQAIEqP6oY1mGjH+v7pOF/m840JsYXU=,tag:COwG5exHLH0WY1kO5zAy2w==,type:str]
+      ZO_ROOT_USER_EMAIL: ENC[AES256_GCM,data:CzEvIMfrd0P61V+5CZT8jg==,iv:EPcpmsbVYeP8UABEGAb70PIwt6RSt9dkMuNyOttCrBA=,tag:z2RP9mWyNDaLnc6veCjwdA==,type:str]
+      ZO_ROOT_USER_PASSWORD: ENC[AES256_GCM,data:5HBlG4YTw4uhNYILggYPq9y8PpQ=,iv:2Ew2slR8sBHo+WvjISghiHMHxqRqYWJLP0uYERBGgxo=,tag:2Uy7AiYUieiVxtsJhf0c5Q==,type:str]
 sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
-    age:
-        - recipient: age1l5ml2kesuwzx9zdeh4sla7ftxd2nx0zq8ypvw8s0rttzm9s6hyks044vwr
-          enc: |
-            -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBHU2dLYVRBQmx0VlM4a2g0
-            TUlPc2xwaVRxYnRyK21YZThHNmtMZ1lyQjJJCkwybjRWMWRBRW44Nk5tUmtHMDgw
-            bytGcE1oSVFQUWg4VUlpV1czdDVyN1UKLS0tIFoxaktBZ0cxMm1MN1ZuN0Z5aUJ1
-            U3FVZUsrV3VPLy8rR1BRcTNJZUFPWGsKAZHXl3CIaU0jCBkNIXjOm2bF3eGm3d31
-            y1j2xVaw73jS/z3Dy7Z3eelxdj6kXJ49HC9YsPsgRMHsxObim17rKw==
-            -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-09-06T08:00:21Z"
-    mac: ENC[AES256_GCM,data:8y+7J+9fxXoOsZE7Q+65K/1EnK1K9FQHOkgo4eYIsaLB8ISRQiBHiT6SoQldfk/F+Op27iYNSQ3V9kLsHFaJlJEAkjh4vIYL0n6/OlgVZIaDMsZr9AXBKIZrWMqTZs2jqGgL+sw801pyNY3ZTWzm5KfcZTlmXvbbGRPd57kE+ng=,iv:X0+IaEtwo2ZhGt1Zqkae9w0rN+D1QHoGiK+yYFh3vL0=,tag:1vRwYOnl+d59NTvMYnH2nQ==,type:str]
-    pgp: []
-    encrypted_regex: ZO_*
-    version: 3.8.1
+  kms: []
+  gcp_kms: []
+  azure_kv: []
+  hc_vault: []
+  age:
+    - recipient: age1l5ml2kesuwzx9zdeh4sla7ftxd2nx0zq8ypvw8s0rttzm9s6hyks044vwr
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBCa1FtYlZrOEVpcXJpRm0r
+        L0s1SVdoeWJTZGl5Mk1SSWhLMTFudHMzbUdRClo5QXlxKy9MWlVKbFo1MkhPa2RJ
+        R0Z3Qzk0dWp1UEUvVUtwS0luZTdQMjgKLS0tIHpPSDFpUzUrZkh6eUx0eGRrWENh
+        VkhxcTg2SFdnVmZldUtNekF5bEI0QjgKDpA2S5kYJ0/KqB0Bhhqmxmvq1xLNCn4T
+        gIAA3hUo38mFxCptNQeysuJDNFBzoN1h2W5cu4fRZirqg4HmiWvSaA==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2024-09-06T08:12:58Z"
+  mac: ENC[AES256_GCM,data:v7havF5d+AAR83qxfCchui1UzO/L5Q4jw+ec1aSLOsoY1gZh4TekBEiWIH+hBUS61560d5JUCLmKEKwJvV7Re8wSLtQknlnEKKZQVidDhHYPA9f4AzJAcST0MTuRw+Y/Na9ilH7qMDlaz0sU96jB9LZm9LIB4bYab7+FF5Ym30M=,iv:L1C5z3YDjY1E0eUHZrKWDsW3SD7W0iBFWkBtF13kao4=,tag:VLR8JmEnrt4Mnw8eZvtPNQ==,type:str]
+  pgp: []
+  encrypted_regex: auth
+  version: 3.8.1
