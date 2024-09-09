@@ -13,7 +13,7 @@ resources:
   # Install CDI(Containerized Data Importer)
   # https://github.com/kubevirt/containerized-data-importer
   # ========================================
-  - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.59.0/cdi-cr.yaml
+  - ./cdi-cr-v1.60.2.yaml
 
   # ========================================
   # Install Cluster Network Addons Operator
