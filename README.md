@@ -168,6 +168,7 @@ To prevent damage to the cluster, we have to follow some rules:
   A comprehensive guide for beginners to understand and use Kustomize for Kubernetes
   deployments, but it do not cover all the features of Kustomize.
 - [Kustomize Official Examples](https://github.com/kubernetes-sigs/kustomize/blob/master/examples/README.md)
+- [Kustomize Official Docs](https://kubectl.docs.kubernetes.io/references/kustomize/)
 - [JSON Patch - Docs](https://jsonpatch.com/)
 - [Kustomization API - FluxCD](https://fluxcd.io/flux/components/kustomize/kustomizations/)
 

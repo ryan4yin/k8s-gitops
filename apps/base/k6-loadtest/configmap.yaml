@@ -1,0 +1,18 @@
+# non-official crd's configmap name will not be replaced to configmap name by kustomize.
+# so we declare the configmap here, instead of using configmapGenerator
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k6-loadtest
+data:
+  test.js: |
+    import { sleep, check } from 'k6';
+    import http from 'k6/http';
+
+    export default () => {
+      const res = http.get('http://bookinfo-gateway-istio.default.svc.cluster.local');
+      check(res, {
+        'status is 200': () => res.status === 200,
+      });
+      sleep(1);
+    };

@@ -1,0 +1,23 @@
+apiVersion: k6.io/v1alpha1
+kind: TestRun
+metadata:
+  name: k6-loadtest
+spec:
+  parallelism: 1
+  script:
+    configMap:
+      name: k6-loadtest
+      file: test.js
+  separate: false
+  runner:
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      runAsNonRoot: true
+    resources:
+      limits:
+        cpu: 200m
+        memory: 1000Mi
+      requests:
+        cpu: 100m
+        memory: 500Mi
