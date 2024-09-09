@@ -9,7 +9,7 @@ resources:
   - ../../base/istio/
   - ../../base/kiali/
   - ../../base/openobserve/
-  - ../../base/openobserve-collector/
+  # - ../../base/openobserve-collector/
   - ../../base/k6/
 
 patches:
