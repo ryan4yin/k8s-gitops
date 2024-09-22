@@ -50,6 +50,11 @@ kubectl get vmi -n vms
 # NOTE: The escape sequence is ^] (Ctrl + ]).
 virtctl console -n vms <vmi-name>
 
+# stop/restart a VMI
+virtctl stop -n vms <vmi-name>
+virtctl start -n vms <vmi-name>
+virtctl restart -n vms <vmi-name>
+
 # connect to a VMI's graphical console
 virtctl vnc -n vms --proxy-only --port 60440 ryan-windows-11
 # then connect to the VNC server via remote-viewer(provided by virt-viewer):
