@@ -210,3 +210,28 @@ Everything looks fine, but the VirtualMachineInstance still stuck in `CrashLoopB
 
 1. `OOM Killed`: The host machine is out of memory, and the VirtualMachineInstance is killed by the OOM killer, check `dmesg` to confirm.
 
+
+### Yaml - wrap long lines
+
+```bash
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xxx
+data:
+  service-account: >-
+    default,
+    abc,
+    def
+```
+
+is equivalent to:
+
+```bash
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xxx
+data:
+  service-account: default, abc, def
+```
