@@ -95,6 +95,9 @@ nix shell nixpkgs#sops nixpkgs#age
 
 ### 1. Generate & add the age key to the cluster
 
+> Generally one age key for one git repository is enough,
+> so you need to generate the age key only once.
+
 Generate a new age key first, add the age key into the cluster:
 
 ```bash
