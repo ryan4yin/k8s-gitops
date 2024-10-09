@@ -93,24 +93,57 @@ We use sops & age to manage secrets, so prerequisites:
 nix shell nixpkgs#sops nixpkgs#age
 ```
 
+### 1. Generate & add the age key to the cluster
+
 Generate a new age key first, add the age key into the cluster:
 
 ```bash
+# generate a new age key
 age-keygen -o k8s-gitops.agekey
+
+# add the age key to the cluster
 cat k8s-gitops.agekey |
 kubectl create secret generic sops-age \
 --namespace=flux-system \
 --from-file=age.agekey=/dev/stdin
 ```
 
+After that, you need to reference the age key in the kustomization config, e.g:
+
+```yaml
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: test
+  namespace: flux-system
+spec:
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infra/xxx
+  # Add the following decryption config
+  # https://fluxcd.io/flux/components/kustomize/kustomizations/#decryption
+  decryption:
+    provider: sops
+    # reference the secret we created before
+    secretRef:
+      name: sops-age
+```
+
+Now, you can encrypt the secrets in the yaml files located in the `infra/xxx` directory,
+and fluxcd will decrypt them automatically.
+
+### 2. Encrypt secrets
+
 To encrypt specific values in a yaml file:
 
 ```bash
+# This is the age recipient public key, it's printed when you generate the age key
 export AGE_RECIPIENT=age1l5ml2kesuwzx9zdeh4sla7ftxd2nx0zq8ypvw8s0rttzm9s6hyks044vwr
 
 # encryp a secret cr file
 sops --age=${AGE_RECIPIENT} --encrypt \
-  --encrypted-regex '^(data|stringData)$' --in-place basic-auth.yaml
+  --encrypted-regex '^(data|stringData)$' --in-place /path/to/secrets.yaml
 ```
 
 Examples:
@@ -157,8 +190,9 @@ To prevent damage to the cluster, we have to follow some rules:
       status.
 1. CI for PRs:
    [fluxcd/flux2-kustomize-helm-example/workflows](https://github.com/fluxcd/flux2-kustomize-helm-example/tree/main/.github/workflows)
-1. Be especially careful when using flux to deploy **network plugins**, as network failures
-   may prevent flux from accessing the git repositories or pulling the helm charts.
+1. Be especially careful when using flux to deploy **network plugins**, as network
+   failures may prevent flux from accessing the git repositories or pulling the helm
+   charts.
 
 ## References
 
