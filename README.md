@@ -224,6 +224,9 @@ To prevent damage to the cluster, we have to follow some rules:
 1. Be especially careful when using flux to deploy **network plugins**, as network
    failures may prevent flux from accessing the git repositories or pulling the helm
    charts.
+1. For the corporate environment, consider spliting gitops repositories & k8s clusters by
+   categories. Use multiple git repos & k8s clusters may increase the management overhead,
+   but it can also reduce the damage caused by accidents.
 
 ## References
 
