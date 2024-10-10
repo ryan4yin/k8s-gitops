@@ -95,8 +95,8 @@ nix shell nixpkgs#sops nixpkgs#age
 
 ### 1. Generate & add the age key to the cluster
 
-> Generally one age key for one git repository is enough,
-> so you need to generate the age key only once.
+> Generally one age key for one git repository is enough, so you need to generate the age
+> key only once.
 
 Generate a new age key first, add the age key into the cluster:
 
@@ -110,6 +110,9 @@ kubectl create secret generic sops-age \
 --namespace=flux-system \
 --from-file=age.agekey=/dev/stdin
 ```
+
+> NOTE: You may want to backup the age key in a secure place, as it's the only way to
+> decrypt the secrets.
 
 After that, you need to reference the age key in the kustomization config, e.g:
 
@@ -138,21 +141,46 @@ and fluxcd will decrypt them automatically.
 
 ### 2. Encrypt secrets
 
-To encrypt specific values in a yaml file:
+> https://github.com/getsops/sops?tab=readme-ov-file#49encrypting-only-parts-of-a-file
+
+To encrypt specific values in a yaml file using age's putlic key:
+
+> NOTE: private keyfile is not needed here, it's only used for decryption in cluster.
 
 ```bash
 # This is the age recipient public key, it's printed when you generate the age key
 export AGE_RECIPIENT=age1l5ml2kesuwzx9zdeh4sla7ftxd2nx0zq8ypvw8s0rttzm9s6hyks044vwr
 
-# encryp a secret cr file
-sops --age=${AGE_RECIPIENT} --encrypt \
+# Encrypting only specific values in a yaml file
+sops --encrypt --age=${AGE_RECIPIENT} \
   --encrypted-regex '^(data|stringData)$' --in-place /path/to/secrets.yaml
+
+# Decrypting the encrypted values
+sops --decrypt /path/to/secrets.yaml
 ```
 
 Examples:
 
 - <./infra/controllers/overlays/k3s-test-1/helmrelease-openobserve.yaml>
 - <./infra/controllers/overlays/k3s-test-1/helmrelease-openobserve-collector.yaml>
+
+### 3. Decrypt secrets
+
+> https://github.com/getsops/sops?tab=readme-ov-file#22encrypting-using-age
+
+Generally, you won't need to decrypt the secrets localy. To decrypt the secrets locally,
+you can just replace the encrypted values with the plaintext values, and then encrypt them
+again.
+
+If you really need to decrypt the secrets locally, you can use the following command:
+
+```bash
+# Specify the private key file path
+export SOPS_AGE_KEY_FILE=./k8s-gitops.agekey
+
+# Decrypting the encrypted values
+sops --decrypt /path/to/secrets.yaml
+```
 
 ## TODO
 
