@@ -6,6 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m
+  retryInterval: 10s
   dependsOn:
     - name: infra-namespaces
     - name: infra-controllers
