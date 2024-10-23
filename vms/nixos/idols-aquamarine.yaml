@@ -41,7 +41,7 @@ spec:
             - ReadWriteOnce
           resources:
             requests:
-              storage: 50Gi
+              storage: 70Gi
           # NOTE: lock down the volume name to avoid creating a new one
           # This should only be used when you want to reuse the volume(like recreating the VM).
           volumeName: pvc-109cf369-b572-4b84-bf95-4e4d302f2727
