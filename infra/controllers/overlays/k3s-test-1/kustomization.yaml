@@ -8,7 +8,7 @@ resources:
   # - ../../base/kong-gateway/
   - ../../base/istio/
   - ../../base/kiali/
-  - ../../base/openobserve/
+  # - ../../base/openobserve/
   # - ../../base/openobserve-collector/
   - ../../base/k6/
 
@@ -19,15 +19,15 @@ patches:
       kind: HelmRelease
       name: victoria-metrics-k8s-stack
       namespace: monitoring
-  - path: ./helmrelease-openobserve.yaml
-    target:
-      group: helm.toolkit.fluxcd.io
-      kind: HelmRelease
-      name: openobserve
-      namespace: openobserve
-  - path: ./helmrelease-openobserve-collector.yaml
-    target:
-      group: helm.toolkit.fluxcd.io
-      kind: HelmRelease
-      name: openobserve-collector
-      namespace: openobserve-collector
+#   - path: ./helmrelease-openobserve.yaml
+#     target:
+#       group: helm.toolkit.fluxcd.io
+#       kind: HelmRelease
+#       name: openobserve
+#       namespace: openobserve
+#   - path: ./helmrelease-openobserve-collector.yaml
+#     target:
+#       group: helm.toolkit.fluxcd.io
+#       kind: HelmRelease
+#       name: openobserve-collector
+#       namespace: openobserve-collector
