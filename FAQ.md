@@ -186,7 +186,8 @@ metadata:
     kustomize.toolkit.fluxcd.io/force: "Enabled"
 ```
 
-To force recreate all StorageClasses, you can add the following to the `kustomization.yaml`
+To force recreate all StorageClasses, you can add the following to the
+`kustomization.yaml`
 
 > It's ok to force recreate storageclasses, the PVCs & PVs will not be affected.
 
@@ -203,13 +204,13 @@ patches:
       kind: StorageClass
 ```
 
-
 ### Why my VirtualMachineInstance stuck in `CrashLoopBackOff` status?
 
-Everything looks fine, but the VirtualMachineInstance still stuck in `CrashLoopBackOff`, the causes may be:
+Everything looks fine, but the VirtualMachineInstance still stuck in `CrashLoopBackOff`,
+the causes may be:
 
-1. `OOM Killed`: The host machine is out of memory, and the VirtualMachineInstance is killed by the OOM killer, check `dmesg` to confirm.
-
+1. `OOM Killed`: The host machine is out of memory, and the VirtualMachineInstance is
+   killed by the OOM killer, check `dmesg` to confirm.
 
 ### Yaml - wrap long lines
 
@@ -236,12 +237,13 @@ data:
   service-account: default, abc, def
 ```
 
-
 ### Longhorn - Volumes Stuck in Detaching
 
-Solution: delete the daemonset pod of longhorn on the corresponding node.
+Solution:
+
+1. Delete the daemonset pod of longhorn on the corresponding node.
+2. If the issue still persists, delete all the pods in longhorn-system namespace via
+   `kubectl delete pod -n longhorn-system --all`.
+3. If the issue still persists, restart the node.
 
 Side effects: all the pods using longhorn volumes on the node will be restarted.
-
-
-
