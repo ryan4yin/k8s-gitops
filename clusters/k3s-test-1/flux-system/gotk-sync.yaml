@@ -11,7 +11,8 @@ spec:
     branch: main
   secretRef:
     name: flux-system
-  url: ssh://gitea@git.writefor.fun/ryan4yin/k8s-gitops
+  # url: ssh://gitea@git.writefor.fun/ryan4yin/k8s-gitops
+  url: ssh://git@github.com/ryan4yin/k8s-gitops
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
