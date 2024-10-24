@@ -239,6 +239,9 @@ data:
 
 ### Longhorn - Volumes Stuck in Detaching
 
+> The issue may be caused by my hardware. I'm using mini PCs with normal RAM (not the ECC
+> one) as my nodes, which may cause the data corruption.
+
 Solution:
 
 1. Delete the daemonset pod of longhorn on the corresponding node.
