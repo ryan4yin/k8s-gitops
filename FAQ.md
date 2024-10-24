@@ -235,3 +235,13 @@ metadata:
 data:
   service-account: default, abc, def
 ```
+
+
+### Longhorn - Volumes Stuck in Detaching
+
+Solution: delete the daemonset pod of longhorn on the corresponding node.
+
+Side effects: all the pods using longhorn volumes on the node will be restarted.
+
+
+
