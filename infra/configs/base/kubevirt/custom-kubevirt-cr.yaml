@@ -51,7 +51,7 @@ spec:
         - HostDisk
         # - VMLiveUpdateFeatures
         - LiveMigration
-    vmStateStorageClass: longhorn
+    vmStateStorageClass: local-path-test
     # vmRolloutStrategy: "LiveUpdate"
     permittedHostDevices:
       # https://kubevirt.io/user-guide/compute/host-devices/#exposing-usb-devices

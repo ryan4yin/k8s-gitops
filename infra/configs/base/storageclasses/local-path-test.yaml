@@ -4,7 +4,7 @@ metadata:
   name: local-path-test
 provisioner: rancher.io/local-path
 parameters:
-  nodePath: /var/lib/local-path-test
+  # nodePath: /var/lib/local-path-test
   pathPattern: "{{ .PVC.Namespace }}/{{ .PVC.Name }}"
 reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
