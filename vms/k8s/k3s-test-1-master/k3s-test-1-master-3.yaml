@@ -22,7 +22,7 @@ spec:
       spec:
         pvc:
           # this is the rootdisk of the node, it contains critical data
-          storageClassName: local-path
+          storageClassName: local-path-critical
           accessModes:
             - ReadWriteOnce
           resources:
@@ -30,7 +30,7 @@ spec:
               storage: 50Gi
           # NOTE: lock down the volume name to avoid creating a new one
           # This should only be used when you want to reuse the volume(like recreating the VM).
-          volumeName: pvc-bcf68b67-d33c-4826-ba84-63b2ebfe448d
+          # volumeName: ''
         source:
           http:
             url: http://kubevirt-file.writefor.fun/vms/kubevirt-k3s-test-1-master-3.qcow2

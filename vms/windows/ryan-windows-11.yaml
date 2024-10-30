@@ -12,10 +12,10 @@ spec:
   resources:
     requests:
       storage: 60Gi
-  storageClassName: local-path
+  storageClassName: local-path-critical
   # NOTE: lock down the volume name to avoid creating a new one
   # This should only be used when you want to reuse the volume(like recreating the VM).
-  volumeName: pvc-54f6c5bd-70ef-4f46-84fe-1f1237083e59
+  # volumeName: ''
 ---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
@@ -99,7 +99,7 @@ spec:
   #     spec:
   #       pvc:
   #         # iso will be used only once, it's useless after installation
-  #         storageClassName: local-path
+  #         storageClassName: local-path-test
   #         accessModes:
   #           - ReadWriteOnce
   #         resources:
