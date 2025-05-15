@@ -14,12 +14,12 @@ spec:
   chart:
     spec:
       chart: k6-operator
-      version: "*"
       sourceRef:
         kind: HelmRepository
         name: k6-operator
         namespace: flux-system
       interval: 12h
+      version: "*"
   # https://github.com/grafana/k6-operator/blob/main/charts/k6-operator/values.yaml
   values:
     namespace:

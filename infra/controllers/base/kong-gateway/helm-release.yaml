@@ -20,7 +20,7 @@ spec:
         name: kong
         namespace: flux-system
       # https://github.com/Kong/charts/blob/main/charts/ingress/Chart.yaml
-      version: 0.13.1
+      version: "0.19.*"
       interval: 12h
   values:
     gatewayDiscovery:

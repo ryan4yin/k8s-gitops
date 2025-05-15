@@ -14,11 +14,11 @@ spec:
   chart:
     spec:
       chart: openobserve-collector
-      version: "0.3.*"
       sourceRef:
         kind: HelmRepository
         name: openobserve-collector
         namespace: flux-system
+      version: "0.3.*"
       interval: 12h
   # https://github.com/openobserve/openobserve-helm-chart/blob/main/charts/openobserve-collector/values.yaml
   values:

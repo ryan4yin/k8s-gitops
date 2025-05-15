@@ -240,6 +240,17 @@ spec:
                         type: object
                     type: object
                     x-kubernetes-map-type: atomic
+                  commonInstancetypesDeployment:
+                    description: CommonInstancetypesDeployment controls the deployment
+                      of common-instancetypes resources
+                    nullable: true
+                    properties:
+                      enabled:
+                        description: Enabled controls the deployment of common-instancetypes
+                          resources, defaults to True.
+                        nullable: true
+                        type: boolean
+                    type: object
                   controllerConfiguration:
                     description: |-
                       ReloadableComponentConfiguration holds all generic k8s configuration options which can
@@ -421,6 +432,23 @@ spec:
                     description: PullPolicy describes a policy for if/when to pull
                       a container image
                     type: string
+                  instancetype:
+                    description: Instancetype configuration
+                    nullable: true
+                    properties:
+                      referencePolicy:
+                        description: |-
+                          ReferencePolicy defines how an instance type or preference should be referenced by the VM after submission, supported values are:
+                          reference (default) - Where a copy of the original object is stashed in a ControllerRevision and referenced by the VM.
+                          expand - Where the instance type or preference are expanded into the VM if no revisionNames have been populated.
+                          expandAll - Where the instance type or preference are expanded into the VM regardless of revisionNames previously being populated.
+                        enum:
+                        - reference
+                        - expand
+                        - expandAll
+                        nullable: true
+                        type: string
+                    type: object
                   ksmConfiguration:
                     description: KSMConfiguration holds the information regarding
                       the enabling the KSM in the nodes (if available).
@@ -479,8 +507,9 @@ spec:
                       features
                     properties:
                       maxCpuSockets:
-                        description: MaxCpuSockets holds the maximum amount of sockets
-                          that can be hotplugged
+                        description: |-
+                          MaxCpuSockets provides a MaxSockets value for VMs that do not provide their own.
+                          For VMs with more sockets than maximum the MaxSockets will be set to equal number of sockets.
                         format: int32
                         type: integer
                       maxGuest:
@@ -573,6 +602,13 @@ spec:
                           If set to true, migrations will still start in pre-copy, but switch to post-copy when
                           CompletionTimeoutPerGiB triggers. Defaults to false
                         type: boolean
+                      allowWorkloadDisruption:
+                        description: |-
+                          AllowWorkloadDisruption indicates that the migration shouldn't be
+                          canceled after acceptableCompletionTime is exceeded. Instead, if
+                          permitted, migration will be switched to post-copy or the VMI will be
+                          paused to allow the migration to complete
+                        type: boolean
                       bandwidthPerMigration:
                         anyOf:
                         - type: integer
@@ -585,8 +621,8 @@ spec:
                       completionTimeoutPerGiB:
                         description: |-
                           CompletionTimeoutPerGiB is the maximum number of seconds per GiB a migration is allowed to take.
-                          If a live-migration takes longer to migrate than this value multiplied by the size of the VMI,
-                          the migration will be cancelled, unless AllowPostCopy is true. Defaults to 800
+                          If the timeout is reached, the migration will be either paused, switched
+                          to post-copy or cancelled depending on other settings. Defaults to 150
                         format: int64
                         type: integer
                       disableTLS:
@@ -649,34 +685,6 @@ spec:
                                 ComputeResourceOverhead specifies the resource overhead that should be added to the compute container when using the binding.
                                 version: v1alphav1
                               properties:
-                                claims:
-                                  description: |-
-                                    Claims lists the names of resources, defined in spec.resourceClaims,
-                                    that are used by this container.
-
-
-                                    This is an alpha field and requires enabling the
-                                    DynamicResourceAllocation feature gate.
-
-
-                                    This field is immutable. It can only be set for containers.
-                                  items:
-                                    description: ResourceClaim references one entry
-                                      in PodSpec.ResourceClaims.
-                                    properties:
-                                      name:
-                                        description: |-
-                                          Name must match the name of one entry in pod.spec.resourceClaims of
-                                          the Pod where this field is used. It makes that resource available
-                                          inside a container.
-                                        type: string
-                                    required:
-                                    - name
-                                    type: object
-                                  type: array
-                                  x-kubernetes-list-map-keys:
-                                  - name
-                                  x-kubernetes-list-type: map
                                 limits:
                                   additionalProperties:
                                     anyOf:
@@ -705,7 +713,7 @@ spec:
                             domainAttachmentType:
                               description: |-
                                 DomainAttachmentType is a standard domain network attachment method kubevirt supports.
-                                Supported values: "tap".
+                                Supported values: "tap", "managedTap" (since v1.4).
                                 The standard domain attachment can be used instead or in addition to the sidecarImage.
                                 version: 1alphav1
                               type: string
@@ -883,37 +891,10 @@ spec:
                         usually idle and don't require a lot of memory or cpu.
                       properties:
                         resources:
-                          description: ResourceRequirements describes the compute
-                            resource requirements.
+                          description: |-
+                            ResourceRequirementsWithoutClaims describes the compute resource requirements.
+                            This struct was taken from the k8s.ResourceRequirements and cleaned up the 'Claims' field.
                           properties:
-                            claims:
-                              description: |-
-                                Claims lists the names of resources, defined in spec.resourceClaims,
-                                that are used by this container.
-
-
-                                This is an alpha field and requires enabling the
-                                DynamicResourceAllocation feature gate.
-
-
-                                This field is immutable. It can only be set for containers.
-                              items:
-                                description: ResourceClaim references one entry in
-                                  PodSpec.ResourceClaims.
-                                properties:
-                                  name:
-                                    description: |-
-                                      Name must match the name of one entry in pod.spec.resourceClaims of
-                                      the Pod where this field is used. It makes that resource available
-                                      inside a container.
-                                    type: string
-                                required:
-                                - name
-                                type: object
-                              type: array
-                              x-kubernetes-list-map-keys:
-                              - name
-                              x-kubernetes-list-type: map
                             limits:
                               additionalProperties:
                                 anyOf:
@@ -967,9 +948,7 @@ spec:
                           MinTLSVersion is a way to specify the minimum protocol version that is acceptable for TLS connections.
                           Protocol versions are based on the following most common TLS configurations:
 
-
                             https://ssl-config.mozilla.org/
-
 
                           Note that SSLv3.0 is not a supported protocol version due to well known
                           vulnerabilities such as POODLE: https://en.wikipedia.org/wiki/POODLE
@@ -1001,17 +980,17 @@ spec:
                         type: object
                     type: object
                   vmRolloutStrategy:
-                    description: VMRolloutStrategy defines how changes to a VM object
-                      propagate to its VMI
+                    description: |-
+                      VMRolloutStrategy defines how live-updatable fields, like CPU sockets, memory,
+                      tolerations, and affinity, are propagated from a VM to its VMI.
                     enum:
                     - Stage
                     - LiveUpdate
                     nullable: true
                     type: string
                   vmStateStorageClass:
-                    description: |-
-                      VMStateStorageClass is the name of the storage class to use for the PVCs created to preserve VM state, like TPM.
-                      The storage class must support RWX in filesystem mode.
+                    description: VMStateStorageClass is the name of the storage class
+                      to use for the PVCs created to preserve VM state, like TPM.
                     type: string
                   webhookConfiguration:
                     description: |-
@@ -1100,10 +1079,13 @@ spec:
                     referenced object inside the same namespace.
                   properties:
                     name:
+                      default: ""
                       description: |-
                         Name of the referent.
+                        This field is effectively required, but due to backwards compatibility is
+                        allowed to be empty. Instances of this type with an empty value here are
+                        almost certainly wrong.
                         More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                        TODO: Add other useful fields. apiVersion, kind, uid?
                       type: string
                   type: object
                   x-kubernetes-map-type: atomic
@@ -1420,7 +1402,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -1435,7 +1417,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -1603,7 +1585,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -1618,7 +1600,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -1784,7 +1766,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -1799,7 +1781,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -1967,7 +1949,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -1982,7 +1964,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -2173,14 +2155,12 @@ spec:
                       BatchEvictionInterval Represents the interval to wait before issuing the next
                       batch of shutdowns
 
-
                       Defaults to 1 minute
                     type: string
                   batchEvictionSize:
                     description: |-
                       BatchEvictionSize Represents the number of VMIs that can be forced updated per
                       the BatchShutdownInteral interval
-
 
                       Defaults to 10
                     type: integer
@@ -2191,7 +2171,6 @@ spec:
                       When multiple methods are present, the least disruptive method takes
                       precedence over more disruptive methods. For example if both LiveMigrate and Shutdown
                       methods are listed, only VMs which are not live migratable will be restarted/shutdown
-
 
                       An empty list defaults to no automated workload updating
                     items:
@@ -2500,7 +2479,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -2515,7 +2494,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -2683,7 +2662,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -2698,7 +2677,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -2864,7 +2843,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -2879,7 +2858,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -3047,7 +3026,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -3062,7 +3041,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -3525,6 +3504,17 @@ spec:
                         type: object
                     type: object
                     x-kubernetes-map-type: atomic
+                  commonInstancetypesDeployment:
+                    description: CommonInstancetypesDeployment controls the deployment
+                      of common-instancetypes resources
+                    nullable: true
+                    properties:
+                      enabled:
+                        description: Enabled controls the deployment of common-instancetypes
+                          resources, defaults to True.
+                        nullable: true
+                        type: boolean
+                    type: object
                   controllerConfiguration:
                     description: |-
                       ReloadableComponentConfiguration holds all generic k8s configuration options which can
@@ -3706,6 +3696,23 @@ spec:
                     description: PullPolicy describes a policy for if/when to pull
                       a container image
                     type: string
+                  instancetype:
+                    description: Instancetype configuration
+                    nullable: true
+                    properties:
+                      referencePolicy:
+                        description: |-
+                          ReferencePolicy defines how an instance type or preference should be referenced by the VM after submission, supported values are:
+                          reference (default) - Where a copy of the original object is stashed in a ControllerRevision and referenced by the VM.
+                          expand - Where the instance type or preference are expanded into the VM if no revisionNames have been populated.
+                          expandAll - Where the instance type or preference are expanded into the VM regardless of revisionNames previously being populated.
+                        enum:
+                        - reference
+                        - expand
+                        - expandAll
+                        nullable: true
+                        type: string
+                    type: object
                   ksmConfiguration:
                     description: KSMConfiguration holds the information regarding
                       the enabling the KSM in the nodes (if available).
@@ -3764,8 +3771,9 @@ spec:
                       features
                     properties:
                       maxCpuSockets:
-                        description: MaxCpuSockets holds the maximum amount of sockets
-                          that can be hotplugged
+                        description: |-
+                          MaxCpuSockets provides a MaxSockets value for VMs that do not provide their own.
+                          For VMs with more sockets than maximum the MaxSockets will be set to equal number of sockets.
                         format: int32
                         type: integer
                       maxGuest:
@@ -3858,6 +3866,13 @@ spec:
                           If set to true, migrations will still start in pre-copy, but switch to post-copy when
                           CompletionTimeoutPerGiB triggers. Defaults to false
                         type: boolean
+                      allowWorkloadDisruption:
+                        description: |-
+                          AllowWorkloadDisruption indicates that the migration shouldn't be
+                          canceled after acceptableCompletionTime is exceeded. Instead, if
+                          permitted, migration will be switched to post-copy or the VMI will be
+                          paused to allow the migration to complete
+                        type: boolean
                       bandwidthPerMigration:
                         anyOf:
                         - type: integer
@@ -3870,8 +3885,8 @@ spec:
                       completionTimeoutPerGiB:
                         description: |-
                           CompletionTimeoutPerGiB is the maximum number of seconds per GiB a migration is allowed to take.
-                          If a live-migration takes longer to migrate than this value multiplied by the size of the VMI,
-                          the migration will be cancelled, unless AllowPostCopy is true. Defaults to 800
+                          If the timeout is reached, the migration will be either paused, switched
+                          to post-copy or cancelled depending on other settings. Defaults to 150
                         format: int64
                         type: integer
                       disableTLS:
@@ -3934,34 +3949,6 @@ spec:
                                 ComputeResourceOverhead specifies the resource overhead that should be added to the compute container when using the binding.
                                 version: v1alphav1
                               properties:
-                                claims:
-                                  description: |-
-                                    Claims lists the names of resources, defined in spec.resourceClaims,
-                                    that are used by this container.
-
-
-                                    This is an alpha field and requires enabling the
-                                    DynamicResourceAllocation feature gate.
-
-
-                                    This field is immutable. It can only be set for containers.
-                                  items:
-                                    description: ResourceClaim references one entry
-                                      in PodSpec.ResourceClaims.
-                                    properties:
-                                      name:
-                                        description: |-
-                                          Name must match the name of one entry in pod.spec.resourceClaims of
-                                          the Pod where this field is used. It makes that resource available
-                                          inside a container.
-                                        type: string
-                                    required:
-                                    - name
-                                    type: object
-                                  type: array
-                                  x-kubernetes-list-map-keys:
-                                  - name
-                                  x-kubernetes-list-type: map
                                 limits:
                                   additionalProperties:
                                     anyOf:
@@ -3990,7 +3977,7 @@ spec:
                             domainAttachmentType:
                               description: |-
                                 DomainAttachmentType is a standard domain network attachment method kubevirt supports.
-                                Supported values: "tap".
+                                Supported values: "tap", "managedTap" (since v1.4).
                                 The standard domain attachment can be used instead or in addition to the sidecarImage.
                                 version: 1alphav1
                               type: string
@@ -4168,37 +4155,10 @@ spec:
                         usually idle and don't require a lot of memory or cpu.
                       properties:
                         resources:
-                          description: ResourceRequirements describes the compute
-                            resource requirements.
+                          description: |-
+                            ResourceRequirementsWithoutClaims describes the compute resource requirements.
+                            This struct was taken from the k8s.ResourceRequirements and cleaned up the 'Claims' field.
                           properties:
-                            claims:
-                              description: |-
-                                Claims lists the names of resources, defined in spec.resourceClaims,
-                                that are used by this container.
-
-
-                                This is an alpha field and requires enabling the
-                                DynamicResourceAllocation feature gate.
-
-
-                                This field is immutable. It can only be set for containers.
-                              items:
-                                description: ResourceClaim references one entry in
-                                  PodSpec.ResourceClaims.
-                                properties:
-                                  name:
-                                    description: |-
-                                      Name must match the name of one entry in pod.spec.resourceClaims of
-                                      the Pod where this field is used. It makes that resource available
-                                      inside a container.
-                                    type: string
-                                required:
-                                - name
-                                type: object
-                              type: array
-                              x-kubernetes-list-map-keys:
-                              - name
-                              x-kubernetes-list-type: map
                             limits:
                               additionalProperties:
                                 anyOf:
@@ -4252,9 +4212,7 @@ spec:
                           MinTLSVersion is a way to specify the minimum protocol version that is acceptable for TLS connections.
                           Protocol versions are based on the following most common TLS configurations:
 
-
                             https://ssl-config.mozilla.org/
-
 
                           Note that SSLv3.0 is not a supported protocol version due to well known
                           vulnerabilities such as POODLE: https://en.wikipedia.org/wiki/POODLE
@@ -4286,17 +4244,17 @@ spec:
                         type: object
                     type: object
                   vmRolloutStrategy:
-                    description: VMRolloutStrategy defines how changes to a VM object
-                      propagate to its VMI
+                    description: |-
+                      VMRolloutStrategy defines how live-updatable fields, like CPU sockets, memory,
+                      tolerations, and affinity, are propagated from a VM to its VMI.
                     enum:
                     - Stage
                     - LiveUpdate
                     nullable: true
                     type: string
                   vmStateStorageClass:
-                    description: |-
-                      VMStateStorageClass is the name of the storage class to use for the PVCs created to preserve VM state, like TPM.
-                      The storage class must support RWX in filesystem mode.
+                    description: VMStateStorageClass is the name of the storage class
+                      to use for the PVCs created to preserve VM state, like TPM.
                     type: string
                   webhookConfiguration:
                     description: |-
@@ -4385,10 +4343,13 @@ spec:
                     referenced object inside the same namespace.
                   properties:
                     name:
+                      default: ""
                       description: |-
                         Name of the referent.
+                        This field is effectively required, but due to backwards compatibility is
+                        allowed to be empty. Instances of this type with an empty value here are
+                        almost certainly wrong.
                         More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                        TODO: Add other useful fields. apiVersion, kind, uid?
                       type: string
                   type: object
                   x-kubernetes-map-type: atomic
@@ -4705,7 +4666,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -4720,7 +4681,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -4888,7 +4849,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -4903,7 +4864,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -5069,7 +5030,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -5084,7 +5045,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -5252,7 +5213,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -5267,7 +5228,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -5458,14 +5419,12 @@ spec:
                       BatchEvictionInterval Represents the interval to wait before issuing the next
                       batch of shutdowns
 
-
                       Defaults to 1 minute
                     type: string
                   batchEvictionSize:
                     description: |-
                       BatchEvictionSize Represents the number of VMIs that can be forced updated per
                       the BatchShutdownInteral interval
-
 
                       Defaults to 10
                     type: integer
@@ -5476,7 +5435,6 @@ spec:
                       When multiple methods are present, the least disruptive method takes
                       precedence over more disruptive methods. For example if both LiveMigrate and Shutdown
                       methods are listed, only VMs which are not live migratable will be restarted/shutdown
-
 
                       An empty list defaults to no automated workload updating
                     items:
@@ -5785,7 +5743,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -5800,7 +5758,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -5968,7 +5926,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -5983,7 +5941,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -6149,7 +6107,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -6164,7 +6122,7 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -6332,7 +6290,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -6347,7 +6305,7 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -7203,15 +7161,36 @@ rules:
 - apiGroups:
   - snapshot.kubevirt.io
   resources:
-  - '*'
+  - virtualmachinesnapshots
+  - virtualmachinesnapshots/status
+  - virtualmachinesnapshots/finalizers
+  - virtualmachinesnapshotcontents
+  - virtualmachinesnapshotcontents/status
+  - virtualmachinesnapshotcontents/finalizers
+  - virtualmachinerestores
+  - virtualmachinerestores/status
   verbs:
-  - '*'
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - delete
+  - patch
 - apiGroups:
   - export.kubevirt.io
   resources:
-  - '*'
+  - virtualmachineexports
+  - virtualmachineexports/status
+  - virtualmachineexports/finalizers
   verbs:
-  - '*'
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - delete
+  - patch
 - apiGroups:
   - pool.kubevirt.io
   resources:
@@ -7234,12 +7213,21 @@ rules:
   verbs:
   - '*'
 - apiGroups:
+  - kubevirt.io
+  resources:
+  - virtualmachines/finalizers
+  - virtualmachineinstances/finalizers
+  verbs:
+  - update
+- apiGroups:
   - subresources.kubevirt.io
   resources:
+  - virtualmachines/stop
   - virtualmachineinstances/addvolume
   - virtualmachineinstances/removevolume
   - virtualmachineinstances/freeze
   - virtualmachineinstances/unfreeze
+  - virtualmachineinstances/reset
   - virtualmachineinstances/softreboot
   - virtualmachineinstances/sev/setupsession
   - virtualmachineinstances/sev/injectlaunchsecret
@@ -7344,6 +7332,14 @@ rules:
   - list
   - watch
 - apiGroups:
+  - batch
+  resources:
+  - jobs
+  verbs:
+  - create
+  - get
+  - delete
+- apiGroups:
   - kubevirt.io
   resources:
   - virtualmachineinstances
@@ -7441,6 +7437,7 @@ rules:
   - virtualmachineinstances/userlist
   - virtualmachineinstances/sev/fetchcertchain
   - virtualmachineinstances/sev/querylaunchmeasurement
+  - virtualmachineinstances/usbredir
   verbs:
   - get
 - apiGroups:
@@ -7453,6 +7450,7 @@ rules:
   - virtualmachineinstances/freeze
   - virtualmachineinstances/unfreeze
   - virtualmachineinstances/softreboot
+  - virtualmachineinstances/reset
   - virtualmachineinstances/sev/setupsession
   - virtualmachineinstances/sev/injectlaunchsecret
   verbs:
@@ -7472,7 +7470,6 @@ rules:
   - virtualmachines/restart
   - virtualmachines/addvolume
   - virtualmachines/removevolume
-  - virtualmachines/migrate
   - virtualmachines/memorydump
   verbs:
   - update
@@ -7489,7 +7486,6 @@ rules:
   - virtualmachineinstances
   - virtualmachineinstancepresets
   - virtualmachineinstancereplicasets
-  - virtualmachineinstancemigrations
   verbs:
   - get
   - delete
@@ -7499,6 +7495,14 @@ rules:
   - list
   - watch
   - deletecollection
+- apiGroups:
+  - kubevirt.io
+  resources:
+  - virtualmachineinstancemigrations
+  verbs:
+  - get
+  - list
+  - watch
 - apiGroups:
   - snapshot.kubevirt.io
   resources:
@@ -7589,6 +7593,7 @@ rules:
   - virtualmachineinstances/userlist
   - virtualmachineinstances/sev/fetchcertchain
   - virtualmachineinstances/sev/querylaunchmeasurement
+  - virtualmachineinstances/usbredir
   verbs:
   - get
 - apiGroups:
@@ -7601,6 +7606,7 @@ rules:
   - virtualmachineinstances/freeze
   - virtualmachineinstances/unfreeze
   - virtualmachineinstances/softreboot
+  - virtualmachineinstances/reset
   - virtualmachineinstances/sev/setupsession
   - virtualmachineinstances/sev/injectlaunchsecret
   verbs:
@@ -7620,7 +7626,6 @@ rules:
   - virtualmachines/restart
   - virtualmachines/addvolume
   - virtualmachines/removevolume
-  - virtualmachines/migrate
   - virtualmachines/memorydump
   verbs:
   - update
@@ -7637,13 +7642,20 @@ rules:
   - virtualmachineinstances
   - virtualmachineinstancepresets
   - virtualmachineinstancereplicasets
-  - virtualmachineinstancemigrations
   verbs:
   - get
   - delete
   - create
   - update
   - patch
+  - list
+  - watch
+- apiGroups:
+  - kubevirt.io
+  resources:
+  - virtualmachineinstancemigrations
+  verbs:
+  - get
   - list
   - watch
 - apiGroups:
@@ -7825,6 +7837,25 @@ rules:
   - list
   - watch
 - apiGroups:
+  - subresources.kubevirt.io
+  resources:
+  - virtualmachines/migrate
+  verbs:
+  - update
+- apiGroups:
+  - kubevirt.io
+  resources:
+  - virtualmachineinstancemigrations
+  verbs:
+  - get
+  - delete
+  - create
+  - update
+  - patch
+  - list
+  - watch
+  - deletecollection
+- apiGroups:
   - authentication.k8s.io
   resources:
   - tokenreviews
@@ -7869,6 +7900,8 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      annotations:
+        openshift.io/required-scc: restricted-v2
       labels:
         kubevirt.io: virt-operator
         name: virt-operator
@@ -7897,14 +7930,14 @@ spec:
         - virt-operator
         env:
         - name: VIRT_OPERATOR_IMAGE
-          value: quay.io/kubevirt/virt-operator:v1.3.1
+          value: quay.io/kubevirt/virt-operator:v1.5.1
         - name: WATCH_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.annotations['olm.targetNamespaces']
         - name: KUBEVIRT_VERSION
-          value: v1.3.1
-        image: quay.io/kubevirt/virt-operator:v1.3.1
+          value: v1.5.1
+        image: quay.io/kubevirt/virt-operator:v1.5.1
         imagePullPolicy: IfNotPresent
         name: virt-operator
         ports:

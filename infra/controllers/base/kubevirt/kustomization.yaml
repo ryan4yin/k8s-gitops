@@ -5,19 +5,19 @@ resources:
   # ========================================
   # Install KubeVirt
   # ========================================
-  - ./kubevirt-operator-v1.3.1.yaml
+  - ./kubevirt-operator-v1.5.1.yaml
 
   # ========================================
   # Install CDI(Containerized Data Importer)
   # ========================================
-  - ./cdi-operator-v1.60.2.yaml
+  - ./cdi-operator-v1.62.0.yaml
   # - ./cdi-cr-v1.xx.x.yaml # cr is created in ./infra/configs, not here
 
   # ========================================
   # Install Cluster Network Addons Operator
   # ========================================
-  - ./cluster-network-addons-operator-v0.95.0.yaml
-  - ./cluster-network-addons-config.crd-v0.95.0.yaml
+  - ./cluster-network-addons-operator-v0.99.0.yaml
+  - ./cluster-network-addons-config.crd-v0.99.0.yaml
 
 patches:
   # We have create the those namespace in ./infra/namespaces,

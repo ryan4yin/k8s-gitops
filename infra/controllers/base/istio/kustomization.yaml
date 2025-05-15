@@ -9,7 +9,7 @@ resources:
   - ./ztunnel.yaml
   - ./istio-metrics.yaml
   # - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.0.0/standard-install.yaml
-  - ./gateway-api-v1.1.0-standard-install.yaml
+  - ./gateway-api-v1.3.0-standard-install.yaml
   # - ./cilium-allow-ambient.yaml
 
 patches:
@@ -22,6 +22,6 @@ patches:
         interval: 72h
         chart:
           spec:
-            version: "1.23.0"
+            version: "1.26.*"
     target:
       kind: HelmRelease

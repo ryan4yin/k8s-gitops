@@ -12,7 +12,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: longhorn-repo
-      version: 1.6.2
+      version: 1.8.*
   interval: 30m0s
   # https://github.com/longhorn/charts/blob/v1.6.x/charts/longhorn/values.yaml
   values:
