@@ -52,14 +52,4 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: openobserve
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: openobserve-collector
----
-apiVersion: v1
-kind: Namespace
-metadata:
   name: k6
