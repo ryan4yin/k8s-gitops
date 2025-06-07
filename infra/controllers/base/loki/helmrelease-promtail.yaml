@@ -1,0 +1,24 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: promtail
+  namespace: monitoring
+spec:
+  releaseName: promtail
+  interval: 30m
+  chart:
+    spec:
+      chart: promtail
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+        namespace: flux-system
+      version: "6.*"
+      interval: 12h
+  values:
+    config:
+      clients:
+        - url: http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push
+    serviceMonitor:
+      enabled: true 

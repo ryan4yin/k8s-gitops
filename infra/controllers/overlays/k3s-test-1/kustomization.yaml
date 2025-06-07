@@ -8,6 +8,7 @@ resources:
   # - ../../base/kong-gateway/
   # - ../../base/istio/
   # - ../../base/kiali/
+  - ../../base/loki/
   - ../../base/k6/
 
 patches:
