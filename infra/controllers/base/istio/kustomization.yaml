@@ -7,7 +7,6 @@ resources:
   - ./istio-ingress.yaml
   - ./istiod.yaml
   - ./ztunnel.yaml
-  - ./istio-metrics.yaml
   - ./cilium-allow-ambient.yaml
 
 patches:
