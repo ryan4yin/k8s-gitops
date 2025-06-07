@@ -18,12 +18,22 @@ spec:
         namespace: flux-system
       interval: 12h
       version: "1.17.*"
-  # https://github.com/cilium/cilium/tree/v1.17.0/install/kubernetes/cilium
+  # https://github.com/cilium/cilium/tree/v1.17.4/install/kubernetes/cilium
   values:
-    # To intergrate with Istio, set the following values:
+    # ======================== Work with Istio ========================
     # https://docs.cilium.io/en/latest/network/servicemesh/istio/
     cni:
       exclusive: false
     socketLB:
       hostNamespaceOnly: true
+    # disable L7 Proxy
+    l7Proxy: false
+
+    # ============================  Dual Stack  ============================
+    ipv6:
+      enabled: true
+    # -- Enables masquerading of IPv6 traffic leaving the node from endpoints.
+    enableIPv6Masquerade: true
+
+
 

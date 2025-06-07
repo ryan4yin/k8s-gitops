@@ -8,8 +8,9 @@ helm repo add cilium https://helm.cilium.io/
 helm search repo cilium/cilium -l | head
 # According to https://docs.cilium.io/en/latest/network/servicemesh/istio/
 # We need to install cilium with the following options:
-helm install cilium cilium/cilium --version 1.17.4 --namespace kube-system \
-  --set cni.exclusive=false --set socketLB.hostNamespaceOnly=true
+helm upgrade -i cilium cilium/cilium --version 1.17.4 --namespace kube-system \
+  --set cni.exclusive=false --set socketLB.hostNamespaceOnly=true \
+  --set ipv6.enabled=true --set enableIPv6Masquerade=true --set l7Proxy=false
 ```
 
 And then you can deploy fluxcd and use it to manage cilium's configs.
