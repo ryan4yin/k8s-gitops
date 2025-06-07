@@ -1,6 +1,5 @@
 # https://istio.io/latest/docs/ambient/install/platform-prerequisites/#cilium
 # https://docs.cilium.io/en/stable/network/kubernetes/policy/
-# TODO: this config will break the pod network!
 ---
 apiVersion: "cilium.io/v2"
 kind: CiliumClusterwideNetworkPolicy
@@ -8,6 +7,9 @@ metadata:
   name: "allow-ambient-hostprobes"
 spec:
   description: "Allows SNAT-ed kubelet health check probes into ambient pods"
+  enableDefaultDeny:
+    egress: false
+    ingress: false
   endpointSelector: {}
   ingress:
   - fromCIDR:
@@ -15,4 +17,4 @@ spec:
     # Allow all IPv4's Private Network Ranges to avoid break the communication between the nodes & pods
     - 10.0.0.0/8
     - 172.16.0.0/12
-    - 192.168.0.0/16"
+    - 192.168.0.0/16

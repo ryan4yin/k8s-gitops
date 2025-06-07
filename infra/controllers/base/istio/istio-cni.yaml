@@ -19,3 +19,6 @@ spec:
       version: "1.26.*"
   values:
     profile: ambient
+    # https://istio.io/latest/docs/ambient/install/platform-prerequisites/#k3s
+    global:
+      platform: k3s
