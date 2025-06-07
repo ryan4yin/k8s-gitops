@@ -59,10 +59,10 @@ spec:
   prune: true
   wait: true
   # https://fluxcd.io/flux/components/kustomize/kustomizations/#decryption
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-age
+  # decryption:
+  #   provider: sops
+  #   secretRef:
+  #     name: sops-age
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
