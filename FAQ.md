@@ -250,3 +250,14 @@ Solution:
 3. If the issue still persists, restart the node.
 
 Side effects: all the pods using longhorn volumes on the node will be restarted.
+
+
+
+### How to merge multiple kubeconfigs
+
+```bash
+KC1="xxx"
+KC2="yyy"
+
+KUBECONFIG="${KC1}:${KC2}" kubectl config view --raw > kc-all
+```
