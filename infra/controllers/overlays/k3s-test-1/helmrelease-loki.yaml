@@ -1,0 +1,42 @@
+kind: will-be-ignored
+metadata:
+  name: will-be-ignored
+spec:
+  values:
+    loki:
+      schemaConfig:
+        # https://grafana.com/docs/loki/latest/operations/storage/schema/
+        configs:
+          # for a new install, use a recent date in the past.
+          - from: 2025-06-01
+            object_store: filesystem # s3 / filesystem
+            store: tsdb      # tsdb only
+            schema: v13      # v13 is the latest
+            index:
+              prefix: index_ # any value without spaces is acceptable.
+              period: 24h    # must be 24h
+      storage:
+        # Loki requires a bucket for chunks and the ruler. GEL requires a third bucket for the admin API.
+        type: filesystem
+        filesystem:
+          chunks_directory: /var/loki/chunks
+          rules_directory: /var/loki/rules
+          admin_api_directory: /var/loki/admin
+        # bucketNames: # for object storage
+        #   chunks: k3s-test-1-loki-chunks
+        #   ruler: k3s-test-1-loki-ruler
+        #   admin: k3s-test-1-loki-admin
+        # s3:
+        #   s3: null
+        #   endpoint: null
+        #   region: null
+        #   secretAccessKey: null
+        #   accessKeyId: null
+        #   signatureVersion: null
+        #   s3ForcePathStyle: false
+        #   insecure: false
+        #   http_config: {}
+        #   # -- Check https://grafana.com/docs/loki/latest/configure/#s3_storage_config for more info on how to provide a backoff_config
+        #   backoff_config: {}
+        #   disable_dualstack: false
+

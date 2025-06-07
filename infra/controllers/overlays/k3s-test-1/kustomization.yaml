@@ -17,4 +17,8 @@ patches:
       group: helm.toolkit.fluxcd.io
       kind: HelmRelease
       name: victoria-metrics-k8s-stack
-
+  - path: ./helmrelease-loki.yaml
+    target:
+      group: helm.toolkit.fluxcd.io
+      kind: HelmRelease
+      name: loki

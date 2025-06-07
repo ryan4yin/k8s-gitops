@@ -18,7 +18,7 @@ spec:
         kind: HelmRepository
         name: victoria-metrics
         namespace: flux-system
-      version: "0.48.0"
+      version: "0.50.*"
       interval: 12h
   # https://github.com/VictoriaMetrics/helm-charts/tree/master/charts/victoria-metrics-k8s-stack
   values:
