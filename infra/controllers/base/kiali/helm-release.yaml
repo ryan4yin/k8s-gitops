@@ -18,7 +18,7 @@ spec:
         namespace: flux-system
       # istio <=> kiali Version Compatibility
       # https://kiali.io/docs/installation/installation-guide/prerequisites/
-      version: "*"
+      version: "2.10.*"
       interval: 12h
   values:
     cr:

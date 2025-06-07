@@ -18,7 +18,7 @@ spec:
         namespace: flux-system
       interval: 12h
       version: "1.17.*"
-  # https://github.com/cilium/cilium/tree/v1.16.0/install/kubernetes/cilium
+  # https://github.com/cilium/cilium/tree/v1.17.0/install/kubernetes/cilium
   values:
     # To intergrate with Istio, set the following values:
     # https://docs.cilium.io/en/latest/network/servicemesh/istio/
