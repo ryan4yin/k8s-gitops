@@ -161,8 +161,8 @@ sops --decrypt /path/to/secrets.yaml
 
 Examples:
 
-- <./infra/controllers/overlays/k3s-test-1/helmrelease-openobserve.yaml>
-- <./infra/controllers/overlays/k3s-test-1/helmrelease-openobserve-collector.yaml>
+- TODO
+
 
 ### 3. Decrypt secrets
 
