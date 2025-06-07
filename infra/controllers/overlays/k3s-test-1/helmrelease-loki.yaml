@@ -22,21 +22,21 @@ spec:
           chunks_directory: /var/loki/chunks
           rules_directory: /var/loki/rules
           admin_api_directory: /var/loki/admin
-        # bucketNames: # for object storage
-        #   chunks: k3s-test-1-loki-chunks
-        #   ruler: k3s-test-1-loki-ruler
-        #   admin: k3s-test-1-loki-admin
-        # s3:
-        #   s3: null
-        #   endpoint: null
-        #   region: null
-        #   secretAccessKey: null
-        #   accessKeyId: null
-        #   signatureVersion: null
-        #   s3ForcePathStyle: false
-        #   insecure: false
-        #   http_config: {}
-        #   # -- Check https://grafana.com/docs/loki/latest/configure/#s3_storage_config for more info on how to provide a backoff_config
-        #   backoff_config: {}
-        #   disable_dualstack: false
+        bucketNames: # for object storage
+          chunks: k3s-test-1-loki-chunks
+          ruler: k3s-test-1-loki-ruler
+          admin: k3s-test-1-loki-admin
+        s3:
+          s3: null
+          endpoint: null
+          region: null
+          secretAccessKey: null
+          accessKeyId: null
+          signatureVersion: null
+          s3ForcePathStyle: false
+          insecure: false
+          http_config: {}
+          # -- Check https://grafana.com/docs/loki/latest/configure/#s3_storage_config for more info on how to provide a backoff_config
+          backoff_config: {}
+          disable_dualstack: false
 
