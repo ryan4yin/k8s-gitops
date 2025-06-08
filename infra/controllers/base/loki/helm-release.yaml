@@ -23,7 +23,7 @@ spec:
     # ==========================================
     # For My Private CA Certs
     global:
-      extravolumes: &extravolumes
+      extraVolumes: &extraVolumes
         - name: loki-certs
           secret:
             secretName: loki-certs
@@ -34,7 +34,7 @@ spec:
     deploymentMode: SingleBinary
     singleBinary:
       replicas: 1
-      extravolumes: *extravolumes
+      extraVolumes: *extraVolumes
       extraVolumeMounts: *extraVolumeMounts
       resources:
         limits:
