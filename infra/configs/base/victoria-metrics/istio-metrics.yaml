@@ -75,7 +75,6 @@ metadata:
     release: istio
 spec:
   jobLabel: istio
-  targetLabels: [app]
   selector:
     matchExpressions:
       - { key: istio, operator: In, values: [pilot] }

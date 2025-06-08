@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   # - ../../base/kong/
   - ../../base/istio/
+  - ../../base/victoria-metrics/
