@@ -27,13 +27,13 @@ spec:
         #   chunks_directory: /var/loki/chunks
         #   rules_directory: /var/loki/rules
         #   admin_api_directory: /var/loki/admin
-        # bucketNames: # for object storage
-        #   chunks: k3s-test-1-loki-chunks
-        #   ruler: k3s-test-1-loki-ruler
-        #   admin: k3s-test-1-loki-admin
+        bucketNames: # for object storage
+          chunks: k3s-test-1-loki-chunks
+          ruler: k3s-test-1-loki-ruler
+          admin: k3s-test-1-loki-admin
         s3:
-          bucketnames: chunks
-          s3forcepathstyle: true
+          # bucketnames: {{ $.Values.loki.storage.bucketNames.chunks }}
+          s3ForcePathStyle: true
           insecure: true
           region: us-east-1
           endpoint: https://minio.writefor.fun
