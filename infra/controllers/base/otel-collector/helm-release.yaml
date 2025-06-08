@@ -16,7 +16,7 @@ spec:
         namespace: flux-system
       version: "0.126.*"
       interval: 12h
-  # https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-collector#crds
+  # https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-collector
   values:
     image:
       repository: "ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s"
@@ -32,16 +32,21 @@ spec:
         extractAllPodLabels: true
       logsCollection:
         enabled: true
-        includeCollectorLogs: true
+        # Do not include the collector itself's log, to prevent log looping
+        includeCollectorLogs: false
 
     config:
+      receivers:
+        jaeger: null
+        prometheus: null
+        zipkin: null
       exporters:
-        loki:
+        otlphttp:
           endpoint: http://loki.monitoring.svc.cluster.local:3100/otlp
       service:
         pipelines:
           logs:
             exporters:
-              - loki
+              - otlphttp
           traces: null
           metrics: null # we use vmagent for metrics collecting.
