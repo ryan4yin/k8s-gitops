@@ -18,6 +18,9 @@ spec:
       interval: 12h
   # https://github.com/grafana/loki/tree/main/production/helm/loki
   values:
+    # ==========================================
+    # Deployment Mode & Resources
+    # ==========================================
     deploymentMode: SingleBinary
     singleBinary:
       replicas: 1
@@ -28,8 +31,20 @@ spec:
         requests:
           cpu: 1
           memory: 2Gi
+    # Zero out replica counts of other deployment modes
+    backend:
+      replicas: 0
+    read:
+      replicas: 0
+    write:
+      replicas: 0
+
     minio:
       enabled: false
+
+    # ==========================================
+    # Loki's Config
+    # ==========================================
     loki:
       commonConfig:
         replication_factor: 1
