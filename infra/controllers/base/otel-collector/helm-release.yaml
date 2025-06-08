@@ -27,6 +27,8 @@ spec:
     replicaCount: 1
     # https://opentelemetry.io/docs/kubernetes/collector/components/
     presets:
+      kubernetesAttributes:
+        enabled: true
       logsCollection:
         enabled: true
         # Do not include the collector itself's log, to prevent log looping
