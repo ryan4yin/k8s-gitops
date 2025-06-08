@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - ./kiali.yaml
   - ./grafana-loki.yaml
+  - ./vmagent.yaml

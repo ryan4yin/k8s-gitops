@@ -1,0 +1,18 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: vmagent
+  namespace: monitoring
+spec:
+  parentRefs:
+    - name: istio-default
+      namespace: istio-ingress
+  hostnames: ["test1-vmagent.writefor.fun"]
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: vmagent-victoria-metrics-k8s-stack
+          port: 8429
