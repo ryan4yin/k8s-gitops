@@ -1,0 +1,19 @@
+kind: will-be-ignored
+metadata:
+  name: will-be-ignored
+spec:
+  values:
+    config:
+      processors:
+        resource:
+          attributes:
+            - key: cluster
+              value: "k3s-test-1"
+              action: upsert
+            - key: env
+              value: "test"
+              action: upsert
+      service:
+        pipelines:
+          logs:
+            processors: [k8sattributes, resource, transform] # Order is crucial

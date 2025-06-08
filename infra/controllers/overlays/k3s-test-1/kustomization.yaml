@@ -23,3 +23,8 @@ patches:
       group: helm.toolkit.fluxcd.io
       kind: HelmRelease
       name: loki
+  - path: ./helmrelease-otel-collector.yaml
+    target:
+      group: helm.toolkit.fluxcd.io
+      kind: HelmRelease
+      name: otel-collector
