@@ -24,12 +24,12 @@ spec:
     # For My Private CA Certs
     global:
       extraVolumes: &extraVolumes
-        - name: certs
+        - name: ca-certs
           secret:
-            secretName: certs
+            secretName: ca-certs
       extraVolumeMounts: &extraVolumeMounts
-        - name: certs
-          mountPath: /data/certs
+        - name: ca-certs
+          mountPath: /data/ca-certs
           readOnly: true
     deploymentMode: SingleBinary
     singleBinary:
@@ -88,7 +88,7 @@ spec:
           insecure: false # Disable https on s3 connection.
           http_config:
             insecure_skip_verify: false # skip verifying the certificate chain and hostname.
-            ca_file: /data/certs/ca.crt
+            ca_file: /data/ca-certs/ca.crt
           endpoint: https://minio.writefor.fun
           # Encrypt Command:
           #  sops --encrypt --age=${AGE_RECIPIENT}   --encrypted-regex 'Key' --in-place ./infra/controllers/overlays/k3s-test-1/helmrelease-loki.yaml

@@ -34,7 +34,7 @@ spec:
         remoteWrite:
         - url: https://prometheus.writefor.fun/api/v1/write
           tlsConfig:
-            caFile: /data/certs/ca.crt
+            caFile: /data/ca-certs/ca.crt
         selectAllByDefault: true
         scrapeInterval: 20s
         externalLabels:
@@ -50,12 +50,12 @@ spec:
           # but makes vmagent debugging UI less informative. See: https://docs.victoriametrics.com/vmagent/#relabel-debug
           promscrape.dropOriginalLabels: "false"
         volumes: &volumes
-          - name: certs
+          - name: ca-certs
             secret:
-              secretName: certs
+              secretName: ca-certs
         volumeMounts: &volumeMounts
-          - name: certs
-            mountPath: /data/certs
+          - name: ca-certs
+            mountPath: /data/ca-certs
             readOnly: true
       ingress:
         enabled: false
