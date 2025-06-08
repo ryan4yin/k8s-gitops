@@ -41,7 +41,7 @@ spec:
             - ReadWriteOnce
           resources:
             requests:
-              storage: 70Gi
+              storage: 80Gi
           # NOTE: lock down the volume name to avoid creating a new one
           # This should only be used when you want to reuse the volume(like recreating the VM).
           # volumeName: ''
