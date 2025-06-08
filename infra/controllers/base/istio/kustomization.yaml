@@ -4,7 +4,6 @@ kind: Kustomization
 resources:
   - ./istio-base.yaml
   - ./istio-cni.yaml
-  - ./istio-ingress.yaml
   - ./istiod.yaml
   - ./ztunnel.yaml
   - ./cilium-allow-ambient.yaml
