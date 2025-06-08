@@ -10,7 +10,7 @@ spec:
           # for a new install, use a recent date in the past.
           - from: "2025-06-01"
             # s3 / filesystem
-            object_store: filesystem
+            object_store: s3
             # tsdb only
             store: tsdb
             # v13 is the latest
@@ -23,37 +23,45 @@ spec:
       storage:
         # Loki requires a bucket for chunks and the ruler. GEL requires a third bucket for the admin API.
         type: s3
-        # filesystem:
-        #   chunks_directory: /var/loki/chunks
-        #   rules_directory: /var/loki/rules
-        #   admin_api_directory: /var/loki/admin
         bucketNames: # for object storage
           chunks: k3s-test-1-loki-chunks
-        s3:
-          # bucketnames: {{ $.Values.loki.storage.bucketNames.chunks }}
-          s3ForcePathStyle: true
-          insecure: true
-          region: us-east-1
-          endpoint: https://minio.writefor.fun
-          # Encrypt Command:
-          #  sops --encrypt --age=${AGE_RECIPIENT}   --encrypted-regex 'Key' --in-place ./infra/controllers/overlays/k3s-test-1/helmrelease-loki.yaml
-          #
-          # Access Key
-          accessKeyId: ENC[AES256_GCM,data:HrJOr3O+xaYCKpAwJrkqpbG/+N0=,iv:QbOKinnwmLgYtEmWrFJfnDjFXiNX4epU9ip7kGexzRs=,tag:kmoFR2dGj3uWLp1nWi7C5A==,type:str]
-          # Secret Key
-          secretAccessKey: ENC[AES256_GCM,data:vvSaDBWP2bV1grXFYfeZH/GV4Cbi8+w8BQXQLGdmLPVazHId8gd5MA==,iv:iQxC4ekcqo2K3kOM54HFP7AH5VGuvlNhjzrbMZIpbq8=,tag:GruLo0gVQ1LXC5eYdlIa3A==,type:str]
-sops:
-  age:
-    - recipient: age15tr9ja4ll22ef3rw43v4mje47x8a03ruqap08f68hcu077tytq0q9e4h5y
-      enc: |
-        -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsZ05yVzJpWVByZGV4K1FL
-        bGY3bDFqMll5NHJPOHB0dzhrVG0yVmJzU2pZCmlZOG15NDJOdkFwRE0xcFJrUENJ
-        YUVHZmZmMm8zMERZUFk2c0psdDIwMU0KLS0tIExUb3hneS9ENEY0Y0RxWXB2QUlM
-        bzdybFJ4T2RPWTRZOWRkVVVrUitFdlkKLumgsNsFjaB4iADdHe30YNAHsBH+THUm
-        20aoWMAyMFyjOs9yKHXVSASch7iCv/ZqZHtH5Q3/pRhcZOomeMQEEQ==
-        -----END AGE ENCRYPTED FILE-----
-  lastmodified: "2025-06-08T06:26:11Z"
-  mac: ENC[AES256_GCM,data:ZIwFmbycsnam3yKW0NfC1jh9FNwuRrgyZtMsAbXGjd6Jr/QYsCdRduTcUEYdvphK3qnDTf9D/dCLJhc6/Cq9RgYU+Oxph2E3QuprhVxXy4MRaW2Ui50aQEsBkFKsi1hAgIxYAv43NL/33RgnaApy8bd9BcKuyhTrxOhinoz5mcg=,iv:W2h0ayx6bcfrWxsINL+jOoUFgwSFUXEy3FA5HmZixss=,tag:S/LOr0GxUw2rYHvKPKA+Tg==,type:str]
-  encrypted_regex: Key
-  version: 3.10.2
+      # ============================================================================
+      # Storage Retentaion
+      # It's recommended to add a lifecycle policy on you object storage bucket.
+      # to delete all the logs older than [retention_period + 1 day].
+      # To assure the old logs get deleted.
+      # https://grafana.com/docs/loki/latest/operations/storage/retention/
+      # ============================================================================
+      # Compact multiple index files in the table into a single index file per tenant per day.
+      compactor:
+        compaction_interval: 10m
+        retention_enabled: true
+        retention_delete_delay: 2h
+        retention_delete_worker_count: 150
+        delete_request_store: s3
+      limits_config:
+        reject_old_samples: true
+        reject_old_samples_max_age: 168h
+        max_query_lookback: 168h # 7 days
+        # delete logs older than this period
+        retention_period: 168h
+        retention_stream:
+          # keey only 1 day for dev logs
+          - selector: '{namespace="dev"}'
+            priority: 1
+            period: 24h
+        max_cache_freshness_per_query: 10m
+        split_queries_by_interval: 15m
+        query_timeout: 60s
+        max_query_parallelism: 32
+        max_concurrent_tail_requests: 10
+        # OTEL related
+        # https://grafana.com/docs/loki/latest/send-data/otel/
+        allow_structured_metadata: true
+        # otlp_config:
+        #   resource_attributes:
+        #     ignore_defaults: true
+        #     attributes_config:
+        #       - action: index_label
+        #         attributes:
+        #           - service.group
