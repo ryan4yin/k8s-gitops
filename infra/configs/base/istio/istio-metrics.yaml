@@ -14,19 +14,29 @@ metadata:
 spec:
   selector:
     matchExpressions:
+      # Ignore all pods with the 'istio-prometheus-ignore' key.
       - { key: istio-prometheus-ignore, operator: DoesNotExist }
+  # Selects all pods in all namespaces...
   namespaceSelector:
     any: true
+  # This job label will be attached to the metrics scraped
   jobLabel: envoy-stats
   podMetricsEndpoints:
     - path: /stats/prometheus
       interval: 15s
       relabelConfigs:
+        # Keep only the official Istio telemetry port (15020) and ignore others.
+        - action: keep
+          sourceLabels: [__meta_kubernetes_pod_container_port_number]
+          regex: "15020"
+        # Keep only pods that have an 'istio-proxy' container.
         - action: keep
           sourceLabels: [__meta_kubernetes_pod_container_name]
           regex: "istio-proxy"
+        # Keep only pods that have the 'prometheus.io/scrape: "true"' annotation.
         - action: keep
           sourceLabels: [__meta_kubernetes_pod_annotationpresent_prometheus_io_scrape]
+        # Create a clean '__address__' label for IPv6
         - action: replace
           regex: (\d+);(([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4})
           replacement: "[$2]:$1"
@@ -34,6 +44,7 @@ spec:
             - __meta_kubernetes_pod_annotation_prometheus_io_port
             - __meta_kubernetes_pod_ip
           targetLabel: __address__
+        # Create a clean '__address__' label for IPv4
         - action: replace
           regex: (\d+);((([0-9]+?)(\.|$)){4})
           replacement: $2:$1
@@ -41,14 +52,18 @@ spec:
             - __meta_kubernetes_pod_annotation_prometheus_io_port
             - __meta_kubernetes_pod_ip
           targetLabel: __address__
+        # Drop all pod labels to avoid excessive label cardinality.
+        # This is a best practice for performance.
         - action: labeldrop
           regex: "__meta_kubernetes_pod_label_(.+)"
+        # Create a clean 'namespace' label from the pod's namespace.
         - sourceLabels: [__meta_kubernetes_namespace]
           action: replace
           targetLabel: namespace
+        # Create a clean 'pod' label from the pod's name.
         - sourceLabels: [__meta_kubernetes_pod_name]
           action: replace
-          targetLabel: pod_name
+          targetLabel: pod
 ---
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMServiceScrape
