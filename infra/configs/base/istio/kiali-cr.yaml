@@ -26,7 +26,7 @@ spec:
     # Defines additional secrets that are to be mounted in the Kiali pod.
     # These are useful to contain certs that are used by Kiali to securely connect to third party systems
     custom_secrets:
-    - name: "kiali-certs"
+    - name: "certs"
       mount: "/data/certs"
       optional: false
     service_type: "NodePort"

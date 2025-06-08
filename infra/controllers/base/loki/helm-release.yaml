@@ -24,11 +24,11 @@ spec:
     # For My Private CA Certs
     global:
       extraVolumes: &extraVolumes
-        - name: loki-certs
+        - name: certs
           secret:
-            secretName: loki-certs
+            secretName: certs
       extraVolumeMounts: &extraVolumeMounts
-        - name: loki-certs
+        - name: certs
           mountPath: /data/certs
           readOnly: true
     deploymentMode: SingleBinary
