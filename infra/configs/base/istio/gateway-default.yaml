@@ -4,6 +4,13 @@ metadata:
   name: istio-default
   namespace: istio-ingress
 spec:
+  infrastructure:
+    labels:
+      istio-component: ingressgateway
+    parametersRef:
+      group: ""
+      kind: ConfigMap
+      name: istio-default-gw-options
   gatewayClassName: istio
   listeners:
     - name: http
@@ -30,3 +37,32 @@ spec:
           - kind: HTTPRoute
         namespaces:
           from: All
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: istio-default-gw-options
+  namespace: istio-ingress
+data:
+  horizontalPodAutoscaler: |
+    spec:
+      minReplicas: 1
+      maxReplicas: 1
+
+  service: |
+    spec:
+      ipFamilyPolicy: PreferDualStack
+      ports:
+      - appProtocol: http
+        name: http
+        port: 80
+        protocol: TCP
+        targetPort: 80
+        nodePort: 80
+      - appProtocol: https
+        name: https
+        port: 443
+        protocol: TCP
+        targetPort: 443
+        nodePort: 443
+      type: NodePort
