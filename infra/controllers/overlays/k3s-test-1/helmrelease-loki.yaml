@@ -8,7 +8,7 @@ spec:
         # https://grafana.com/docs/loki/latest/operations/storage/schema/
         configs:
           # for a new install, use a recent date in the past.
-          - from: 2025-06-01
+          - from: "2025-06-01"
             object_store: filesystem # s3 / filesystem
             store: tsdb      # tsdb only
             schema: v13      # v13 is the latest
