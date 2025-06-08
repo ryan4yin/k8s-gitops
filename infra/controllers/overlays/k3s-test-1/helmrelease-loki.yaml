@@ -9,34 +9,53 @@ spec:
         configs:
           # for a new install, use a recent date in the past.
           - from: "2025-06-01"
-            object_store: filesystem # s3 / filesystem
-            store: tsdb      # tsdb only
-            schema: v13      # v13 is the latest
+            # s3 / filesystem
+            object_store: filesystem
+            # tsdb only
+            store: tsdb
+            # v13 is the latest
+            schema: v13
             index:
-              prefix: index_ # any value without spaces is acceptable.
-              period: 24h    # must be 24h
+              # any value without spaces is acceptable.
+              prefix: index_
+              # must be 24h
+              period: 24h
       storage:
         # Loki requires a bucket for chunks and the ruler. GEL requires a third bucket for the admin API.
-        type: filesystem
-        filesystem:
-          chunks_directory: /var/loki/chunks
-          rules_directory: /var/loki/rules
-          admin_api_directory: /var/loki/admin
-        bucketNames: # for object storage
-          chunks: k3s-test-1-loki-chunks
-          ruler: k3s-test-1-loki-ruler
-          admin: k3s-test-1-loki-admin
+        type: s3
+        # filesystem:
+        #   chunks_directory: /var/loki/chunks
+        #   rules_directory: /var/loki/rules
+        #   admin_api_directory: /var/loki/admin
+        # bucketNames: # for object storage
+        #   chunks: k3s-test-1-loki-chunks
+        #   ruler: k3s-test-1-loki-ruler
+        #   admin: k3s-test-1-loki-admin
         s3:
-          s3: http://${MINIO_ROOT_USER}:${MINIO_ROOT_PASSWORD}@minio.:9000/${MINIO_BUCKET_NAME}
-          endpoint: null
-          region: null
-          secretAccessKey: null
-          accessKeyId: null
-          signatureVersion: null
-          s3ForcePathStyle: false
-          insecure: false
-          http_config: {}
-          # -- Check https://grafana.com/docs/loki/latest/configure/#s3_storage_config for more info on how to provide a backoff_config
-          backoff_config: {}
-          disable_dualstack: false
-
+          bucketnames: chunks
+          s3forcepathstyle: true
+          insecure: true
+          region: us-east-1
+          endpoint: https://minio.writefor.fun
+          # Encrypt Command:
+          #  sops --encrypt --age=${AGE_RECIPIENT}   --encrypted-regex 'Key' --in-place ./infra/controllers/overlays/k3s-test-1/helmrelease-loki.yaml
+          #
+          # Access Key
+          accessKeyId: ENC[AES256_GCM,data:HrJOr3O+xaYCKpAwJrkqpbG/+N0=,iv:QbOKinnwmLgYtEmWrFJfnDjFXiNX4epU9ip7kGexzRs=,tag:kmoFR2dGj3uWLp1nWi7C5A==,type:str]
+          # Secret Key
+          secretAccessKey: ENC[AES256_GCM,data:vvSaDBWP2bV1grXFYfeZH/GV4Cbi8+w8BQXQLGdmLPVazHId8gd5MA==,iv:iQxC4ekcqo2K3kOM54HFP7AH5VGuvlNhjzrbMZIpbq8=,tag:GruLo0gVQ1LXC5eYdlIa3A==,type:str]
+sops:
+  age:
+    - recipient: age15tr9ja4ll22ef3rw43v4mje47x8a03ruqap08f68hcu077tytq0q9e4h5y
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsZ05yVzJpWVByZGV4K1FL
+        bGY3bDFqMll5NHJPOHB0dzhrVG0yVmJzU2pZCmlZOG15NDJOdkFwRE0xcFJrUENJ
+        YUVHZmZmMm8zMERZUFk2c0psdDIwMU0KLS0tIExUb3hneS9ENEY0Y0RxWXB2QUlM
+        bzdybFJ4T2RPWTRZOWRkVVVrUitFdlkKLumgsNsFjaB4iADdHe30YNAHsBH+THUm
+        20aoWMAyMFyjOs9yKHXVSASch7iCv/ZqZHtH5Q3/pRhcZOomeMQEEQ==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2025-06-08T06:26:11Z"
+  mac: ENC[AES256_GCM,data:ZIwFmbycsnam3yKW0NfC1jh9FNwuRrgyZtMsAbXGjd6Jr/QYsCdRduTcUEYdvphK3qnDTf9D/dCLJhc6/Cq9RgYU+Oxph2E3QuprhVxXy4MRaW2Ui50aQEsBkFKsi1hAgIxYAv43NL/33RgnaApy8bd9BcKuyhTrxOhinoz5mcg=,iv:W2h0ayx6bcfrWxsINL+jOoUFgwSFUXEy3FA5HmZixss=,tag:S/LOr0GxUw2rYHvKPKA+Tg==,type:str]
+  encrypted_regex: Key
+  version: 3.10.2
