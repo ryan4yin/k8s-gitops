@@ -159,7 +159,7 @@ spec:
                 # After all desired labels have been created, delete all temporary and original source attributes.
                 # This is a crucial step to avoid sending unnecessary data to the backend, saving bandwidth and storage costs.
                 # ----------------------------------------------------------------------
-                - delete_matching_keys(attributes, "^k8s\\.pod\\.labels\\..*")
+                - delete_matching_keys(attributes, "^k8s\\.pod\\.label\\..*")
 
       service:
         pipelines:
