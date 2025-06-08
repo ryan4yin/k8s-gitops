@@ -1,0 +1,40 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: otel-collector
+  namespace: monitoring
+spec:
+  releaseName: otel-collector
+  interval: 30m
+  chart:
+    spec:
+      chart: opentelemetry-collector
+      sourceRef:
+        kind: HelmRepository
+        name: open-telemetry
+        namespace: flux-system
+      version: "0.126.*"
+      interval: 12h
+  # https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-collector#crds
+  values:
+    mode: daemonset
+    replicaCount: 1
+    presets:
+      kubernetesAttributes:
+        enabled: true
+        extractAllPodLabels: true
+      logsCollection:
+        enabled: true
+        includeCollectorLogs: true
+
+    config:
+      exporters:
+        loki:
+          endpoint: http://loki.monitoring.svc.cluster.local:3100/otlp
+      service:
+        pipelines:
+          logs:
+            exporters: [loki] 
+          traces: null
+          metrics: null # we use vmagent for metrics collecting.

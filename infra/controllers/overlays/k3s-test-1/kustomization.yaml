@@ -5,12 +5,13 @@ resources:
   # deploy monitoring stack first
   - ../../base/victoria-metrics/
   - ../../base/cert-manager/
+  - ../../base/gateway-api/
   # - ../../base/kong-gateway/
   - ../../base/istio/
-  - ../../base/gateway-api/
   - ../../base/kiali/
-  - ../../base/loki/
   - ../../base/k6/
+  - ../../base/loki/
+  - ../../base/otel-collector/
 patches:
   - path: ./helmrelease-victoria-metrics.yaml
     target:

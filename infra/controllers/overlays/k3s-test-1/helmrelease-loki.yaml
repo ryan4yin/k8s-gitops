@@ -27,7 +27,7 @@ spec:
           ruler: k3s-test-1-loki-ruler
           admin: k3s-test-1-loki-admin
         s3:
-          s3: null
+          s3: http://${MINIO_ROOT_USER}:${MINIO_ROOT_PASSWORD}@minio.:9000/${MINIO_BUCKET_NAME}
           endpoint: null
           region: null
           secretAccessKey: null
