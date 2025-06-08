@@ -29,8 +29,6 @@ spec:
         #   admin_api_directory: /var/loki/admin
         bucketNames: # for object storage
           chunks: k3s-test-1-loki-chunks
-          ruler: k3s-test-1-loki-ruler
-          admin: k3s-test-1-loki-admin
         s3:
           # bucketnames: {{ $.Values.loki.storage.bucketNames.chunks }}
           s3ForcePathStyle: true
