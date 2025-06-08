@@ -43,6 +43,9 @@ spec:
       exporters:
         otlphttp:
           endpoint: http://loki.monitoring.svc.cluster.local:3100/otlp
+          headers:
+            # loki require such a ID by default
+            X-Scope-OrgID: "fake" 
       service:
         pipelines:
           logs:

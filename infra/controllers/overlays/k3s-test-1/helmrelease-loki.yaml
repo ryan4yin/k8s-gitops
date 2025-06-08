@@ -4,6 +4,9 @@ metadata:
 spec:
   values:
     loki:
+      # Enables authentication through the X-Scope-OrgID header, which must be present
+      # if true. If false, the OrgID will always be set to 'fake'.
+      auth_enabled: true
       schemaConfig:
         # https://grafana.com/docs/loki/latest/operations/storage/schema/
         configs:
