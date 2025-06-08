@@ -18,8 +18,14 @@ spec:
       interval: 12h
   # https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-collector#crds
   values:
+    image:
+      repository: "ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s"
+    command:
+      name: "otelcol-k8s"
+
     mode: daemonset
     replicaCount: 1
+    # https://opentelemetry.io/docs/kubernetes/collector/components/
     presets:
       kubernetesAttributes:
         enabled: true
@@ -35,6 +41,7 @@ spec:
       service:
         pipelines:
           logs:
-            exporters: [loki] 
+            exporters:
+              - loki
           traces: null
           metrics: null # we use vmagent for metrics collecting.
