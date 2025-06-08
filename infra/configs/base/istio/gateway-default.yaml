@@ -24,7 +24,7 @@ spec:
         certificateRefs:
           - kind: Secret
             group: ""
-            name: ryan4yin-server-cert
+            name: server-tls-secret
       allowedRoutes:
         kinds:
           - kind: HTTPRoute
