@@ -27,15 +27,14 @@ spec:
     vmagent:
       # vmagent collects metrics from targets and sends them to a remote storage
       enabled: true
-      # https://docs.victoriametrics.com/operator/api.html#vmagentremotewritespec
-      # defined spec will be added to the remoteWrite configuration of VMAgent
-      #
-      # https://prometheus.io/docs/prometheus/latest/querying/api/#remote-write-receiver
-      additionalRemoteWrites:
-        - url: https://prometheus.writefor.fun/api/v1/write
       # spec for VMAgent crd
       # https://docs.victoriametrics.com/operator/api.html#vmagentspec
       spec:
+        # https://docs.victoriametrics.com/operator/api.html#vmagentremotewritespec
+        remoteWrite:
+        - url: https://prometheus.writefor.fun/api/v1/write
+          tlsConfig:
+            caFile: /data/certs/ca.crt
         selectAllByDefault: true
         scrapeInterval: 20s
         externalLabels:
