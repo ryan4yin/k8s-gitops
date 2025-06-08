@@ -153,7 +153,7 @@ export AGE_RECIPIENT=age15tr9ja4ll22ef3rw43v4mje47x8a03ruqap08f68hcu077tytq0q9e4
 
 # Encrypting only specific values in a yaml file
 sops --encrypt --age=${AGE_RECIPIENT} \
-  --encrypted-regex 'Key' --in-place /path/to/secrets.yaml
+  --encrypted-regex '^(data|stringData)$' --in-place /path/to/secrets.yaml
 
 # Decrypting the encrypted values
 sops --decrypt /path/to/secrets.yaml
