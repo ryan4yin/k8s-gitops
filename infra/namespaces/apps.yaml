@@ -5,6 +5,7 @@ metadata:
   name: staging
   labels:
     eventing.knative.dev/injection: enabled
+    istio.io/dataplane-mode: ambient
 ---
 apiVersion: v1
 kind: Namespace
@@ -12,3 +13,4 @@ metadata:
   name: prod
   labels:
     eventing.knative.dev/injection: enabled
+    istio.io/dataplane-mode: ambient

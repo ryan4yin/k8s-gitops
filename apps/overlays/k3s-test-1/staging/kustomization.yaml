@@ -7,3 +7,4 @@ commonLabels:
 resources:
   - ./podinfo/
   - ./../../../base/debug/
+  - ./../../../base/istio-bookinfo/
