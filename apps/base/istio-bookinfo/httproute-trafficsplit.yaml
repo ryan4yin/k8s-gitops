@@ -12,8 +12,11 @@ spec:
   - backendRefs:
     - name: reviews-v1
       port: 9080
-      weight: 90
+      weight: 10
     - name: reviews-v2
       port: 9080
-      weight: 10
+      weight: 30
+    - name: reviews-v3
+      port: 9080
+      weight: 60
 
