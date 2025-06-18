@@ -6,6 +6,7 @@ metadata:
 spec:
   parentRefs:
     - name: istio-default
+      namespace: istio-ingress
   hostnames:
     - "podinfo-prod.writefor.fun"
   rules:
