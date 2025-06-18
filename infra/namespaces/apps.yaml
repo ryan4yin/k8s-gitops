@@ -5,7 +5,12 @@ metadata:
   name: staging
   labels:
     eventing.knative.dev/injection: enabled
+    # add the namespace to the mesh in ambient mode
+    # https://istio.io/latest/docs/ambient/usage/add-workloads/
     istio.io/dataplane-mode: ambient
+    # redirect all ambient mode traffic to the "waypoint" instance in this namespace
+    # https://istio.io/latest/docs/ambient/usage/waypoint/#waypoint-traffic-types
+    istio.io/use-waypoint: waypoint
 ---
 apiVersion: v1
 kind: Namespace
@@ -14,3 +19,4 @@ metadata:
   labels:
     eventing.knative.dev/injection: enabled
     istio.io/dataplane-mode: ambient
+    # istio.io/use-waypoint: waypoint
