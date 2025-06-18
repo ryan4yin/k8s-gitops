@@ -5,7 +5,7 @@ metadata:
   name: podinfo
 spec:
   parentRefs:
-    - name: kong
+    - name: istio-default
   hostnames:
     - "podinfo-staging.writefor.fun"
   rules:
