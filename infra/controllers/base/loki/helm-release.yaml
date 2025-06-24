@@ -43,13 +43,34 @@ spec:
         requests:
           cpu: 1
           memory: 2Gi
+
     # Zero out replica counts of other deployment modes
+    # https://grafana.com/docs/loki/latest/get-started/deployment-modes/#simple-scalable
+    # https://grafana.com/docs/loki/latest/get-started/components/
     backend:
+      # Backend is Stateful
+      # Contains:
+      #   Compactor
+      #   Index Gateway
+      #   Query Scheduler
+      #   Ruler
+      #   Bloom Planner (experimental)
+      #   Bloom Builder (experimental)
+      #   Bloom Gateway (experimental)
       replicas: 0
     read:
+      # Stateless
+      # Contains: Query Frontend + Querier
       replicas: 0
     write:
-      replicas: 0
+      # The write target is stateful
+      # Contains: Distributor + Ingester
+      # 
+      # To prevent data losing on rollouts, the ingester leverages the 
+      # Raft consensus algorithm for high availability and data replication.
+      #
+      # So we need at least 3 replicas here for high availability.
+      replicas: 0 # 3
 
     minio:
       enabled: false
@@ -101,7 +122,7 @@ spec:
     # Loki Canary is a standalone app that audits the log-capturing performance
     #  of a Grafana Loki cluster.
     # This component emits and periodically queries for logs, making sure that Loki
-    #  is ingesting logs without any data loss. 
+    #  is ingesting logs without any data loss.
     # When something is wrong with Loki, the Canary often provides the first indication.
     #
     # https://grafana.com/docs/loki/latest/operations/loki-canary/
