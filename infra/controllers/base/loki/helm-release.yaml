@@ -48,7 +48,7 @@ spec:
     # https://grafana.com/docs/loki/latest/get-started/deployment-modes/#simple-scalable
     # https://grafana.com/docs/loki/latest/get-started/components/
     backend:
-      # Backend is Stateful
+      # Backend is Stateful, but its data is not critical.
       # Contains:
       #   Compactor
       #   Index Gateway
@@ -63,7 +63,9 @@ spec:
       # Contains: Query Frontend + Querier
       replicas: 0
     write:
-      # The write target is stateful
+      # The write target is stateful, its PV contains WAL log,
+      # remove the old PV will cause log losing.
+      #
       # Contains: Distributor + Ingester
       # 
       # To prevent data losing on rollouts, the ingester requires at least
