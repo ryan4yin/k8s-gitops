@@ -66,9 +66,9 @@ spec:
       # The write target is stateful
       # Contains: Distributor + Ingester
       # 
-      # To prevent data losing on rollouts, the ingester leverages the 
-      # Raft consensus algorithm for high availability and data replication.
-      #
+      # To prevent data losing on rollouts, the ingester requires at least
+      # `floor( replication_factor / 2 ) + 1` instances ready to write successfully.
+      # By default, replication_factor is 3,
       # So we need at least 3 replicas here for high availability.
       replicas: 0 # 3
 
