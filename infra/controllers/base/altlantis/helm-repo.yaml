@@ -1,0 +1,10 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: runatlantis
+  namespace: flux-system
+spec:
+  interval: 12h
+  url: https://runatlantis.github.io/helm-charts
+

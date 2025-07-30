@@ -1,0 +1,58 @@
+kind: will-be-ignored
+metadata:
+  name: will-be-ignored
+spec:
+  values:
+    # -- An option to override the atlantis url,
+    # if not using an ingress, set it to the external IP.
+    # Check values.yaml for examples.
+    atlantisUrl: "https://atlantis.writefor.fun"
+
+    orgAllowlist: "github.com/ryan4yin/infra-gitops"
+
+    # -- If using a GitHub App, please enter your values as follows.
+    # The chart will perform the base64 encoding for you for values that are stored in secrets.
+    # installationId is necessary when there are multiple installs of the Github App.
+    # 
+    # https://www.runatlantis.io/docs/access-credentials.html#manually-creating-the-github-app
+    githubApp:
+      installationId: 1
+      slug: atlantis-for-ryan4yin
+      id: 123456
+      key: |
+        -----BEGIN RSA PRIVATE KEY-----
+        -----END RSA PRIVATE KEY-----
+      secret: xxx
+
+  service:
+    type: ClusterIP
+
+  ingress:
+    enabled: false
+
+  # -- Resources for Atlantis.
+  # Check values.yaml for examples.
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 500m
+    limits:
+      memory: 1Gi
+      cpu: 1
+
+  volumeClaim:
+    enabled: true
+    # -- Disk space available to check out repositories.
+    dataStorage: 2Gi
+    # -- Storage class name (if possible, use a resizable one).
+    storageClassName: ""
+    accessModes: ["ReadWriteOnce"]
+
+  # -- Replica count for Atlantis pods.
+  replicaCount: 1
+
+  # -- Environment values to add to the Atlantis pod.
+  # Check values.yaml for examples.
+  environment:
+    ATLANTIS_EMOJI_REACTION: eyes
+    # ATLANTIS_DEFAULT_TF_VERSION: v1.2.9

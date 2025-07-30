@@ -1,0 +1,21 @@
+# https://fluxcd.io/flux/components/helm/helmreleases/
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: runatlantis
+  namespace: runatlantis
+spec:
+  releaseName: cert-manager
+  interval: 30m
+  chart:
+    spec:
+      chart: atlantis
+      sourceRef:
+        kind: HelmRepository
+        name: runatlantis
+        namespace: flux-system
+      interval: 12h
+      version: "5.17.*"
+
