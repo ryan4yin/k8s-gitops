@@ -32,7 +32,7 @@ spec:
       # Collect infra's logs via filelog.
       # NOTE: application-level logs should be sent to otel via sdk direcly, instead of print into stdout/stderr.
       logsCollection:
-        enabled: false # disable it for customizing
+        enabled: true
         # Do not include the collector itself's log, to prevent log looping
         includeCollectorLogs: false
 
