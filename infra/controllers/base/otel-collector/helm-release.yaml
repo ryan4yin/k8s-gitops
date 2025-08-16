@@ -29,6 +29,8 @@ spec:
     presets:
       kubernetesAttributes:
         enabled: true
+      # Collect infra's logs via filelog.
+      # NOTE: application-level logs should be sent to otel via sdk direcly, instead of print into stdout/stderr.
       logsCollection:
         enabled: true
         # Do not include the collector itself's log, to prevent log looping
@@ -107,6 +109,9 @@ spec:
           log_statements:
             - context: resource # Modifying resource attributes
               statements:
+                # log level
+                - set(resource.attributes["level"], severity_text)
+
                 # app (coalescing)
                 - set(resource.attributes["app"],
                   resource.attributes["k8s.pod.label.app_kubernetes_io_name"]) where
@@ -159,7 +164,7 @@ spec:
                 # After all desired labels have been created, delete all temporary and original source attributes.
                 # This is a crucial step to avoid sending unnecessary data to the backend, saving bandwidth and storage costs.
                 # ----------------------------------------------------------------------
-                - delete_matching_keys(attributes, "^k8s\\.pod\\.label\\..*")
+                - delete_matching_keys(resource.attributes, "^k8s\\.pod\\.label\\..*")
 
       service:
         pipelines:
