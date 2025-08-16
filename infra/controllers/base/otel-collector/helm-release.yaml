@@ -217,7 +217,6 @@ spec:
                 # This is a crucial step to avoid sending unnecessary data to the backend, saving bandwidth and storage costs.
                 # ----------------------------------------------------------------------
                 - delete_matching_keys(resource.attributes, "^k8s\\.pod\\.label\\..*")
-                - delete_matching_keys(resource.attributes, "^level_str")
 
       service:
         pipelines:
