@@ -164,7 +164,7 @@ spec:
             - context: resource # Modifying resource attributes
               statements:
                 # level
-                - set(resource.attributes["level"], resource.attributes["severity"])
+                - set(resource.attributes["level"], resource.attributes["severity_text"])
 
                 # app (coalescing)
                 - set(resource.attributes["app"],
@@ -219,6 +219,7 @@ spec:
                 # This is a crucial step to avoid sending unnecessary data to the backend, saving bandwidth and storage costs.
                 # ----------------------------------------------------------------------
                 - delete_matching_keys(resource.attributes, "^k8s\\.pod\\.label\\..*")
+                - delete_matching_keys(resource.attributes, "^level_str")
 
       service:
         pipelines:
