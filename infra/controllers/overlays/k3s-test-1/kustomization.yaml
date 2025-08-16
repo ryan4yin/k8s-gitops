@@ -12,6 +12,7 @@ resources:
   - ../../base/k6/
   - ../../base/loki/
   - ../../base/otel-collector/
+  - ../../base/cloudnative-pg/
 patches:
   - path: ./helmrelease-victoria-metrics.yaml
     target:
