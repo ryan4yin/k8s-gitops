@@ -55,8 +55,10 @@ spec:
             - id: container-parser
               type: container
               max_log_size: 102400
-            # Step 2: Parse logs in JSON format.
+            # Step 2: Try to parse logs in JSON format.
             - type: json_parser
+              if: 'body matches "^{.*}$"'
+              on_error: send_quite
               # Parse the 'body' field as JSON and place the results into 'attributes'.
               parse_to: attributes
               # Use the severity configuration block to extract the level.
