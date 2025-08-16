@@ -1,0 +1,74 @@
+# https://github.com/clevyr/docker-cloudnativepg-timescale
+# https://github.com/imusmanmalik/cloudnative-pg-timescaledb-postgis-containers
+# https://medium.com/@datbui/timescaledb-with-cloudnativepg-ea2dac25e4c9
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ClusterImageCatalog
+metadata:
+  name: timescale
+  namespace: cnpg-database
+spec:
+  images:
+    - major: 16
+      image: timescale/timescaledb-ha:pg16
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: cnpg-timescale
+  namespace: cnpg-database
+spec:
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: timescale
+    major: 16
+  instances: 2 # 1 primary + 1 replica
+  storage:
+    size: 10Gi
+    # Retain critical volumes after deletion
+    storageClass: local-path-critical
+  monitoring:
+    # create PodMonitor automatically
+    enablePodMonitor: true
+  postgresql:
+    shared_preload_libraries:
+      - timescaledb
+  bootstrap:
+    initdb:
+      postInitTemplateSQL:
+        - CREATE EXTENSION IF NOT EXISTS timescaledb;
+        - CREATE EXTENSION IF NOT EXISTS timescaledb_toolkit;
+  postgresGID: 1000
+  postgresUID: 1000
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: cnpg-timescale-pooler-rw
+  namespace: cnpg-database
+spec:
+  cluster:
+    name: cnpg-timescale
+  instances: 1
+  type: rw
+  pgbouncer:
+    poolMode: transaction # the most common mode
+    parameters:
+      max_client_conn: "5000"
+      server_lifetime: "1800" # 30mins
+      server_check_query: "SELECT 1"
+      server_check_delay: "10"
+      # pool size for every combination of database & user
+      default_pool_size: "100"
+  template:
+    spec:
+      containers:
+        - name: pgbouncer
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 500m
+              memory: 500Mi
