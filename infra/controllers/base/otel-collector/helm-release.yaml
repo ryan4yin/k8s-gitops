@@ -32,7 +32,7 @@ spec:
       # Collect infra's logs via filelog.
       # NOTE: application-level logs should be sent to otel via sdk direcly, instead of print into stdout/stderr.
       logsCollection:
-        enabled: true
+        enabled: false # disable it for customizing
         # Do not include the collector itself's log, to prevent log looping
         includeCollectorLogs: false
 
@@ -41,6 +41,58 @@ spec:
         jaeger: null
         prometheus: null
         zipkin: null
+        filelog:
+          exclude:
+            - /var/log/pods/monitoring_otel-collector-opentelemetry-collector*_*/opentelemetry-collector/*.log
+          include:
+            - /var/log/pods/*/*/*.log
+          include_file_name: false
+          include_file_path: true
+          operators:
+            # Step 1: Use the container operator to parse the container runtime log header.
+            # It strips the timestamp and stream (stdout/stderr) and places the application log itself into the 'body' field.
+            # https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/pkg/stanza/docs/operators/container.md
+            - id: container-parser
+              type: container
+              max_log_size: 102400
+            # Step 2: Parse logs in JSON format.
+            - type: json_parser
+              # Parse the 'body' field as JSON and place the results into 'attributes'.
+              parse_to: attributes
+              # Use the severity configuration block to extract the level.
+              severity:
+                # First, try to parse from the 'attributes.level' field.
+                parse_from: attributes.level
+            # Step 3: Parse logs in plain text format.
+            - type: regex_parser
+              if: 'attributes.severity_text == nil'
+              # Regex to capture common log level keywords from the text.
+              regex: ".*(?P<level_str>(?i)(DEBUG|INFO|WARN|WARNING|ERROR|ERR|FATAL|CRITICAL)).*"
+              # Use the severity configuration block to normalize the captured level.
+              severity:
+                parse_from: attributes.level_str
+                # Establish a mapping to unify different captured strings into standard OTEL levels.
+                mapping:
+                  debug: debug
+                  info: info
+                  warn:
+                    - warn
+                    - warning
+                  error:
+                    - error
+                    - err
+                    - fatal
+                    - critical
+            # Step 4 (Final Step): Set a default severity if it was not parsed successfully.
+            - type: add
+              # This 'if' condition checks if the 'severity_text' field was NOT set by previous parsers.
+              if: 'attributes.severity_text == nil'
+              # If it wasn't set, add the field with a value of "unknown".
+              field: attributes.severity_text
+              value: "unknown"
+          retry_on_failure:
+            enabled: true
+          start_at: end
       exporters:
         otlphttp:
           endpoint: http://loki.monitoring.svc.cluster.local:3100/otlp
@@ -109,8 +161,8 @@ spec:
           log_statements:
             - context: resource # Modifying resource attributes
               statements:
-                # log level
-                - set(resource.attributes["level"], severity_text)
+                # level
+                - set(resource.attributes["level"], resource.attributes["severity"])
 
                 # app (coalescing)
                 - set(resource.attributes["app"],
@@ -169,7 +221,7 @@ spec:
       service:
         pipelines:
           logs:
-            receivers: [otlp]
+            receivers: [otlp, filelog]
             processors: [k8sattributes, transform] # Order is crucial
             exporters: [otlphttp]
           traces: null
