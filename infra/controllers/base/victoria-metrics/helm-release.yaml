@@ -22,6 +22,7 @@ spec:
       interval: 12h
   # https://github.com/VictoriaMetrics/helm-charts/tree/master/charts/victoria-metrics-k8s-stack
   values:
+    nameOverride: vmks # avoid hitting resource name limits of 63 characters
     kube-state-metrics:
       enabled: true
     vmagent:
