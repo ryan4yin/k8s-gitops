@@ -2,7 +2,7 @@
 
 Helm Charts:
 
-- https://github.com/istio/istio/tree/1.26.0/manifests/charts
+- https://github.com/istio/istio/tree/1.27.0/manifests/charts
 
 ## NOTES
 

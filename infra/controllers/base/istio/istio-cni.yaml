@@ -16,9 +16,11 @@ spec:
         name: istio
         namespace: flux-system
       interval: 12h
-      version: "1.26.*"
+      version: "*"
   values:
     profile: ambient
     # https://istio.io/latest/docs/ambient/install/platform-prerequisites/#k3s
     global:
       platform: k3s
+      # In order to use native nftable rules instead of iptable rules, set this flag to true.
+      nativeNftables: true
