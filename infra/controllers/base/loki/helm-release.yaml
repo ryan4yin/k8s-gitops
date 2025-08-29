@@ -44,6 +44,14 @@ spec:
           cpu: 1
           memory: 2Gi
 
+    # -- DEPRECATED Monitoring section 
+    monitoring:
+      selfMonitoring:
+        enabled: false
+      # do not use grafana-agent-operator, we use victoriametrics & prometheus-operator's crd instead.
+      grafanaAgent:
+        installOperator: false
+
     # Zero out replica counts of other deployment modes
     # https://grafana.com/docs/loki/latest/get-started/deployment-modes/#simple-scalable
     # https://grafana.com/docs/loki/latest/get-started/components/
