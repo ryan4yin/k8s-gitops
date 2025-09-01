@@ -1,4 +1,4 @@
-# Istio samples: https://github.com/istio/istio/blob/1.23.0/samples/addons/extras/prometheus-operator.yaml
+# Istio samples: https://github.com/istio/istio/blob/1.27.0/samples/addons/extras/prometheus-operator.yaml
 # We need to convert to Victoria Metrics Operator's CR manually, guide:
 #   https://docs.victoriametrics.com/operator/migration/index.html
 # Basically we just need to replace the apiVersion and kind of the CRs.
