@@ -29,9 +29,8 @@ spec:
     victoria-metrics-operator:
       enabled: true
       nameOverride: vmks-operator # shorten resource name
-      # -- Configures monitoring with serviceScrape using either `VMServiceScrape` or `ServiceMonitor`.
       serviceMonitor:
-        enabled: false
+        enabled: true
         # -- Creates `VMServiceScrape` if `true` and `ServiceMonitor` otherwise.
         vm: true
       operator:
