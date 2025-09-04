@@ -24,7 +24,7 @@ spec:
   values:
     nameOverride: vmks # avoid hitting resource name limits of 63 characters
     # -- Tenant to use for Grafana datasources and remote write
-    # Grafana Datasource: `http://vmselect-victoriametrics-vmks.monitoring-vm.svc.cluster.local:8481/select/0/prometheus`
+    # Grafana Datasource: `http://vmselect-victoriametrics-vmks:8481/select/0/prometheus`
     # remote write: `http://vminsert-victoriametrics-vmks:8480/insert/0/prometheus/api/v1/write`
     tenant: "0"
 
