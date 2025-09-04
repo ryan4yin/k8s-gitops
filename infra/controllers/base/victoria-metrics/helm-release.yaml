@@ -9,7 +9,7 @@ spec:
   install:
     crds: CreateReplace
     replace: true
-  releaseName: victoria-metrics-k8s-stack
+  releaseName: vmks
   interval: 30m
   chart:
     spec:
@@ -22,7 +22,6 @@ spec:
       interval: 12h
   # https://github.com/VictoriaMetrics/helm-charts/tree/master/charts/victoria-metrics-k8s-stack
   values:
-    nameOverride: vmks # avoid hitting resource name limits of 63 characters
     # -- Tenant to use for Grafana datasources and remote write
     # Grafana Datasource: `http://vmselect-victoriametrics-vmks:8481/select/0/prometheus`
     # remote write: `http://vminsert-victoriametrics-vmks:8480/insert/0/prometheus/api/v1/write`
@@ -32,7 +31,6 @@ spec:
     # https://github.com/VictoriaMetrics/helm-charts/blob/master/charts/victoria-metrics-operator/values.yaml
     victoria-metrics-operator:
       enabled: true
-      nameOverride: vmks-operator # shorten resource name
       serviceMonitor:
         enabled: true
         # -- Creates `VMServiceScrape` if `true` and `ServiceMonitor` otherwise.
