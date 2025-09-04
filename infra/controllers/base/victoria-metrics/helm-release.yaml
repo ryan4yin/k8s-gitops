@@ -23,6 +23,21 @@ spec:
   # https://github.com/VictoriaMetrics/helm-charts/tree/master/charts/victoria-metrics-k8s-stack
   values:
     nameOverride: vmks # avoid hitting resource name limits of 63 characters
+
+    # -- VictoriaMetrics Operator dependency chart configuration. More values can be found [here](https://docs.victoriametrics.com/helm/victoriametrics-operator#parameters). Also checkout [here](https://docs.victoriametrics.com/operator/configuration/#environment-variables) possible ENV variables to configure operator behaviour
+    # https://github.com/VictoriaMetrics/helm-charts/blob/master/charts/victoria-metrics-operator/values.yaml
+    victoria-metrics-operator:
+      enabled: true
+      nameOverride: vmks-operator # shorten resource name
+      # -- Configures monitoring with serviceScrape using either `VMServiceScrape` or `ServiceMonitor`.
+      serviceMonitor:
+        enabled: false
+        # -- Creates `VMServiceScrape` if `true` and `ServiceMonitor` otherwise.
+        vm: true
+      operator:
+        # -- By default, operator converts prometheus-operator objects.
+        disable_prometheus_converter: false
+
     kube-state-metrics:
       enabled: true
     vmagent:
