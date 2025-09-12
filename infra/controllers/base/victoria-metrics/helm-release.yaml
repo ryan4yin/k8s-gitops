@@ -133,18 +133,17 @@ spec:
           enabled: true
           replicaCount: 2
           extraArgs:
-            # https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/#resource-usage-limits
             search.maxQueryDuration: 60s
             search.maxConcurrentRequests: 4 # default = 2 * vcpu cores
             # Allowed percent of system memory VictoriaMetrics caches may occupy
             memory.allowedPercent: 60
-            maxInsertRequestSize: 32MB # default to 32MB
           resources: {}
         vminsert:
           # -- Set this value to false to disable VMInsert
           enabled: true
           replicaCount: 2
-          extraArgs: {}
+          extraArgs:
+            maxInsertRequestSize: 32MB # default to 32MB
           resources: {}
 
     # ================================================================
