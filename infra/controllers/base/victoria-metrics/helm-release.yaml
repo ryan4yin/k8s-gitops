@@ -115,7 +115,7 @@ spec:
         # https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/#replication-and-data-safety
         replicationFactor: 1
         vmstorage:
-          replicaCount: 2
+          replicaCount: 3
           extraArgs:
             # https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/#resource-usage-limits
             search.maxUniqueTimeseries: "1000000"
@@ -126,12 +126,12 @@ spec:
               spec:
                 resources:
                   requests:
-                    storage: 50Gi
+                    storage: 30Gi
           resources: {}
         vmselect:
           # -- Set this value to false to disable VMSelect
           enabled: true
-          replicaCount: 2
+          replicaCount: 3
           extraArgs:
             search.maxQueryDuration: 60s
             search.maxConcurrentRequests: 4 # default = 2 * vcpu cores
@@ -141,7 +141,7 @@ spec:
         vminsert:
           # -- Set this value to false to disable VMInsert
           enabled: true
-          replicaCount: 2
+          replicaCount: 3
           extraArgs:
             maxInsertRequestSize: 32MB # default to 32MB
           resources: {}
