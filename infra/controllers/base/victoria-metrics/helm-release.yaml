@@ -9,7 +9,7 @@ spec:
   install:
     crds: CreateReplace
     replace: true
-  releaseName: vmks
+  releaseName: victoriametrics
   interval: 30m
   chart:
     spec:
@@ -22,9 +22,9 @@ spec:
       interval: 12h
   # https://github.com/VictoriaMetrics/helm-charts/tree/master/charts/victoria-metrics-k8s-stack
   values:
-    # -- Tenant to use for Grafana datasources and remote write
-    # Grafana Datasource: `http://vmselect-victoriametrics-vmks:8481/select/0/prometheus`
-    # remote write: `http://vminsert-victoriametrics-vmks:8480/insert/0/prometheus/api/v1/write`
+    nameOverride: vmks # avoid hitting resource name limits of 63 characters
+
+    # -- Tenant to use for Grafana datasources and remote write, used in Cluster Version
     tenant: "0"
 
     # -- VictoriaMetrics Operator dependency chart configuration. More values can be found [here](https://docs.victoriametrics.com/helm/victoriametrics-operator#parameters). Also checkout [here](https://docs.victoriametrics.com/operator/configuration/#environment-variables) possible ENV variables to configure operator behaviour

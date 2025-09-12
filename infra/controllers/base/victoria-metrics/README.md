@@ -33,3 +33,18 @@ near-peak levels for a few seconds and then almost instantly collapse back to ba
   - memory.allowedPercent: 60       # default = 60
 - vminsert
   - maxInsertRequestSize: 32MB      # default = 32MB
+
+
+# API
+
+Cluster Version:
+
+- Datasource: `http://vmselect-victoriametrics-vmks:8481/select/0/prometheus`
+- VM Web UI: `http://vmselect-victoriametrics-vmks:8481/select/0/vmui` 
+- Remote Write: `http://vminsert-victoriametrics-vmks:8480/insert/0/prometheus/api/v1/write`
+
+Single Node Version(same as Prometheus):
+
+- Datasource: `http://xx.xx.xx.xx:9090`
+- VM Web UI: `http://xx.xx.xx.xx:9090/vmui` 
+- Remote Write: `http://xx.xx.xx.xx:9090/api/v1/write`
