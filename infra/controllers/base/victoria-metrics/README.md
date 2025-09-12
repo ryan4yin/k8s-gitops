@@ -41,7 +41,9 @@ Cluster Version:
 
 - Datasource: `http://vmselect-victoriametrics-vmks:8481/select/0/prometheus`
 - VM Web UI: `http://vmselect-victoriametrics-vmks:8481/select/0/vmui` 
-- Remote Write: `http://vminsert-victoriametrics-vmks:8480/insert/0/prometheus/api/v1/write`
+- Remote Write API: `http://vminsert-victoriametrics-vmks:8480/insert/0/prometheus/api/v1/write`
+- VM Agent UI: `http://vmagent-victoriametrics-vmks:8429`
+  - shows the active targets, discovered targets, etc
 
 Single Node Version(same as Prometheus):
 
