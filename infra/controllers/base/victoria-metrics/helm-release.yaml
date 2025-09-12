@@ -90,9 +90,62 @@ spec:
           - name: ca-certs
             mountPath: /data/ca-certs
             readOnly: true
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+          requests:
+            cpu: "100m"
+            memory: "500Mi"  
       ingress:
         enabled: false
         ingressClassName: kong
+
+    # disable this , we use a external vmcluster instead.
+    vmcluster:
+      enabled: false
+      # -- Full spec for VMCluster CRD. Allowed values described [here](https://docs.victoriametrics.com/operator/api#vmclusterspec)
+      spec:
+        # -- Data retention period. Possible units character: h(ours), d(ays), w(eeks), y(ears), if no unit character specified - month. 
+        # The minimum retention period is 24h. See these [docs](https://docs.victoriametrics.com/single-server-victoriametrics/#retention)
+        # enterprise edition: set different retentionPeriod based on label filter
+        retentionPeriod: "30d"
+        # Store N copies for every ingested sample on N distinct vmstorage nodes.
+        # This guarantees that all the stored data remains available for querying if up to N-1 vmstorage nodes are unavailable.
+        # https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/#replication-and-data-safety
+        replicationFactor: 1
+        vmstorage:
+          replicaCount: 2
+          extraArgs:
+            # https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/#resource-usage-limits
+            search.maxUniqueTimeseries: "1000000"
+            # Allowed percent of system memory VictoriaMetrics caches may occupy
+            memory.allowedPercent: 60
+          storage:
+            volumeClaimTemplate:
+              spec:
+                resources:
+                  requests:
+                    storage: 50Gi
+          resources: {}
+        vmselect:
+          # -- Set this value to false to disable VMSelect
+          enabled: true
+          replicaCount: 2
+          extraArgs:
+            # https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/#resource-usage-limits
+            search.maxQueryDuration: 60s
+            search.maxConcurrentRequests: 4 # default = 2 * vcpu cores
+            # Allowed percent of system memory VictoriaMetrics caches may occupy
+            memory.allowedPercent: 60
+            maxInsertRequestSize: 32MB # default to 32MB
+          resources: {}
+        vminsert:
+          # -- Set this value to false to disable VMInsert
+          enabled: true
+          replicaCount: 2
+          extraArgs: {}
+          resources: {}
 
     # ================================================================
     # Disabled components
