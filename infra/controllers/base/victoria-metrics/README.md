@@ -35,7 +35,7 @@ near-peak levels for a few seconds and then almost instantly collapse back to ba
   - maxInsertRequestSize: 32MB      # default = 32MB
 
 
-# API
+## API
 
 Cluster Version:
 
@@ -50,3 +50,10 @@ Single Node Version(same as Prometheus):
 - Datasource: `http://xx.xx.xx.xx:9090`
 - VM Web UI: `http://xx.xx.xx.xx:9090/vmui` 
 - Remote Write: `http://xx.xx.xx.xx:9090/api/v1/write`
+
+
+## Dashboards
+
+<https://grafana.com/orgs/victoriametrics/dashboards>
+
+
