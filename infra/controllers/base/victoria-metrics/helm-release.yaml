@@ -163,6 +163,9 @@ spec:
       enabled: false
     alertmanager:
       enabled: false
+    defaultRules:
+      # disable all default vmrules(apply to vmalert)
+      create: false
     vmsingle:
       # Single-node VictoriaMetrics for storing metrics.
       # https://docs.victoriametrics.com/faq/#which-victoriametrics-type-is-recommended-for-use-in-production---single-node-or-cluster
