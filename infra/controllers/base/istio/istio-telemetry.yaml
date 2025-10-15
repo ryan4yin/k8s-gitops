@@ -1,0 +1,19 @@
+
+# https://istio.io/latest/docs/reference/config/telemetry/
+apiVersion: telemetry.istio.io/v1
+kind: Telemetry
+metadata:
+  name: mesh-default-metrics
+  namespace: istio-system
+spec:
+  # no selector specified, applies to all workloads in the namespace
+  metrics:
+  - providers:
+    - name: prometheus
+    overrides:
+    # Add dimensions(labels) to all Prometheus metrics
+    - tagOverrides:
+        request_method:
+          value: "request.method"
+        request_host:
+          value: "request.host"

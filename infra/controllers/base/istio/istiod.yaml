@@ -17,5 +17,25 @@ spec:
         namespace: flux-system
       interval: 12h
       version: "*"
+  # https://github.com/istio/istio/blob/1.27.0/manifests/charts/istio-control/istio-discovery/values.yaml
   values:
     profile: ambient
+    global:
+      # Used to locate istiod.
+      istioNamespace: istio-system
+      # enable pod disruption budget for the control plane, which is used to
+      # ensure Istio control plane components are gradually upgraded or recovered.
+      defaultPodDisruptionBudget:
+        enabled: true
+
+      # A minimal set of requested resources to applied to all deployments so that
+      # Horizontal Pod Autoscaler will be able to function (if set).
+      # Each component can overwrite these default values by adding its own resources
+      # block in the relevant section below and setting the desired resources values.
+      defaultResources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+        limits:
+          cpu: 100m
+          memory: 128Mi
