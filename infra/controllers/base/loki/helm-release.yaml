@@ -56,25 +56,26 @@ spec:
     # https://grafana.com/docs/loki/latest/get-started/deployment-modes/#simple-scalable
     # https://grafana.com/docs/loki/latest/get-started/components/
     backend:
-      # Backend is Stateful, but its data is not critical.
+      # -- Backend is Stateful, but its data is not critical.
       # Contains:
-      #   Compactor
-      #   Index Gateway
-      #   Query Scheduler
-      #   Ruler
-      #   Bloom Planner (experimental)
-      #   Bloom Builder (experimental)
-      #   Bloom Gateway (experimental)
+      #   Compactor - Merge the multiple index files into one & replace them in remote storage
+      #   Index Gateway - handling and serving metadata queries
+      #   Query Scheduler - an optional service
+      #   Ruler - manages and evaluates rule and/or alert expressions provided in a rule configuration.
       replicas: 0
     read:
-      # Stateless
-      # Contains: Query Frontend + Querier
+      # -- Read is stateless
+      # Contains:
+      #   Query Frontend - an optional service
+      #   Querier - executing Log Query Language (LogQL) queries
       replicas: 0
     write:
-      # The write target is stateful, its PV contains WAL log,
+      # -- The write target is stateful, its PV contains WAL log,
       # remove the old PV will cause log losing.
       #
-      # Contains: Distributor + Ingester
+      # Contains:
+      #   Distributer - handling incoming push requests from clients
+      #   Ingester - persisting data and shipping it to long-term storage(gcs)
       # 
       # To prevent data losing on rollouts, the ingester requires at least
       # `floor( replication_factor / 2 ) + 1` instances ready to write successfully.
@@ -86,6 +87,7 @@ spec:
       enabled: false
 
     ruler:
+      # Ruler is an optional service for logs alerting, similar to prometheus's alerting rules.
       enabled: false
     resultsCache:
       # -- Specifies whether memcached based results-cache should be enabled
@@ -166,6 +168,9 @@ spec:
       querier:
         # Default is 4, if you have enough memory and CPU you can increase, reduce if OOMing
         max_concurrent: 2
+      # used by the pattern feature in Logs Drilldown, which lets you detect similar log lines and add or exclude them from your search.
+      pattern_ingester:
+        enabled: true
       # ============================================================================
       # Storage Retentaion
       # It's recommended to add a lifecycle policy on you object storage bucket.
