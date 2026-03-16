@@ -4,6 +4,8 @@ kind: Kustomization
 namespace: vms
 resources:
   - ./idols-aquamarine.yaml
+  - ./idols-kana.yaml
+  - ./idols-ruby.yaml
 
 patches:
   # add podAntiAffinity to all master nodes

@@ -1,0 +1,44 @@
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: idols-kana
+spec:
+  instancetype:
+    kind: VirtualMachineClusterInstancetype
+    name: c-4vcpu-8gb
+    # https://kubevirt.io/user-guide/user_workloads/instancetypes/#versioning
+    revisionName: "" # we need to set this to empty when updating the instancetype
+  preference:
+    kind: VirtualMachineClusterPreference
+    name: virtio
+  template:
+    metadata:
+      labels:
+        kubevirt.io/vm: idols-kana
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: kubevirt-youko
+      domain:
+      volumes:
+        - dataVolume:
+            name: idols-kana-disk
+          name: rootdisk
+  dataVolumeTemplates:
+    - metadata:
+        name: idols-kana-disk
+      spec:
+        pvc:
+          # this is the rootdisk of the node, it contains critical data
+          storageClassName: local-path-critical
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 100Gi
+          # NOTE: lock down the volume name to avoid creating a new one
+          # This should only be used when you want to reuse the volume(like recreating the VM).
+          # volumeName: ''
+        source:
+          http:
+            url: http://kubevirt-file.writefor.fun/vms/kubevirt-kana.qcow2
