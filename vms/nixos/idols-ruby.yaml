@@ -17,9 +17,6 @@ spec:
       labels:
         kubevirt.io/vm: idols-ruby
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: kubevirt-youko
-      domain:
       volumes:
         - dataVolume:
             name: idols-ruby-disk
