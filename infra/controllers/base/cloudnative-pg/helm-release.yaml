@@ -17,7 +17,7 @@ spec:
         name: cnpg
         namespace: flux-system
       interval: 12h
-      version: "0.26.*"
+      version: "0.28.*"
   # https://github.com/cloudnative-pg/charts
   values:
     crds:
@@ -32,4 +32,3 @@ spec:
     monitoring:
       # -- Specifies whether the monitoring should be enabled. Requires Prometheus Operator CRDs.
       podMonitorEnabled: false
-

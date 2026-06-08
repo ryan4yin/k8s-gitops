@@ -17,5 +17,4 @@ spec:
         name: runatlantis
         namespace: flux-system
       interval: 12h
-      version: "5.17.*"
-
+      version: "6.5.*"

@@ -12,9 +12,9 @@ spec:
       chart: loki
       sourceRef:
         kind: HelmRepository
-        name: grafana
+        name: grafana-community
         namespace: flux-system
-      version: "6.*"
+      version: "17.1.*"
       interval: 12h
   # https://github.com/grafana/loki/tree/main/production/helm/loki
   values:
@@ -31,8 +31,8 @@ spec:
         - name: ca-certs
           mountPath: /data/ca-certs
           readOnly: true
-    deploymentMode: SingleBinary
-    singleBinary:
+    deploymentMode: Monolithic
+    monolithic:
       replicas: 1
       extraVolumes: *extraVolumes
       extraVolumeMounts: *extraVolumeMounts
