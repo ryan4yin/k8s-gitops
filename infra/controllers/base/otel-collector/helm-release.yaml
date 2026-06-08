@@ -14,7 +14,7 @@ spec:
         kind: HelmRepository
         name: open-telemetry
         namespace: flux-system
-      version: "0.126.*"
+      version: "0.158.*"
       interval: 12h
   # https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-collector
   values:
@@ -104,7 +104,7 @@ spec:
             X-Scope-OrgID: "fake"
 
       processors:
-        k8sattributes:
+        k8s_attributes:
           passthrough: false
           filter:
             node_from_env_var: K8S_NODE_NAME
@@ -222,7 +222,7 @@ spec:
         pipelines:
           logs:
             receivers: [otlp, filelog]
-            processors: [k8sattributes, transform] # Order is crucial
+            processors: [k8s_attributes, transform] # Order is crucial
             exporters: [otlphttp]
           traces: null
           metrics: null # we use vmagent for metrics collecting.

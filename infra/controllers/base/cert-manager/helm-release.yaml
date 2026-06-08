@@ -17,7 +17,6 @@ spec:
         name: jetstack
         namespace: flux-system
       interval: 12h
-      version: "1.17.*"
+      version: "1.19.*"
   values:
     installCRDs: true
-

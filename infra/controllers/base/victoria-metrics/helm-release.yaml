@@ -18,7 +18,7 @@ spec:
         kind: HelmRepository
         name: victoria-metrics
         namespace: flux-system
-      version: "0.50.*"
+      version: "0.81.*"
       interval: 12h
   # https://github.com/VictoriaMetrics/helm-charts/tree/master/charts/victoria-metrics-k8s-stack
   values:
@@ -31,6 +31,13 @@ spec:
     # https://github.com/VictoriaMetrics/helm-charts/blob/master/charts/victoria-metrics-operator/values.yaml
     victoria-metrics-operator:
       enabled: true
+      crds:
+        plain: true
+        cleanup:
+          enabled: false
+        upgrade:
+          enabled: true
+          forceConflicts: true
       serviceMonitor:
         enabled: true
         # -- Creates `VMServiceScrape` if `true` and `ServiceMonitor` otherwise.

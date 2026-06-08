@@ -17,8 +17,8 @@ spec:
         name: cilium
         namespace: flux-system
       interval: 12h
-      version: "1.17.*"
-  # https://github.com/cilium/cilium/tree/v1.17.4/install/kubernetes/cilium
+      version: "1.19.*"
+  # https://github.com/cilium/cilium/tree/v1.19.4/install/kubernetes/cilium
   values:
     # ======================== Work with Istio ========================
     # https://docs.cilium.io/en/latest/network/servicemesh/istio/
@@ -34,6 +34,4 @@ spec:
       enabled: true
     # -- Enables masquerading of IPv6 traffic leaving the node from endpoints.
     enableIPv6Masquerade: true
-
-
 

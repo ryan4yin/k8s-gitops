@@ -16,4 +16,4 @@ spec:
       service:
         pipelines:
           logs:
-            processors: [k8sattributes, resource, transform] # Order is crucial
+            processors: [k8s_attributes, resource, transform] # Order is crucial

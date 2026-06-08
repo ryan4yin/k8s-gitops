@@ -12,11 +12,11 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: longhorn-repo
-      version: 1.8.*
+      version: 1.12.*
   interval: 30m0s
-  # https://github.com/longhorn/charts/blob/v1.6.x/charts/longhorn/values.yaml
+  # https://github.com/longhorn/charts/blob/v1.12.x/charts/longhorn/values.yaml
   values:
-    # https://longhorn.io/docs/1.6.2/best-practices/#volume-performance-optimization
+    # https://longhorn.io/docs/1.12.0/best-practices/#volume-performance-optimization
     persistence:
       defaultClass: true
       # -- Filesystem type of the default Longhorn StorageClass.
@@ -24,13 +24,13 @@ spec:
       # 2 replicas to achieve data availability with better disk space usage or less impact to system performance
       defaultClassReplicaCount: 2
       # -- Data locality of the default Longhorn StorageClass. (Options: "disabled", "best-effort", "strict-local")
-      # https://longhorn.io/docs/1.6.2/high-availability/data-locality/
+      # https://longhorn.io/docs/1.12.0/high-availability/data-locality/
       defaultDataLocality: best-effort # to gain better io performance
       # -- Reclaim policy that provides instructions for handling of a volume after its claim is released. (Options: "Retain", "Delete")
       reclaimPolicy: Delete
       migratable: false # disable by default, security concern
     defaultSettings:
-      # https://longhorn.io/docs/1.6.2/high-availability/auto-balance-replicas/
+      # https://longhorn.io/docs/1.12.0/high-availability/auto-balance-replicas/
       replicaAutoBalance: "best-effort"
       defaultReplicaCount: 2
       defaultDataLocality: best-effort # to gain better io performance

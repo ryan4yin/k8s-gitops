@@ -28,4 +28,5 @@ spec:
         type: s3
         bucketNames: # for object storage
           chunks: k3s-test-1-loki-chunks
-
+          ruler: k3s-test-1-loki-ruler
+          admin: k3s-test-1-loki-admin

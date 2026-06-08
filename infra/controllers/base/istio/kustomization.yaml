@@ -19,6 +19,6 @@ patches:
         interval: 72h
         chart:
           spec:
-            version: "1.27.*"
+            version: "1.30.*"
     target:
       kind: HelmRelease
