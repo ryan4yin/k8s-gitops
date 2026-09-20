@@ -163,7 +163,6 @@ Examples:
 
 - TODO
 
-
 ### 3. Decrypt secrets
 
 > https://github.com/getsops/sops?tab=readme-ov-file#22encrypting-using-age
@@ -181,6 +180,35 @@ export SOPS_AGE_KEY_FILE=./k8s-gitops.agekey
 # Decrypting the encrypted values
 sops --decrypt /path/to/secrets.yaml
 ```
+
+## Upgrading Components
+
+Controllers/operators sometimes change a CRD's `spec.versions` (Flux `v2.9` drops the
+image/OCI CRD `v1beta2`; KubeVirt `v1.9` moves the export API from `v1alpha1/v1beta1` to
+`v1/v1beta1`). Kubernetes rejects removing a version that was ever a storage version while
+`status.storedVersions` still lists it, so the apply fails with:
+
+```
+status.storedVersions[0]: Invalid value: "vX": missing from spec.versions; ... must remain in
+spec.versions until a storage migration ensures no data remains persisted in vX ...
+```
+
+Procedure:
+
+1. Migrate the stored objects with the new CLI first — `flux migrate --yes` on each
+   cluster before the Flux minor upgrade.
+2. For CRDs that still block, compare served vs stored versions:
+   `kubectl get crd <name> -o jsonpath='{.spec.versions[*].name} | {.status.storedVersions}'`.
+   A CRD with **no instances** can simply be deleted and recreated by its operator/Flux
+   (`kubectl delete crd <name>`); otherwise do a real storage migration.
+3. Reconcile the affected Kustomization/HelmRelease afterwards.
+
+Notes:
+
+- KubeVirt `virtualmachineexports.export.kubevirt.io` had no objects, so it was deleted
+  and the operator recreated it as `v1beta1 + v1`.
+- Never delete `network-attachment-definitions.k8s.cni.cncf.io` (CNAO keeps it on
+  purpose).
 
 ## TODO
 
