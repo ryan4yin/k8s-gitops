@@ -12,6 +12,11 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./infra/namespaces
+  # https://fluxcd.io/flux/components/kustomize/kustomizations/#decryption
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   # NOTE: Namespaces are very likely to have stateful resources that
   # will prevent deletion if they are not empty.
   # So, we should not prune them automatically!
@@ -32,6 +37,11 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./infra/pre-controllers/overlays/kubevirt-lab-1
+  # https://fluxcd.io/flux/components/kustomize/kustomizations/#decryption
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   # NOTE: infra-pre-controllers contains critical resources that provides
   # networking, storage, etc. for the rest of the cluster.
   # So, we should not prune them automatically!
@@ -55,6 +65,10 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./infra/controllers/overlays/kubevirt-lab-1
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   prune: true
   wait: true
 ---
@@ -73,4 +87,8 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./infra/configs/overlays/kubevirt-lab-1
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   prune: true

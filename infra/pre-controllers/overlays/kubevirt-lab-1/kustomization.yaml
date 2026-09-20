@@ -5,5 +5,6 @@ resources:
   - ./kubevip/
   - ../../base/cilium/
   - ../../base/multus/
-  # ca-certs / server-tls-certs into monitoring, kiali-operator, istio-ingress
-  - ../../base/secrets/
+  # plain ca-certs only: the base secrets also ship a SOPS-encrypted
+  # server-tls-certs which this cluster's sops-age key cannot decrypt.
+  - ./secrets/
