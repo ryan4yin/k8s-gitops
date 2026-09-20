@@ -68,6 +68,9 @@ spec:
         externalLabels:
           # For multi-cluster setups it is useful to use "cluster" label to identify the metrics source.
           type: kubernetes
+          # Stable per-cluster label; keeps series stable across vmagent restarts
+          # (the receiver also dedups; see the VictoriaMetrics dedup fix).
+          cluster: kubevirt-lab-1
         extraArgs:
           # vmagent automatically switches to VictoriaMetrics remote write protocol when it sends data to VictoriaMetrics components
           remoteWrite.forceVMProto: "true"

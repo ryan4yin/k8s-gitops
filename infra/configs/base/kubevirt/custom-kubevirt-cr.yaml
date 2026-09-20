@@ -33,7 +33,9 @@ spec:
       cpuAllocationRatio: 10 # 1vcpu = 1/10 cpu core
       # https://github.com/kubevirt/kubevirt/blob/main/pkg/virt-config/feature-gates.go#L26
       featureGates:
-        - Snapshot
+        # Snapshot and LiveMigration are intentionally NOT enabled: the VM disks use
+        # node-local (local-path, RWO) storage, which supports neither CSI snapshots
+        # nor live migration. Enable them together with suitable storage.
         - VMExport
         # required by windows
         ## persisting backend state files of VMs, such as the contents of the vTPM
@@ -50,7 +52,6 @@ spec:
         - HostDevices
         - HostDisk
         # - VMLiveUpdateFeatures
-        - LiveMigration
     vmStateStorageClass: local-path-test
     # vmRolloutStrategy: "LiveUpdate"
     permittedHostDevices:

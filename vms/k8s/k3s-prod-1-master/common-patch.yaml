@@ -13,14 +13,18 @@ spec:
     spec:
       affinity:
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: app.kubernetes.io/name
-                    operator: In
-                    values:
-                      - k3s-prod-1-master
-              topologyKey: kubernetes.io/hostname
+          # Soft anti-affinity: spread the nodes across hosts when possible, but do
+          # not block a (re)start when a host still has a terminating pod.
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - k3s-prod-1-master
+                topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 30
       domain:
         devices:
