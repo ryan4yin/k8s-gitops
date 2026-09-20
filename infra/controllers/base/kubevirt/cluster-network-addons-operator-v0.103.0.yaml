@@ -30,6 +30,18 @@ rules:
   - create
   - update
 - apiGroups:
+  - security.openshift.io
+  resourceNames:
+  - linux-bridge
+  - bridge-marker
+  - macvtap-cni
+  - multus
+  - ovs-cni-marker
+  resources:
+  - securitycontextconstraints
+  verbs:
+  - use
+- apiGroups:
   - apiextensions.k8s.io
   resources:
   - customresourcedefinitions
@@ -79,6 +91,7 @@ rules:
   verbs:
   - list
   - watch
+  - get
 - apiGroups:
   - rbac.authorization.k8s.io
   resources:
@@ -385,6 +398,18 @@ rules:
   - create
   - update
   - delete
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - networkpolicies
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -405,7 +430,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    networkaddonsoperator.network.kubevirt.io/version: 0.95.0
+    networkaddonsoperator.network.kubevirt.io/version: 0.103.0
   labels:
     prometheus.cnao.io: "true"
   name: cluster-network-addons-operator
@@ -424,40 +449,38 @@ spec:
           Kubernetes network components on top of Kubernetes cluster
       labels:
         name: cluster-network-addons-operator
+        np.kubevirt.io/allow-access-cluster-services: ""
+        np.kubevirt.io/allow-prometheus-access: ""
         prometheus.cnao.io: "true"
     spec:
       containers:
       - env:
         - name: MULTUS_IMAGE
-          value: ghcr.io/k8snetworkplumbingwg/multus-cni@sha256:3fbcc32bd4e4d15bd93c96def784a229cd84cca27942bf4858b581f31c97ee02
+          value: ghcr.io/k8snetworkplumbingwg/multus-cni@sha256:2b9671447f3ea4e7e56730843dbf59445b9307246f393b61386b896d56ae51c9
         - name: MULTUS_DYNAMIC_NETWORKS_CONTROLLER_IMAGE
-          value: ghcr.io/k8snetworkplumbingwg/multus-dynamic-networks-controller@sha256:83b460502671fb4f34116363a1a39b2ddfc9d14a920ee0a6413bfc3bd0580404
+          value: ghcr.io/k8snetworkplumbingwg/multus-dynamic-networks-controller@sha256:c7d137a7f4ddd81233b9778d02ae57a496e892ddedf74d49382d86df50ddcc27
         - name: LINUX_BRIDGE_IMAGE
-          value: quay.io/kubevirt/cni-default-plugins@sha256:0c354fa9d695b8cab97b459e8afea2f7662407a987e83f6f6f1a8af4b45726be
+          value: quay.io/kubevirt/cni-default-plugins@sha256:976a24392c2a096c38c2663d234b2d3131f5c24558889196d30b9ac1b6716788
         - name: LINUX_BRIDGE_MARKER_IMAGE
-          value: quay.io/kubevirt/bridge-marker@sha256:18d954d58b9830738df9bf5c9a575d22b33096d1af26fb6bc2da09fb31c9f73a
+          value: quay.io/kubevirt/bridge-marker@sha256:f9611ec10bb4aec44b0ec19f9b9d748a36255c089a1f59bc76e5fc37acc0fed2
         - name: OVS_CNI_IMAGE
-          value: ghcr.io/k8snetworkplumbingwg/ovs-cni-plugin@sha256:54be8fcacee50af64deafa9e99f3fe079033630c00c4ed9f74d17b0d91009f10
+          value: ghcr.io/k8snetworkplumbingwg/ovs-cni-plugin@sha256:435f374b434b3bc70a5cfaba0011fdcf5f433d96b98b06d29306cbd8db3a8c21
         - name: KUBEMACPOOL_IMAGE
-          value: quay.io/kubevirt/kubemacpool@sha256:677971a25ff3ce95d9e6ecc86090a09f0ae691ce67b8349384f1881562feed7b
+          value: quay.io/kubevirt/kubemacpool@sha256:d009c4829af2a3b46f70d54687075aa401d216c27fd965f24c0c5b7b3b7d92c7
         - name: MACVTAP_CNI_IMAGE
-          value: quay.io/kubevirt/macvtap-cni@sha256:850b89343ace7c7ea6b18dd8e11964613974e9d1f7377af03854d407fb15230a
-        - name: KUBE_RBAC_PROXY_IMAGE
-          value: quay.io/openshift/origin-kube-rbac-proxy@sha256:e2def4213ec0657e72eb790ae8a115511d5b8f164a62d3568d2f1bff189917e8
+          value: quay.io/kubevirt/macvtap-cni@sha256:aee6d9beb458fa76b0eab34335e2b528ad9eaff74b87be2fd62658ba77cbfa87
         - name: KUBE_SECONDARY_DNS_IMAGE
-          value: ghcr.io/kubevirt/kubesecondarydns@sha256:44489bdf8affb0e82b68a7100bbee7d289151ada54ab2e76a9d3afef769a1f54
+          value: ghcr.io/kubevirt/kubesecondarydns@sha256:f5fe9c98fb6d7e5e57a6df23fe82e43e65db5953d76af44adda9ab40c46ad0bf
         - name: CORE_DNS_IMAGE
           value: registry.k8s.io/coredns/coredns@sha256:a0ead06651cf580044aeb0a0feba63591858fb2e43ade8c9dea45a6a89ae7e5e
         - name: KUBEVIRT_IPAM_CONTROLLER_IMAGE
-          value: ghcr.io/kubevirt/ipam-controller@sha256:35c21de5eb18325da256fe7c8ac479aba27c5034bb0563a4be528947e8f62bd7
-        - name: PASST_BINDING_CNI_IMAGE
-          value: ghcr.io/kubevirt/passt-binding-cni@sha256:26c19e9292a76c5311c8ff66059ddf4f8085eee9c075d642cd86d645ebc31088
+          value: ghcr.io/kubevirt/ipam-controller@sha256:c26cc85bd8fa6457c1ddb1ffdb68be56d84046611591abc25aedac954c312f6c
         - name: OPERATOR_IMAGE
-          value: quay.io/kubevirt/cluster-network-addons-operator:v0.95.0
+          value: quay.io/kubevirt/cluster-network-addons-operator:v0.103.0
         - name: OPERATOR_NAME
           value: cluster-network-addons-operator
         - name: OPERATOR_VERSION
-          value: 0.95.0
+          value: 0.103.0
         - name: OPERATOR_NAMESPACE
           valueFrom:
             fieldRef:
@@ -477,33 +500,33 @@ spec:
           value: prometheus-k8s
         - name: RUNBOOK_URL_TEMPLATE
           value: https://kubevirt.io/monitoring/runbooks/%s
-        image: quay.io/kubevirt/cluster-network-addons-operator:v0.95.0
+        - name: CNAO_LOG_LEVEL
+          value: "0"
+        image: quay.io/kubevirt/cluster-network-addons-operator:v0.103.0
         imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: healthprobe
+          initialDelaySeconds: 15
+          periodSeconds: 20
         name: cluster-network-addons-operator
+        ports:
+        - containerPort: 8081
+          name: healthprobe
+        - containerPort: 8443
+          name: metrics
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: healthprobe
+          initialDelaySeconds: 5
+          periodSeconds: 10
         resources:
           requests:
             cpu: 50m
             memory: 30Mi
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-      - args:
-        - --logtostderr
-        - --secure-listen-address=:8443
-        - --upstream=http://127.0.0.1:8080
-        image: quay.io/openshift/origin-kube-rbac-proxy@sha256:e2def4213ec0657e72eb790ae8a115511d5b8f164a62d3568d2f1bff189917e8
-        imagePullPolicy: Always
-        name: kube-rbac-proxy
-        ports:
-        - containerPort: 8443
-          name: metrics
-          protocol: TCP
-        resources:
-          requests:
-            cpu: 10m
-            memory: 20Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:

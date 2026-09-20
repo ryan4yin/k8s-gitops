@@ -178,6 +178,20 @@ spec:
                       defaultArchitecture:
                         type: string
                       ppc64le:
+                        description: 'Deprecated: ppc64le architecture is no longer
+                          supported.'
+                        properties:
+                          emulatedMachines:
+                            items:
+                              type: string
+                            type: array
+                            x-kubernetes-list-type: atomic
+                          machineType:
+                            type: string
+                          ovmfPath:
+                            type: string
+                        type: object
+                      s390x:
                         properties:
                           emulatedMachines:
                             items:
@@ -240,6 +254,108 @@ spec:
                         type: object
                     type: object
                     x-kubernetes-map-type: atomic
+                  changedBlockTrackingLabelSelectors:
+                    description: |-
+                      ChangedBlockTrackingLabelSelectors defines label selectors. VMs matching these selectors will have changed block tracking enabled.
+                      Enabling changedBlockTracking is mandatory for performing storage-agnostic backups and incremental backups.
+                    nullable: true
+                    properties:
+                      namespaceLabelSelector:
+                        description: NamespaceSelector will enable changedBlockTracking
+                          on all VMs running inside namespaces that match the label
+                          selector.
+                        properties:
+                          matchExpressions:
+                            description: matchExpressions is a list of label selector
+                              requirements. The requirements are ANDed.
+                            items:
+                              description: |-
+                                A label selector requirement is a selector that contains values, a key, and an operator that
+                                relates the key and values.
+                              properties:
+                                key:
+                                  description: key is the label key that the selector
+                                    applies to.
+                                  type: string
+                                operator:
+                                  description: |-
+                                    operator represents a key's relationship to a set of values.
+                                    Valid operators are In, NotIn, Exists and DoesNotExist.
+                                  type: string
+                                values:
+                                  description: |-
+                                    values is an array of string values. If the operator is In or NotIn,
+                                    the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                    the values array must be empty. This array is replaced during a strategic
+                                    merge patch.
+                                  items:
+                                    type: string
+                                  type: array
+                                  x-kubernetes-list-type: atomic
+                              required:
+                              - key
+                              - operator
+                              type: object
+                            type: array
+                            x-kubernetes-list-type: atomic
+                          matchLabels:
+                            additionalProperties:
+                              type: string
+                            description: |-
+                              matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                              map is equivalent to an element of matchExpressions, whose key field is "key", the
+                              operator is "In", and the values array contains only "value". The requirements are ANDed.
+                            type: object
+                        type: object
+                        x-kubernetes-map-type: atomic
+                      virtualMachineLabelSelector:
+                        description: VirtualMachineSelector will enable changedBlockTracking
+                          on all VMs that match the label selector.
+                        properties:
+                          matchExpressions:
+                            description: matchExpressions is a list of label selector
+                              requirements. The requirements are ANDed.
+                            items:
+                              description: |-
+                                A label selector requirement is a selector that contains values, a key, and an operator that
+                                relates the key and values.
+                              properties:
+                                key:
+                                  description: key is the label key that the selector
+                                    applies to.
+                                  type: string
+                                operator:
+                                  description: |-
+                                    operator represents a key's relationship to a set of values.
+                                    Valid operators are In, NotIn, Exists and DoesNotExist.
+                                  type: string
+                                values:
+                                  description: |-
+                                    values is an array of string values. If the operator is In or NotIn,
+                                    the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                    the values array must be empty. This array is replaced during a strategic
+                                    merge patch.
+                                  items:
+                                    type: string
+                                  type: array
+                                  x-kubernetes-list-type: atomic
+                              required:
+                              - key
+                              - operator
+                              type: object
+                            type: array
+                            x-kubernetes-list-type: atomic
+                          matchLabels:
+                            additionalProperties:
+                              type: string
+                            description: |-
+                              matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                              map is equivalent to an element of matchExpressions, whose key field is "key", the
+                              operator is "In", and the values array contains only "value". The requirements are ANDed.
+                            type: object
+                        type: object
+                        x-kubernetes-map-type: atomic
+                    type: object
                   commonInstancetypesDeployment:
                     description: CommonInstancetypesDeployment controls the deployment
                       of common-instancetypes resources
@@ -250,6 +366,33 @@ spec:
                           resources, defaults to True.
                         nullable: true
                         type: boolean
+                    type: object
+                  confidentialCompute:
+                    description: QGS configuration for attestation on the Intel TDX
+                      Platform
+                    nullable: true
+                    properties:
+                      tdx:
+                        description: TDX configuration for attestation on the Intel
+                          TDX Platform
+                        nullable: true
+                        properties:
+                          attestation:
+                            description: QGSConfiguration holds QGS configuration
+                            properties:
+                              enforced:
+                                default: false
+                                description: Indicates whether TDX VM should enforce
+                                  the existence of QGS (required for attestation)
+                                  to be scheduled
+                                type: boolean
+                              qgsSocketPath:
+                                default: /var/run/tdx-qgs/qgs.socket
+                                description: Socket path pointing to the Quote Generation
+                                  Service
+                                type: string
+                            type: object
+                        type: object
                     type: object
                   controllerConfiguration:
                     description: |-
@@ -296,6 +439,10 @@ spec:
                   developerConfiguration:
                     description: DeveloperConfiguration holds developer options
                     properties:
+                      clusterProfiler:
+                        description: Enable the ability to pprof profile KubeVirt
+                          control plane
+                        type: boolean
                       cpuAllocationRatio:
                         description: |-
                           For each requested virtual CPU, CPUAllocationRatio defines how much physical CPU to request per VMI
@@ -306,6 +453,14 @@ spec:
                           https://kubevirt.io/user-guide/operations/node_overcommit/#node-cpu-allocation-ratio
                           Defaults to 10
                         type: integer
+                      disabledFeatureGates:
+                        description: |-
+                          DisabledFeatureGates specifies a list of experimental feature gates to disable.
+                          A feature gate must not appear in both FeatureGates and DisabledFeatureGates.
+                        items:
+                          type: string
+                        type: array
+                        x-kubernetes-list-type: atomic
                       diskVerification:
                         description: DiskVerification holds container disks verification
                           limits
@@ -320,11 +475,13 @@ spec:
                         - memoryLimit
                         type: object
                       featureGates:
-                        description: FeatureGates is the list of experimental features
-                          to enable. Defaults to none
+                        description: |-
+                          FeatureGates specifies a list of experimental feature gates to enable. Defaults to none.
+                          A feature gate must not appear in both FeatureGates and DisabledFeatureGates.
                         items:
                           type: string
                         type: array
+                        x-kubernetes-list-type: atomic
                       logVerbosity:
                         description: LogVerbosity sets log verbosity level of  various
                           components
@@ -345,6 +502,8 @@ spec:
                             type: integer
                           virtOperator:
                             type: integer
+                          virtSynchronizationController:
+                            type: integer
                         type: object
                       memoryOvercommit:
                         description: |-
@@ -353,6 +512,7 @@ spec:
                           "see" 2% more memory than its parent pod. Values under 100 are effectively "undercommits".
                           Overcommits can lead to memory exhaustion, which in turn can lead to crashes. Use carefully.
                           Defaults to 100
+                        minimum: 10
                         type: integer
                       minimumClusterTSCFrequency:
                         description: |-
@@ -428,9 +588,30 @@ spec:
                             type: object
                         type: object
                     type: object
+                  hypervisors:
+                    description: Hypervisors holds information regarding the hypervisor
+                      configurations supported on this cluster.
+                    items:
+                      description: HypervisorConfiguration holds information regarding
+                        the hypervisor present on cluster nodes.
+                      properties:
+                        name:
+                          description: |-
+                            Name is the name of the hypervisor.
+                            Supported values are: "kvm", "hyperv-direct".
+                          enum:
+                          - kvm
+                          - hyperv-direct
+                          type: string
+                      type: object
+                    maxItems: 1
+                    type: array
+                    x-kubernetes-list-type: atomic
                   imagePullPolicy:
-                    description: PullPolicy describes a policy for if/when to pull
-                      a container image
+                    description: |-
+                      The ImagePullPolicy to use for user workload pods and their containers
+                      (launcher pods, exporter pods, etc.).
+                      For KubeVirt infrastructure images, use spec.imagePullPolicy instead.
                     type: string
                   instancetype:
                     description: Instancetype configuration
@@ -539,6 +720,12 @@ spec:
                     description: MediatedDevicesConfiguration holds information about
                       MDEV types to be defined, if available
                     properties:
+                      enabled:
+                        description: |-
+                          Enable the creation and removal of mediated devices by virt-handler
+                          Replaces the deprecated DisableMDEVConfiguration feature gate
+                          Defaults to true
+                        type: boolean
                       mediatedDeviceTypes:
                         items:
                           type: string
@@ -637,6 +824,14 @@ spec:
                           That will ensure the target virt-launcher doesn't share categories with another pod on the node.
                           However, migrations will fail when using RWX volumes that don't automatically deal with SELinux levels.
                         type: boolean
+                      maxDowntimeMs:
+                        description: |-
+                          MaxDowntimeMs specifies the maximum tolerable downtime (in milliseconds) during switchover.
+                          Defaults to 900
+                        format: int64
+                        maximum: 2000000
+                        minimum: 1
+                        type: integer
                       network:
                         description: |-
                           Network is the name of the CNI network to use for live migrations. By default, migrations go
@@ -671,8 +866,16 @@ spec:
                           UnsafeMigrationOverride allows live migrations to occur even if the compatibility check
                           indicates the migration will be unsafe to the guest. Defaults to false
                         type: boolean
+                      utilityVolumesTimeout:
+                        description: |-
+                          UtilityVolumesTimeout is the maximum number of seconds a migration can wait in Pending state
+                          for utility volumes to be detached. If utility volumes are still present after this timeout,
+                          the migration will be marked as Failed. Defaults to 150
+                        format: int64
+                        type: integer
                     type: object
                   minCPUModel:
+                    description: deprecated
                     type: string
                   network:
                     description: NetworkConfiguration holds network options
@@ -845,6 +1048,31 @@ spec:
                         type: array
                         x-kubernetes-list-type: atomic
                     type: object
+                  persistentReservationConfiguration:
+                    description: PersistentReservationConfiguration controls the deployment
+                      of additional resources required for using SCSI persistent reservation
+                      in VMs
+                    nullable: true
+                    properties:
+                      enabled:
+                        description: |-
+                          Enabled controls the deployment of additional resources like the pr-helper container
+                          for enabling the use of the SCSI persistent reservation VMs, defaults to False.
+                        nullable: true
+                        type: boolean
+                    type: object
+                  roleAggregationStrategy:
+                    description: |-
+                      RoleAggregationStrategy controls whether RBAC cluster roles should be aggregated
+                      to the default Kubernetes roles (admin, edit, view).
+                      When set to "AggregateToDefault" (default) or not specified, the aggregate-to-* labels are added to the cluster roles.
+                      When set to "Manual", the labels are not added, and roles will not be aggregated to the default roles.
+                      Setting RoleAggregationStrategy to "Manual" requires the OptOutRoleAggregation feature gate
+                      to be enabled (Beta, enabled by default since v1.9.0).
+                    enum:
+                    - AggregateToDefault
+                    - Manual
+                    type: string
                   seccompConfiguration:
                     description: SeccompConfiguration holds Seccomp configuration
                       for Kubevirt components
@@ -959,6 +1187,17 @@ spec:
                         - VersionTLS13
                         type: string
                     type: object
+                  virtTemplateDeployment:
+                    description: VirtTemplateDeployment controls the deployment of
+                      virt-template components
+                    nullable: true
+                    properties:
+                      enabled:
+                        description: Enabled controls the deployment of virt-template
+                          resources, defaults to True when feature gate is enabled.
+                        nullable: true
+                        type: boolean
+                    type: object
                   virtualMachineInstancesPerNode:
                     type: integer
                   virtualMachineOptions:
@@ -1067,7 +1306,11 @@ spec:
                     x-kubernetes-list-type: atomic
                 type: object
               imagePullPolicy:
-                description: The ImagePullPolicy to use.
+                description: |-
+                  The ImagePullPolicy to use for KubeVirt operator-managed infrastructure
+                  images (virt-api, virt-controller, virt-handler, virt-exportproxy, etc.).
+                  For pull policy of user workload pods, see
+                  spec.configuration.imagePullPolicy.
                 type: string
               imagePullSecrets:
                 description: |-
@@ -1402,7 +1645,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -1417,7 +1659,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -1585,7 +1826,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -1600,7 +1840,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -1694,8 +1933,8 @@ spec:
                                   most preferred is the one with the greatest sum of weights, i.e.
                                   for each node that meets all of the scheduling requirements (resource
                                   request, requiredDuringScheduling anti-affinity expressions, etc.),
-                                  compute a sum by iterating through the elements of this field and adding
-                                  "weight" to the sum if the node has pods which matches the corresponding podAffinityTerm; the
+                                  compute a sum by iterating through the elements of this field and subtracting
+                                  "weight" from the sum if the node has pods which matches the corresponding podAffinityTerm; the
                                   node(s) with the highest sum are the most preferred.
                                 items:
                                   description: The weights of all of the matched WeightedPodAffinityTerm
@@ -1766,7 +2005,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -1781,7 +2019,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -1949,7 +2186,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -1964,7 +2200,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -2139,6 +2374,10 @@ spec:
                   The namespace the service monitor will be deployed
                    When ServiceMonitorNamespace is set, then we'll install the service monitor object in that namespace
                   otherwise we will use the monitoring namespace.
+                type: string
+              synchronizationPort:
+                description: Specify the port to listen on for VMI status synchronization
+                  traffic. Default is 9185
                 type: string
               uninstallStrategy:
                 description: |-
@@ -2479,7 +2718,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -2494,7 +2732,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -2662,7 +2899,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -2677,7 +2913,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -2771,8 +3006,8 @@ spec:
                                   most preferred is the one with the greatest sum of weights, i.e.
                                   for each node that meets all of the scheduling requirements (resource
                                   request, requiredDuringScheduling anti-affinity expressions, etc.),
-                                  compute a sum by iterating through the elements of this field and adding
-                                  "weight" to the sum if the node has pods which matches the corresponding podAffinityTerm; the
+                                  compute a sum by iterating through the elements of this field and subtracting
+                                  "weight" from the sum if the node has pods which matches the corresponding podAffinityTerm; the
                                   node(s) with the highest sum are the most preferred.
                                 items:
                                   description: The weights of all of the matched WeightedPodAffinityTerm
@@ -2843,7 +3078,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -2858,7 +3092,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -3026,7 +3259,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -3041,7 +3273,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -3271,6 +3502,11 @@ spec:
                 description: KubeVirtPhase is a label for the phase of a KubeVirt
                   deployment at the current time.
                 type: string
+              synchronizationAddresses:
+                items:
+                  type: string
+                type: array
+                x-kubernetes-list-type: atomic
               targetDeploymentConfig:
                 type: string
               targetDeploymentID:
@@ -3442,6 +3678,20 @@ spec:
                       defaultArchitecture:
                         type: string
                       ppc64le:
+                        description: 'Deprecated: ppc64le architecture is no longer
+                          supported.'
+                        properties:
+                          emulatedMachines:
+                            items:
+                              type: string
+                            type: array
+                            x-kubernetes-list-type: atomic
+                          machineType:
+                            type: string
+                          ovmfPath:
+                            type: string
+                        type: object
+                      s390x:
                         properties:
                           emulatedMachines:
                             items:
@@ -3504,6 +3754,108 @@ spec:
                         type: object
                     type: object
                     x-kubernetes-map-type: atomic
+                  changedBlockTrackingLabelSelectors:
+                    description: |-
+                      ChangedBlockTrackingLabelSelectors defines label selectors. VMs matching these selectors will have changed block tracking enabled.
+                      Enabling changedBlockTracking is mandatory for performing storage-agnostic backups and incremental backups.
+                    nullable: true
+                    properties:
+                      namespaceLabelSelector:
+                        description: NamespaceSelector will enable changedBlockTracking
+                          on all VMs running inside namespaces that match the label
+                          selector.
+                        properties:
+                          matchExpressions:
+                            description: matchExpressions is a list of label selector
+                              requirements. The requirements are ANDed.
+                            items:
+                              description: |-
+                                A label selector requirement is a selector that contains values, a key, and an operator that
+                                relates the key and values.
+                              properties:
+                                key:
+                                  description: key is the label key that the selector
+                                    applies to.
+                                  type: string
+                                operator:
+                                  description: |-
+                                    operator represents a key's relationship to a set of values.
+                                    Valid operators are In, NotIn, Exists and DoesNotExist.
+                                  type: string
+                                values:
+                                  description: |-
+                                    values is an array of string values. If the operator is In or NotIn,
+                                    the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                    the values array must be empty. This array is replaced during a strategic
+                                    merge patch.
+                                  items:
+                                    type: string
+                                  type: array
+                                  x-kubernetes-list-type: atomic
+                              required:
+                              - key
+                              - operator
+                              type: object
+                            type: array
+                            x-kubernetes-list-type: atomic
+                          matchLabels:
+                            additionalProperties:
+                              type: string
+                            description: |-
+                              matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                              map is equivalent to an element of matchExpressions, whose key field is "key", the
+                              operator is "In", and the values array contains only "value". The requirements are ANDed.
+                            type: object
+                        type: object
+                        x-kubernetes-map-type: atomic
+                      virtualMachineLabelSelector:
+                        description: VirtualMachineSelector will enable changedBlockTracking
+                          on all VMs that match the label selector.
+                        properties:
+                          matchExpressions:
+                            description: matchExpressions is a list of label selector
+                              requirements. The requirements are ANDed.
+                            items:
+                              description: |-
+                                A label selector requirement is a selector that contains values, a key, and an operator that
+                                relates the key and values.
+                              properties:
+                                key:
+                                  description: key is the label key that the selector
+                                    applies to.
+                                  type: string
+                                operator:
+                                  description: |-
+                                    operator represents a key's relationship to a set of values.
+                                    Valid operators are In, NotIn, Exists and DoesNotExist.
+                                  type: string
+                                values:
+                                  description: |-
+                                    values is an array of string values. If the operator is In or NotIn,
+                                    the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                    the values array must be empty. This array is replaced during a strategic
+                                    merge patch.
+                                  items:
+                                    type: string
+                                  type: array
+                                  x-kubernetes-list-type: atomic
+                              required:
+                              - key
+                              - operator
+                              type: object
+                            type: array
+                            x-kubernetes-list-type: atomic
+                          matchLabels:
+                            additionalProperties:
+                              type: string
+                            description: |-
+                              matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                              map is equivalent to an element of matchExpressions, whose key field is "key", the
+                              operator is "In", and the values array contains only "value". The requirements are ANDed.
+                            type: object
+                        type: object
+                        x-kubernetes-map-type: atomic
+                    type: object
                   commonInstancetypesDeployment:
                     description: CommonInstancetypesDeployment controls the deployment
                       of common-instancetypes resources
@@ -3514,6 +3866,33 @@ spec:
                           resources, defaults to True.
                         nullable: true
                         type: boolean
+                    type: object
+                  confidentialCompute:
+                    description: QGS configuration for attestation on the Intel TDX
+                      Platform
+                    nullable: true
+                    properties:
+                      tdx:
+                        description: TDX configuration for attestation on the Intel
+                          TDX Platform
+                        nullable: true
+                        properties:
+                          attestation:
+                            description: QGSConfiguration holds QGS configuration
+                            properties:
+                              enforced:
+                                default: false
+                                description: Indicates whether TDX VM should enforce
+                                  the existence of QGS (required for attestation)
+                                  to be scheduled
+                                type: boolean
+                              qgsSocketPath:
+                                default: /var/run/tdx-qgs/qgs.socket
+                                description: Socket path pointing to the Quote Generation
+                                  Service
+                                type: string
+                            type: object
+                        type: object
                     type: object
                   controllerConfiguration:
                     description: |-
@@ -3560,6 +3939,10 @@ spec:
                   developerConfiguration:
                     description: DeveloperConfiguration holds developer options
                     properties:
+                      clusterProfiler:
+                        description: Enable the ability to pprof profile KubeVirt
+                          control plane
+                        type: boolean
                       cpuAllocationRatio:
                         description: |-
                           For each requested virtual CPU, CPUAllocationRatio defines how much physical CPU to request per VMI
@@ -3570,6 +3953,14 @@ spec:
                           https://kubevirt.io/user-guide/operations/node_overcommit/#node-cpu-allocation-ratio
                           Defaults to 10
                         type: integer
+                      disabledFeatureGates:
+                        description: |-
+                          DisabledFeatureGates specifies a list of experimental feature gates to disable.
+                          A feature gate must not appear in both FeatureGates and DisabledFeatureGates.
+                        items:
+                          type: string
+                        type: array
+                        x-kubernetes-list-type: atomic
                       diskVerification:
                         description: DiskVerification holds container disks verification
                           limits
@@ -3584,11 +3975,13 @@ spec:
                         - memoryLimit
                         type: object
                       featureGates:
-                        description: FeatureGates is the list of experimental features
-                          to enable. Defaults to none
+                        description: |-
+                          FeatureGates specifies a list of experimental feature gates to enable. Defaults to none.
+                          A feature gate must not appear in both FeatureGates and DisabledFeatureGates.
                         items:
                           type: string
                         type: array
+                        x-kubernetes-list-type: atomic
                       logVerbosity:
                         description: LogVerbosity sets log verbosity level of  various
                           components
@@ -3609,6 +4002,8 @@ spec:
                             type: integer
                           virtOperator:
                             type: integer
+                          virtSynchronizationController:
+                            type: integer
                         type: object
                       memoryOvercommit:
                         description: |-
@@ -3617,6 +4012,7 @@ spec:
                           "see" 2% more memory than its parent pod. Values under 100 are effectively "undercommits".
                           Overcommits can lead to memory exhaustion, which in turn can lead to crashes. Use carefully.
                           Defaults to 100
+                        minimum: 10
                         type: integer
                       minimumClusterTSCFrequency:
                         description: |-
@@ -3692,9 +4088,30 @@ spec:
                             type: object
                         type: object
                     type: object
+                  hypervisors:
+                    description: Hypervisors holds information regarding the hypervisor
+                      configurations supported on this cluster.
+                    items:
+                      description: HypervisorConfiguration holds information regarding
+                        the hypervisor present on cluster nodes.
+                      properties:
+                        name:
+                          description: |-
+                            Name is the name of the hypervisor.
+                            Supported values are: "kvm", "hyperv-direct".
+                          enum:
+                          - kvm
+                          - hyperv-direct
+                          type: string
+                      type: object
+                    maxItems: 1
+                    type: array
+                    x-kubernetes-list-type: atomic
                   imagePullPolicy:
-                    description: PullPolicy describes a policy for if/when to pull
-                      a container image
+                    description: |-
+                      The ImagePullPolicy to use for user workload pods and their containers
+                      (launcher pods, exporter pods, etc.).
+                      For KubeVirt infrastructure images, use spec.imagePullPolicy instead.
                     type: string
                   instancetype:
                     description: Instancetype configuration
@@ -3803,6 +4220,12 @@ spec:
                     description: MediatedDevicesConfiguration holds information about
                       MDEV types to be defined, if available
                     properties:
+                      enabled:
+                        description: |-
+                          Enable the creation and removal of mediated devices by virt-handler
+                          Replaces the deprecated DisableMDEVConfiguration feature gate
+                          Defaults to true
+                        type: boolean
                       mediatedDeviceTypes:
                         items:
                           type: string
@@ -3901,6 +4324,14 @@ spec:
                           That will ensure the target virt-launcher doesn't share categories with another pod on the node.
                           However, migrations will fail when using RWX volumes that don't automatically deal with SELinux levels.
                         type: boolean
+                      maxDowntimeMs:
+                        description: |-
+                          MaxDowntimeMs specifies the maximum tolerable downtime (in milliseconds) during switchover.
+                          Defaults to 900
+                        format: int64
+                        maximum: 2000000
+                        minimum: 1
+                        type: integer
                       network:
                         description: |-
                           Network is the name of the CNI network to use for live migrations. By default, migrations go
@@ -3935,8 +4366,16 @@ spec:
                           UnsafeMigrationOverride allows live migrations to occur even if the compatibility check
                           indicates the migration will be unsafe to the guest. Defaults to false
                         type: boolean
+                      utilityVolumesTimeout:
+                        description: |-
+                          UtilityVolumesTimeout is the maximum number of seconds a migration can wait in Pending state
+                          for utility volumes to be detached. If utility volumes are still present after this timeout,
+                          the migration will be marked as Failed. Defaults to 150
+                        format: int64
+                        type: integer
                     type: object
                   minCPUModel:
+                    description: deprecated
                     type: string
                   network:
                     description: NetworkConfiguration holds network options
@@ -4109,6 +4548,31 @@ spec:
                         type: array
                         x-kubernetes-list-type: atomic
                     type: object
+                  persistentReservationConfiguration:
+                    description: PersistentReservationConfiguration controls the deployment
+                      of additional resources required for using SCSI persistent reservation
+                      in VMs
+                    nullable: true
+                    properties:
+                      enabled:
+                        description: |-
+                          Enabled controls the deployment of additional resources like the pr-helper container
+                          for enabling the use of the SCSI persistent reservation VMs, defaults to False.
+                        nullable: true
+                        type: boolean
+                    type: object
+                  roleAggregationStrategy:
+                    description: |-
+                      RoleAggregationStrategy controls whether RBAC cluster roles should be aggregated
+                      to the default Kubernetes roles (admin, edit, view).
+                      When set to "AggregateToDefault" (default) or not specified, the aggregate-to-* labels are added to the cluster roles.
+                      When set to "Manual", the labels are not added, and roles will not be aggregated to the default roles.
+                      Setting RoleAggregationStrategy to "Manual" requires the OptOutRoleAggregation feature gate
+                      to be enabled (Beta, enabled by default since v1.9.0).
+                    enum:
+                    - AggregateToDefault
+                    - Manual
+                    type: string
                   seccompConfiguration:
                     description: SeccompConfiguration holds Seccomp configuration
                       for Kubevirt components
@@ -4223,6 +4687,17 @@ spec:
                         - VersionTLS13
                         type: string
                     type: object
+                  virtTemplateDeployment:
+                    description: VirtTemplateDeployment controls the deployment of
+                      virt-template components
+                    nullable: true
+                    properties:
+                      enabled:
+                        description: Enabled controls the deployment of virt-template
+                          resources, defaults to True when feature gate is enabled.
+                        nullable: true
+                        type: boolean
+                    type: object
                   virtualMachineInstancesPerNode:
                     type: integer
                   virtualMachineOptions:
@@ -4331,7 +4806,11 @@ spec:
                     x-kubernetes-list-type: atomic
                 type: object
               imagePullPolicy:
-                description: The ImagePullPolicy to use.
+                description: |-
+                  The ImagePullPolicy to use for KubeVirt operator-managed infrastructure
+                  images (virt-api, virt-controller, virt-handler, virt-exportproxy, etc.).
+                  For pull policy of user workload pods, see
+                  spec.configuration.imagePullPolicy.
                 type: string
               imagePullSecrets:
                 description: |-
@@ -4666,7 +5145,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -4681,7 +5159,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -4849,7 +5326,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -4864,7 +5340,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -4958,8 +5433,8 @@ spec:
                                   most preferred is the one with the greatest sum of weights, i.e.
                                   for each node that meets all of the scheduling requirements (resource
                                   request, requiredDuringScheduling anti-affinity expressions, etc.),
-                                  compute a sum by iterating through the elements of this field and adding
-                                  "weight" to the sum if the node has pods which matches the corresponding podAffinityTerm; the
+                                  compute a sum by iterating through the elements of this field and subtracting
+                                  "weight" from the sum if the node has pods which matches the corresponding podAffinityTerm; the
                                   node(s) with the highest sum are the most preferred.
                                 items:
                                   description: The weights of all of the matched WeightedPodAffinityTerm
@@ -5030,7 +5505,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -5045,7 +5519,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -5213,7 +5686,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -5228,7 +5700,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -5403,6 +5874,10 @@ spec:
                   The namespace the service monitor will be deployed
                    When ServiceMonitorNamespace is set, then we'll install the service monitor object in that namespace
                   otherwise we will use the monitoring namespace.
+                type: string
+              synchronizationPort:
+                description: Specify the port to listen on for VMI status synchronization
+                  traffic. Default is 9185
                 type: string
               uninstallStrategy:
                 description: |-
@@ -5743,7 +6218,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -5758,7 +6232,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -5926,7 +6399,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -5941,7 +6413,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -6035,8 +6506,8 @@ spec:
                                   most preferred is the one with the greatest sum of weights, i.e.
                                   for each node that meets all of the scheduling requirements (resource
                                   request, requiredDuringScheduling anti-affinity expressions, etc.),
-                                  compute a sum by iterating through the elements of this field and adding
-                                  "weight" to the sum if the node has pods which matches the corresponding podAffinityTerm; the
+                                  compute a sum by iterating through the elements of this field and subtracting
+                                  "weight" from the sum if the node has pods which matches the corresponding podAffinityTerm; the
                                   node(s) with the highest sum are the most preferred.
                                 items:
                                   description: The weights of all of the matched WeightedPodAffinityTerm
@@ -6107,7 +6578,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                             Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -6122,7 +6592,6 @@ spec:
                                             pod labels will be ignored. The default value is empty.
                                             The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                             Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                            This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                           items:
                                             type: string
                                           type: array
@@ -6290,7 +6759,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                         Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -6305,7 +6773,6 @@ spec:
                                         pod labels will be ignored. The default value is empty.
                                         The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                         Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                        This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                       items:
                                         type: string
                                       type: array
@@ -6535,6 +7002,11 @@ spec:
                 description: KubeVirtPhase is a label for the phase of a KubeVirt
                   deployment at the current time.
                 type: string
+              synchronizationAddresses:
+                items:
+                  type: string
+                type: array
+                x-kubernetes-list-type: atomic
               targetDeploymentConfig:
                 type: string
               targetDeploymentID:
@@ -6604,12 +7076,21 @@ rules:
   resourceNames:
   - kubevirt-ca
   - kubevirt-export-ca
+  - kubevirt-backup-ca
   - kubevirt-virt-handler-certs
   - kubevirt-virt-handler-server-certs
+  - kubevirt-virt-handler-migration-client-certs
+  - kubevirt-virt-handler-vsock-client-certs
+  - kubevirt-virt-handler-monitoring-client-certs
   - kubevirt-operator-certs
   - kubevirt-virt-api-certs
   - kubevirt-controller-certs
   - kubevirt-exportproxy-certs
+  - kubevirt-synchronization-controller-certs
+  - kubevirt-synchronization-controller-server-certs
+  - kubevirt-virt-template-api-certs
+  - kubevirt-virt-template-webhook-certs
+  - kubevirt-virt-template-controller-metrics-certs
   resources:
   - secrets
   verbs:
@@ -6721,6 +7202,28 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - ""
+  resourceNames:
+  - kubevirt-ca
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - list
+  - watch
+  - delete
+  - update
+  - create
+  - patch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -6755,7 +7258,6 @@ rules:
   - watch
   - patch
   - update
-  - patch
 - apiGroups:
   - ""
   resources:
@@ -6919,6 +7421,45 @@ rules:
   - watch
   - patch
 - apiGroups:
+  - template.kubevirt.io
+  resources:
+  - virtualmachinetemplates
+  - virtualmachinetemplaterequests
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - template.kubevirt.io
+  resources:
+  - virtualmachinetemplates/status
+  - virtualmachinetemplaterequests/status
+  verbs:
+  - get
+  - patch
+- apiGroups:
+  - template.kubevirt.io
+  resources:
+  - virtualmachinetemplates/finalizers
+  - virtualmachinetemplaterequests/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - template.kubevirt.io
+  resources:
+  - virtualmachinetemplaterequests/source
+  verbs:
+  - create
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+- apiGroups:
   - ""
   resources:
   - pods
@@ -6944,6 +7485,7 @@ rules:
   - persistentvolumeclaims
   verbs:
   - get
+  - list
 - apiGroups:
   - kubevirt.io
   resources:
@@ -7009,6 +7551,22 @@ rules:
   - list
   - watch
 - apiGroups:
+  - backup.kubevirt.io
+  resources:
+  - virtualmachinebackups
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - backup.kubevirt.io
+  resources:
+  - virtualmachinebackuptrackers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
   - cdi.kubevirt.io
   resources:
   - datasources
@@ -7051,6 +7609,12 @@ rules:
   verbs:
   - create
   - list
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
   - get
 - apiGroups:
   - ""
@@ -7192,6 +7756,41 @@ rules:
   - delete
   - patch
 - apiGroups:
+  - backup.kubevirt.io
+  resources:
+  - virtualmachinebackups
+  - virtualmachinebackups/status
+  - virtualmachinebackups/finalizers
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - delete
+  - patch
+- apiGroups:
+  - backup.kubevirt.io
+  resources:
+  - virtualmachinebackuptrackers
+  - virtualmachinebackuptrackers/status
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - delete
+  - patch
+- apiGroups:
+  - template.kubevirt.io
+  resources:
+  - virtualmachinetemplates
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
   - pool.kubevirt.io
   resources:
   - virtualmachinepools
@@ -7225,6 +7824,8 @@ rules:
   - virtualmachines/stop
   - virtualmachineinstances/addvolume
   - virtualmachineinstances/removevolume
+  - virtualmachineinstances/backup
+  - virtualmachineinstances/redefine-checkpoint
   - virtualmachineinstances/freeze
   - virtualmachineinstances/unfreeze
   - virtualmachineinstances/reset
@@ -7239,12 +7840,6 @@ rules:
   - '*'
   verbs:
   - '*'
-- apiGroups:
-  - k8s.cni.cncf.io
-  resources:
-  - network-attachment-definitions
-  verbs:
-  - get
 - apiGroups:
   - apiextensions.k8s.io
   resources:
@@ -7340,6 +7935,21 @@ rules:
   - get
   - delete
 - apiGroups:
+  - resource.k8s.io
+  resources:
+  - resourceslices
+  - resourceclaims
+  verbs:
+  - list
+  - watch
+  - get
+- apiGroups:
+  - k8s.cni.cncf.io
+  resources:
+  - network-attachment-definitions
+  verbs:
+  - get
+- apiGroups:
   - kubevirt.io
   resources:
   - virtualmachineinstances
@@ -7396,6 +8006,23 @@ rules:
   - list
   - watch
 - apiGroups:
+  - backup.kubevirt.io
+  resources:
+  - virtualmachinebackuptrackers
+  - virtualmachinebackuptrackers/status
+  verbs:
+  - list
+  - watch
+  - patch
+- apiGroups:
+  - plugin.kubevirt.io
+  resources:
+  - plugins
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
   - export.kubevirt.io
   resources:
   - virtualmachineexports
@@ -7408,6 +8035,50 @@ rules:
   resources:
   - kubevirts
   verbs:
+  - list
+  - watch
+- apiGroups:
+  - kubevirt.io
+  resources:
+  - virtualmachineinstances
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+- apiGroups:
+  - kubevirt.io
+  resources:
+  - virtualmachineinstancemigrations
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+  - delete
+- apiGroups:
+  - kubevirt.io
+  resources:
+  - kubevirts
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - update
+  - create
+  - patch
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - get
   - list
   - watch
 - apiGroups:
@@ -7438,6 +8109,8 @@ rules:
   - virtualmachineinstances/sev/fetchcertchain
   - virtualmachineinstances/sev/querylaunchmeasurement
   - virtualmachineinstances/usbredir
+  - virtualmachines/objectgraph
+  - virtualmachineinstances/objectgraph
   verbs:
   - get
 - apiGroups:
@@ -7453,6 +8126,7 @@ rules:
   - virtualmachineinstances/reset
   - virtualmachineinstances/sev/setupsession
   - virtualmachineinstances/sev/injectlaunchsecret
+  - virtualmachineinstances/evacuate/cancel
   verbs:
   - update
 - apiGroups:
@@ -7471,6 +8145,7 @@ rules:
   - virtualmachines/addvolume
   - virtualmachines/removevolume
   - virtualmachines/memorydump
+  - virtualmachines/evacuate/cancel
   verbs:
   - update
 - apiGroups:
@@ -7509,6 +8184,33 @@ rules:
   - virtualmachinesnapshots
   - virtualmachinesnapshotcontents
   - virtualmachinerestores
+  verbs:
+  - get
+  - delete
+  - create
+  - update
+  - patch
+  - list
+  - watch
+  - deletecollection
+- apiGroups:
+  - backup.kubevirt.io
+  resources:
+  - virtualmachinebackups
+  - virtualmachinebackuptrackers
+  verbs:
+  - get
+  - delete
+  - create
+  - update
+  - patch
+  - list
+  - watch
+  - deletecollection
+- apiGroups:
+  - plugin.kubevirt.io
+  resources:
+  - plugins
   verbs:
   - get
   - delete
@@ -7586,7 +8288,6 @@ rules:
   resources:
   - virtualmachineinstances/console
   - virtualmachineinstances/vnc
-  - virtualmachineinstances/vnc/screenshot
   - virtualmachineinstances/portforward
   - virtualmachineinstances/guestosinfo
   - virtualmachineinstances/filesystemlist
@@ -7594,6 +8295,8 @@ rules:
   - virtualmachineinstances/sev/fetchcertchain
   - virtualmachineinstances/sev/querylaunchmeasurement
   - virtualmachineinstances/usbredir
+  - virtualmachines/objectgraph
+  - virtualmachineinstances/objectgraph
   verbs:
   - get
 - apiGroups:
@@ -7609,6 +8312,7 @@ rules:
   - virtualmachineinstances/reset
   - virtualmachineinstances/sev/setupsession
   - virtualmachineinstances/sev/injectlaunchsecret
+  - virtualmachineinstances/evacuate/cancel
   verbs:
   - update
 - apiGroups:
@@ -7627,6 +8331,7 @@ rules:
   - virtualmachines/addvolume
   - virtualmachines/removevolume
   - virtualmachines/memorydump
+  - virtualmachines/evacuate/cancel
   verbs:
   - update
 - apiGroups:
@@ -7664,6 +8369,19 @@ rules:
   - virtualmachinesnapshots
   - virtualmachinesnapshotcontents
   - virtualmachinerestores
+  verbs:
+  - get
+  - delete
+  - create
+  - update
+  - patch
+  - list
+  - watch
+- apiGroups:
+  - backup.kubevirt.io
+  resources:
+  - virtualmachinebackups
+  - virtualmachinebackuptrackers
   verbs:
   - get
   - delete
@@ -7754,6 +8472,8 @@ rules:
   - virtualmachineinstances/userlist
   - virtualmachineinstances/sev/fetchcertchain
   - virtualmachineinstances/sev/querylaunchmeasurement
+  - virtualmachines/objectgraph
+  - virtualmachineinstances/objectgraph
   verbs:
   - get
 - apiGroups:
@@ -7780,6 +8500,15 @@ rules:
   - virtualmachinesnapshots
   - virtualmachinesnapshotcontents
   - virtualmachinerestores
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - backup.kubevirt.io
+  resources:
+  - virtualmachinebackups
+  - virtualmachinebackuptrackers
   verbs:
   - get
   - list
@@ -7823,6 +8552,14 @@ rules:
   - migrations.kubevirt.io
   resources:
   - migrationpolicies
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - plugin.kubevirt.io
+  resources:
+  - plugins
   verbs:
   - get
   - list
@@ -7905,10 +8642,26 @@ spec:
       labels:
         kubevirt.io: virt-operator
         name: virt-operator
+        np.kubevirt.io/allow-access-cluster-services: "true"
         prometheus.kubevirt.io: "true"
       name: virt-operator
     spec:
       affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - key: node-role.kubernetes.io/worker
+                operator: DoesNotExist
+            weight: 100
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: Exists
+            - matchExpressions:
+              - key: node-role.kubernetes.io/master
+                operator: Exists
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - podAffinityTerm:
@@ -7930,15 +8683,22 @@ spec:
         - virt-operator
         env:
         - name: VIRT_OPERATOR_IMAGE
-          value: quay.io/kubevirt/virt-operator:v1.5.1
+          value: quay.io/kubevirt/virt-operator:v1.9.0
         - name: WATCH_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.annotations['olm.targetNamespaces']
         - name: KUBEVIRT_VERSION
-          value: v1.5.1
-        image: quay.io/kubevirt/virt-operator:v1.5.1
+          value: v1.9.0
+        image: quay.io/kubevirt/virt-operator:v1.9.0
         imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          timeoutSeconds: 10
         name: virt-operator
         ports:
         - containerPort: 8443
@@ -7965,6 +8725,7 @@ spec:
             - ALL
           seccompProfile:
             type: RuntimeDefault
+        terminationMessagePolicy: FallbackToLogsOnError
         volumeMounts:
         - mountPath: /etc/virt-operator/certificates
           name: kubevirt-operator-certs
@@ -7981,6 +8742,12 @@ spec:
       serviceAccountName: kubevirt-operator
       tolerations:
       - key: CriticalAddonsOnly
+        operator: Exists
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
         operator: Exists
       volumes:
       - name: kubevirt-operator-certs
