@@ -4,7 +4,8 @@
 
 ## Basic Concepts
 
-1. Layer 2 Network: KubeVirt supports Layer 2 network via Multus-CNI and OVS-CNI plugins.
+1. Layer 2 Network: KubeVirt supports Layer 2 network via Multus-CNI and the `bridge` CNI
+   plugin (VMs are attached to the Linux bridge `br0`).
     1. It allows VMs to be connected to the same network as the host node.
     1. CRD: `NetworkAttachmentDefinition`
 1. Disks: VMs can use PVCs as disks.

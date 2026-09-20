@@ -1,14 +1,14 @@
 # Cilium - Pod network
 
-To use cilium as the network plugin, you have to install it via helm first:
+Cilium is the pod network on `kubevirt-lab-1` (and `k3s-test-1`/`k3s-prod-1`); k3s runs with
+`--flannel-backend=none`. There is no CNI until Cilium is installed, so **Flux cannot start on a
+fresh cluster** and the first install must be done manually (Flux adopts it afterwards):
 
 ```bash
-# To get all nodes ready, cilium(network plugin) has to be installed first.
+# from a host with a kubeconfig, after the nodes have flannel disabled
 helm repo add cilium https://helm.cilium.io/
-helm search repo cilium/cilium -l | head
-# According to https://docs.cilium.io/en/latest/network/servicemesh/istio/
-# We need to install cilium with the following options:
-helm upgrade -i cilium cilium/cilium --version 1.17.4 --namespace kube-system \
+# keep these values in sync with infra/pre-controllers/base/cilium/helm-release.yaml
+helm upgrade -i cilium cilium/cilium --version 1.19.8 --namespace kube-system \
   --set cni.exclusive=false --set socketLB.hostNamespaceOnly=true \
   --set ipv6.enabled=true --set enableIPv6Masquerade=true --set l7Proxy=false
 ```
@@ -16,15 +16,15 @@ helm upgrade -i cilium cilium/cilium --version 1.17.4 --namespace kube-system \
 And then you can deploy fluxcd and use it to manage cilium's configs.
 
 
-## Known issues
+## KubeVirt notes
 
-### 1. Cilium has issues with KubeVirt on K3s
-
-If you disable k3s's defalut network plugin `flannel` and use `cilium` instead,
-you may encounter some issues with KubeVirt:
-
-1. multus CNI plugin will failed to start.
-1. kubevirt's virt-handler will complain about `failed to configure vmi network: setup failed, err: pod link (pod6b4853bd4f2) is missing`.
-
-So do not use `cilium` as the network plugin on K3s if you want to use KubeVirt.
+- `cni.exclusive=false` is required when Multus is used. The default (`true`) makes Cilium rename
+  every other CNI config (including Multus's `00-multus.conf`) to `*.cilium_bak`, so secondary
+  networks never come up and virt-handler reports
+  `failed to configure vmi network: setup failed, err: pod link (pod6b4853bd4f2) is missing`.
+- Use Cilium `>= 1.19.5`: earlier 1.17-1.19 releases stomp the MTU of multus-attached interfaces
+  (https://github.com/cilium/cilium/issues/37824).
+- Keep the datapath as `veth` (chart default). If netkit is enabled, use `netkit-l2`, not `netkit`
+  (L3): the L3 mode gives the pod NIC an all-zero MAC and breaks KubeVirt
+  (https://github.com/cilium/cilium/issues/37265).
 

@@ -73,16 +73,16 @@ spec:
             - name: defaultnetwork
               masquerade: {}
               model: e1000
-            - name: ovs-net
+            - name: bridge-net
               bridge: {}
               model: e1000
       networks:
         - name: defaultnetwork
           pod: {}
-        - name: ovs-net
+        - name: bridge-net
           multus:
             # References to a NetworkAttachmentDefinition CRD object
-            networkName: ovs-conf
+            networkName: bridge-conf
       volumes:
         - name: rootdisk
           persistentVolumeClaim:

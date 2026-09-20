@@ -1,0 +1,35 @@
+# Multus in THIN mode. CNAO only ships the thick plugin, which cannot work on
+# k3s: since multus v4.1 the daemon no longer chroots to /hostroot, so it cannot
+# resolve the k3s/nix absolute symlinks inside its pod. Thin mode runs the CNI
+# plugins on the host where those symlinks (and /run/flannel) are valid.
+# https://docs.k3s.io/networking/multus-ipams
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: multus
+  namespace: kube-system
+spec:
+  releaseName: multus
+  interval: 1h
+  chart:
+    spec:
+      chart: rke2-multus
+      sourceRef:
+        kind: HelmRepository
+        name: rke2-charts
+        namespace: flux-system
+      interval: 12h
+      version: ">=4.3.101"
+  install:
+    createNamespace: false
+  values:
+    config:
+      cni_conf:
+        confDir: /var/lib/rancher/k3s/agent/etc/cni/net.d
+        binDir: /var/lib/rancher/k3s/data/cni/
+        kubeconfig: /var/lib/rancher/k3s/agent/etc/cni/net.d/multus.d/multus.kubeconfig
+        multusAutoconfigDir: /var/lib/rancher/k3s/agent/etc/cni/net.d
+    # thin mode (default), and do not install the flannel CNI binary
+    thickPlugin:
+      enabled: false

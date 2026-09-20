@@ -31,12 +31,12 @@ spec:
           interfaces:
             - name: defaultnetwork
               masquerade: {}
-            - name: ovs-net
+            - name: bridge-net
               bridge: {}
       networks:
         - name: defaultnetwork
           pod: {}
-        - name: ovs-net
+        - name: bridge-net
           multus:
             # References to a NetworkAttachmentDefinition CRD object
-            networkName: ovs-conf
+            networkName: bridge-conf
