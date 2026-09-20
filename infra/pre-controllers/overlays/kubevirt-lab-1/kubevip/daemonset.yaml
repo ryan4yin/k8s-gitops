@@ -37,7 +37,7 @@ spec:
         - name: port
           value: "6443"
         - name: vip_interface
-          value: ovsbr1
+          value: br0
         - name: vip_cidr
           value: "32"
         - name: dns_mode

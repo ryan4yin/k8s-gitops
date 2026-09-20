@@ -15,9 +15,4 @@ resources:
   # ========================================
   - ./cdi-cr-v1.66.1.yaml
 
-  # ========================================
-  # Install Cluster Network Addons Operator
-  # https://github.com/kubevirt/cluster-network-addons-operator/tree/main?tab=readme-ov-file#deployment
-  # ========================================
-  - ./custom-networkaddonsconfig.yaml
   - ./kubevirt-metrics.yaml

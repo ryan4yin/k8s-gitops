@@ -4,7 +4,7 @@ curl -o rbac.yaml https://kube-vip.io/manifests/rbac.yaml
 # so that I can access all my services via this domain name & vip.
 export VIP=192.168.5.187
 # set vip on the main interface, we use openvswitch, so we set it on ovs's bridge
-export INTERFACE=ovsbr1
+export INTERFACE=br0
 
 # https://github.com/kube-vip/kube-vip/releases
 export KVVERSION=v0.7.2

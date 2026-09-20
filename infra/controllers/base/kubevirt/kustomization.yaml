@@ -13,15 +13,8 @@ resources:
   - ./cdi-operator-v1.66.1.yaml
   # - ./cdi-cr-v1.xx.x.yaml # cr is created in ./infra/configs, not here
 
-  # ========================================
-  # Install Cluster Network Addons Operator
-  # ========================================
-  - ./cluster-network-addons-operator-v0.95.0.yaml
-  - ./cluster-network-addons-config.crd-v0.95.0.yaml
-
 patches:
   # We have create the those namespace in ./infra/namespaces,
   # so we need to delete the namespaces' creation in kubevirt-operator.yaml
   - path: delete-ns-kubevirt.yaml
   - path: delete-ns-cdi.yaml
-  # - path: delete-ns-cluster-network-addons.yaml

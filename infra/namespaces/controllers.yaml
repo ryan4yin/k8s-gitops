@@ -47,11 +47,6 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: cluster-network-addons
----
-apiVersion: v1
-kind: Namespace
-metadata:
   name: cdi
 ---
 apiVersion: v1

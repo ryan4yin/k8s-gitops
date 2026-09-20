@@ -207,8 +207,9 @@ Notes:
 
 - KubeVirt `virtualmachineexports.export.kubevirt.io` had no objects, so it was deleted
   and the operator recreated it as `v1beta1 + v1`.
-- Never delete `network-attachment-definitions.k8s.cni.cncf.io` (CNAO keeps it on
-  purpose).
+- Keep the `network-attachment-definitions.k8s.cni.cncf.io` CRD: the VMs' secondary
+  network depends on it. It used to be installed by CNAO; CNAO has been removed, so
+  make sure it stays (or install the `rke2-multus-crd` chart).
 
 ## TODO
 
