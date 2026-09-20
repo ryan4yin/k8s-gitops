@@ -12,4 +12,6 @@ spec:
   # macvtap: {}
   ovs: {} # openvswitch cni plugin
   multus: {} # required by ovs-cni
-  multusDynamicNetworks: {}
+  # disabled: the dynamic-networks-controller hardcodes the CRI-O socket
+  # (/run/crio/crio.sock) and cannot start on k3s; we don't hot-plug networks.
+  # multusDynamicNetworks: {}
