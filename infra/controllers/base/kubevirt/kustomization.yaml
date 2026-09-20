@@ -5,12 +5,12 @@ resources:
   # ========================================
   # Install KubeVirt
   # ========================================
-  - ./kubevirt-operator-v1.5.1.yaml
+  - ./kubevirt-operator-v1.9.0.yaml
 
   # ========================================
   # Install CDI(Containerized Data Importer)
   # ========================================
-  - ./cdi-operator-v1.62.0.yaml
+  - ./cdi-operator-v1.66.1.yaml
   # - ./cdi-cr-v1.xx.x.yaml # cr is created in ./infra/configs, not here
 
   # ========================================

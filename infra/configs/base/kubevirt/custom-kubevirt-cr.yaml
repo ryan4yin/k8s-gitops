@@ -66,10 +66,10 @@ spec:
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
   workloadUpdateStrategy:
-    # live migration is preferred
-    # if live migration is not possible, evict the VM
+    # VMs use node-local (local-path) disks which cannot be live-migrated, so a
+    # KubeVirt upgrade can only evict them. Evict one VM at a time so a rolling
+    # update of the k3s masters keeps etcd quorum.
     workloadUpdateMethods:
-      - LiveMigrate
       - Evict
-    batchEvictionSize: 10
+    batchEvictionSize: 1
     batchEvictionInterval: "1m"
