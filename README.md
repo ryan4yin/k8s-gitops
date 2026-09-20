@@ -208,8 +208,29 @@ Notes:
 - KubeVirt `virtualmachineexports.export.kubevirt.io` had no objects, so it was deleted
   and the operator recreated it as `v1beta1 + v1`.
 - Keep the `network-attachment-definitions.k8s.cni.cncf.io` CRD: the VMs' secondary
-  network depends on it. It used to be installed by CNAO; CNAO has been removed, so
-  make sure it stays (or install the `rke2-multus-crd` chart).
+  network depends on it. It used to be installed by CNAO; CNAO has been removed, so make
+  sure it stays (or install the `rke2-multus-crd` chart).
+
+## Cluster Networking
+
+`kubevirt-lab-1` runs a Cilium pod network with Multus for secondary networks and KubeVirt
+VMs:
+
+- **Primary CNI: Cilium** (`infra/pre-controllers/base/cilium`); the k3s hosts run with
+  `--flannel-backend=none` (see the `kubevirt-*` hosts in nix-config). Pinned
+  `>= 1.19.5 < 1.20.0` (earlier 1.17-1.19 stomp the MTU of multus interfaces,
+  cilium/cilium#37824) with `cni.exclusive=false`, so Cilium does not rename Multus's
+  `00-multus.conf`.
+- **Secondary networks: rke2-multus in THIN mode** (`infra/pre-controllers/base/multus`)
+  plus the reference CNI plugins. CNAO was removed: it only ships the thick plugin, which
+  cannot work on k3s (since multus v4.1 it no longer chroots to `/hostroot`, so it cannot
+  resolve the k3s/nix absolute CNI symlinks inside its daemon pod).
+- **VM L2 network**: the `NetworkAttachmentDefinition` uses the `bridge` CNI plugin on the
+  Linux bridge `br0` (the hosts used to run Open vSwitch; nix-config now creates `br0` and
+  drops OVS).
+- **API VIP**: kube-vip binds the VIP to `br0`.
+- On a fresh cluster there is no CNI until Cilium is installed, so **Flux cannot start**:
+  bootstrap Cilium manually first (see `infra/pre-controllers/base/cilium/README.md`).
 
 ## TODO
 
