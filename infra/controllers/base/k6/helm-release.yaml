@@ -19,7 +19,7 @@ spec:
         name: k6-operator
         namespace: flux-system
       interval: 12h
-      version: "*"
+      version: "4.6.*"
   # https://github.com/grafana/k6-operator/blob/main/charts/k6-operator/values.yaml
   values:
     namespace:

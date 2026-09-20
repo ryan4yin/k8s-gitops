@@ -19,7 +19,7 @@ spec:
       interval: 12h
       # >= 1.19.5 avoids Cilium stomping the MTU of multus-attached interfaces
       # (cilium/cilium#37824).
-      version: ">=1.19.5 <1.20.0"
+      version: "1.20.*"
   # https://github.com/cilium/cilium/tree/v1.19.4/install/kubernetes/cilium
   values:
     # ======================== Work with Istio ========================

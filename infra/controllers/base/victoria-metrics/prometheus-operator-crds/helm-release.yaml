@@ -19,7 +19,7 @@ spec:
         kind: HelmRepository
         name: prometheus-community
         namespace: flux-system
-      version: "*"
+      version: "32.0.*"
       interval: 12h
   values:
     crds:

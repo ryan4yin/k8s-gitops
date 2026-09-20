@@ -16,7 +16,7 @@ spec:
         name: istio
         namespace: flux-system
       interval: 12h
-      version: "*"
+      version: "1.30.4"
   values:
     profile: ambient
     # https://istio.io/latest/docs/ambient/install/platform-prerequisites/#k3s
