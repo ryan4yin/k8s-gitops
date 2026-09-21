@@ -21,13 +21,14 @@ are in `vms/`. Utility scripts are in `scripts/` and root-level helper files suc
   overlay before committing.
 
 Prefer these local validation commands over cluster mutations. Do not run `kubectl apply`,
-`helm upgrade`, or other remote-changing commands for this repo unless explicitly requested.
+`helm upgrade`, or other remote-changing commands for this repo unless explicitly
+requested.
 
 ## Coding Style & Naming Conventions
 
 Use YAML for Kubernetes resources and keep manifests small, explicit, and reviewable. Use
 lowercase directory names with hyphens, matching existing patterns such as
-`infra/controllers/base/cert-manager` and `clusters/k3s-prod-1`. Name resources
+`infra/controllers/base/cert-manager` and `clusters/k3s-test-1`. Name resources
 descriptively and consistently with their component, for example `helm-release.yaml`,
 `helm-repo.yaml`, and `kustomization.yaml`. Markdown and general formatting follow
 `.prettierrc.yaml`: no semicolons, double quotes, 90-character print width, and wrapped
@@ -38,7 +39,8 @@ prose.
 There is no unit test suite; validation is manifest-focused. Run `./scripts/validate.sh`
 before opening a PR or after changing any YAML. For focused edits, first run
 `kustomize build` on the changed overlay, then run the full validation script. The
-validation script skips Kubernetes `Secret` schema checks because SOPS metadata is present.
+validation script skips Kubernetes `Secret` schema checks because SOPS metadata is
+present.
 
 ## Commit & Pull Request Guidelines
 
@@ -50,7 +52,7 @@ any operational risk, ordering requirement, or breaking change.
 
 ## Security & Configuration Tips
 
-Never commit plaintext secrets. This repository uses SOPS and age; keep encrypted values in
-place and use placeholders or documented secret references for examples. Be careful with
-resources that have finalizers, CRDs, admission webhooks, PVs, or PVCs. Prefer Flux-driven
-reconciliation and staged validation over manual cluster changes.
+Never commit plaintext secrets. This repository uses SOPS and age; keep encrypted values
+in place and use placeholders or documented secret references for examples. Be careful
+with resources that have finalizers, CRDs, admission webhooks, PVs, or PVCs. Prefer
+Flux-driven reconciliation and staged validation over manual cluster changes.
