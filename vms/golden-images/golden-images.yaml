@@ -2,6 +2,12 @@
 # cloned from. They live on the shared NFS store (nfs-golden) so every node can
 # clone them, and are populated out-of-band with `just upload-vm` (CDI upload).
 # The VMs' runtime disks stay on local-path (see the VirtualMachine manifests).
+#
+# Sizes only need to fit the built image (virtualisation.diskSize = "auto", so
+# the image is only as large as the data it contains -- currently ~12 GiB for
+# kana and ~24 GiB for ruby). The runtime disks are grown to their declared
+# size afterwards. The NFS provisioner does not preallocate requests.storage,
+# so these numbers are a ceiling, not reserved space.
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -13,7 +19,7 @@ spec:
   storageClassName: nfs-golden
   resources:
     requests:
-      storage: 80Gi
+      storage: 32Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -25,7 +31,7 @@ spec:
   storageClassName: nfs-golden
   resources:
     requests:
-      storage: 100Gi
+      storage: 16Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -37,7 +43,7 @@ spec:
   storageClassName: nfs-golden
   resources:
     requests:
-      storage: 100Gi
+      storage: 32Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -49,7 +55,7 @@ spec:
   storageClassName: nfs-golden
   resources:
     requests:
-      storage: 50Gi
+      storage: 16Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -61,7 +67,7 @@ spec:
   storageClassName: nfs-golden
   resources:
     requests:
-      storage: 50Gi
+      storage: 16Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -73,7 +79,7 @@ spec:
   storageClassName: nfs-golden
   resources:
     requests:
-      storage: 50Gi
+      storage: 16Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -85,7 +91,7 @@ spec:
   storageClassName: nfs-golden
   resources:
     requests:
-      storage: 50Gi
+      storage: 16Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -97,7 +103,7 @@ spec:
   storageClassName: nfs-golden
   resources:
     requests:
-      storage: 50Gi
+      storage: 16Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -109,7 +115,7 @@ spec:
   storageClassName: nfs-golden
   resources:
     requests:
-      storage: 50Gi
+      storage: 16Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -121,7 +127,7 @@ spec:
   storageClassName: nfs-golden
   resources:
     requests:
-      storage: 50Gi
+      storage: 16Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -133,7 +139,7 @@ spec:
   storageClassName: nfs-golden
   resources:
     requests:
-      storage: 50Gi
+      storage: 16Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -145,4 +151,4 @@ spec:
   storageClassName: nfs-golden
   resources:
     requests:
-      storage: 50Gi
+      storage: 16Gi
