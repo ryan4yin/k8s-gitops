@@ -27,7 +27,7 @@ Prefer these local validation commands over cluster mutations. Do not run `kubec
 
 Use YAML for Kubernetes resources and keep manifests small, explicit, and reviewable. Use
 lowercase directory names with hyphens, matching existing patterns such as
-`infra/controllers/base/cert-manager` and `clusters/k3s-prod-1`. Name resources
+`infra/controllers/base/cert-manager` and `clusters/k3s-test-1`. Name resources
 descriptively and consistently with their component, for example `helm-release.yaml`,
 `helm-repo.yaml`, and `kustomization.yaml`. Markdown and general formatting follow
 `.prettierrc.yaml`: no semicolons, double quotes, 90-character print width, and wrapped

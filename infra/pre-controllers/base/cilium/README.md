@@ -1,6 +1,6 @@
 # Cilium - Pod network
 
-Cilium is the pod network on `kubevirt-lab-1` (and `k3s-test-1`/`k3s-prod-1`); k3s runs with
+Cilium is the pod network on `kubevirt-lab-1` (and `k3s-test-1`); k3s runs with
 `--flannel-backend=none`. There is no CNI until Cilium is installed, so **Flux cannot start on a
 fresh cluster** and the first install must be done manually (Flux adopts it afterwards):
 
