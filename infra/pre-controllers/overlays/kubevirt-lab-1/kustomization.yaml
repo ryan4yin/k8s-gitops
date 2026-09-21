@@ -4,7 +4,6 @@ kind: Kustomization
 resources:
   - ./kubevip/
   - ../../base/cilium/
-  - ../../base/multus/
   # csi-driver-nfs backs the shared golden-image store (nfs-golden StorageClass)
   - ../../base/csi-driver-nfs/
   # plain ca-certs only: the base secrets also ship a SOPS-encrypted
