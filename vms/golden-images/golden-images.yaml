@@ -1,65 +1,17 @@
-# Golden images: the pristine, read-mostly VM disks that new/recreated VMs are
-# cloned from. They live on the shared NFS store (nfs-golden) so every node can
-# clone them, and are populated out-of-band with `just upload-vm` (a CDI upload).
-# The VMs' runtime disks stay on local-path (see the VirtualMachine manifests).
+# Golden images -- kept as a record; no longer used.
 #
-# They are declared as DataVolumes with `source.upload` because CDI only accepts
-# `virtctl image-upload` into a DataVolume (or a CDI-managed upload PVC); the
-# DataVolume creates a PVC of the same name, which the VMs clone via source.pvc.
+# We originally provisioned the VMs by uploading a per-VM image once into a
+# shared "golden" DataVolume (on the NFS store) and cloning it into each VM's
+# local disk via `dataVolumeTemplates.source.pvc`. That indirection only pays off
+# when many VMs share one base image; here every VM is an individual NixOS build
+# and is only created once, and CDI cannot clone from the NFS class into
+# local-path anyway.
 #
-# Only the goldens that are still useful are declared: every VM is an individual
-# NixOS build with its own image, so an existing VM is never re-created from its
-# golden a second time. The goldens we already consumed are kept commented out
-# below, as a record of what was used.
----
-apiVersion: cdi.kubevirt.io/v1beta1
-kind: DataVolume
-metadata:
-  name: golden-k3s-test-1-worker-1
-spec:
-  source:
-    upload: {}
-  pvc:
-    accessModes:
-      - ReadWriteMany
-    storageClassName: nfs-golden
-    resources:
-      requests:
-        storage: 32Gi
----
-apiVersion: cdi.kubevirt.io/v1beta1
-kind: DataVolume
-metadata:
-  name: golden-k3s-test-1-worker-2
-spec:
-  source:
-    upload: {}
-  pvc:
-    accessModes:
-      - ReadWriteMany
-    storageClassName: nfs-golden
-    resources:
-      requests:
-        storage: 32Gi
----
-apiVersion: cdi.kubevirt.io/v1beta1
-kind: DataVolume
-metadata:
-  name: golden-k3s-test-1-worker-3
-spec:
-  source:
-    upload: {}
-  pvc:
-    accessModes:
-      - ReadWriteMany
-    storageClassName: nfs-golden
-    resources:
-      requests:
-        storage: 32Gi
-
-# =============================================================================
-# Consumed already -- kept here as a record (their VMs are running and are not
-# re-created from these).
+# The VMs now declare their root disk as `source: upload: {}` and `just upload-vm`
+# writes the built image straight into `<vm>-disk` on local-path (no clone, no
+# shared store). The NFS store / RWX class is kept for other uses.
+#
+# Everything below is commented out as a record of what we used.
 #
 # ---
 # apiVersion: cdi.kubevirt.io/v1beta1
@@ -151,4 +103,48 @@ spec:
 #     resources:
 #       requests:
 #         storage: 32Gi
-# =============================================================================
+# ---
+# apiVersion: cdi.kubevirt.io/v1beta1
+# kind: DataVolume
+# metadata:
+#   name: golden-k3s-test-1-worker-1
+# spec:
+#   source:
+#     upload: {}
+#   pvc:
+#     accessModes:
+#       - ReadWriteMany
+#     storageClassName: nfs-golden
+#     resources:
+#       requests:
+#         storage: 32Gi
+# ---
+# apiVersion: cdi.kubevirt.io/v1beta1
+# kind: DataVolume
+# metadata:
+#   name: golden-k3s-test-1-worker-2
+# spec:
+#   source:
+#     upload: {}
+#   pvc:
+#     accessModes:
+#       - ReadWriteMany
+#     storageClassName: nfs-golden
+#     resources:
+#       requests:
+#         storage: 32Gi
+# ---
+# apiVersion: cdi.kubevirt.io/v1beta1
+# kind: DataVolume
+# metadata:
+#   name: golden-k3s-test-1-worker-3
+# spec:
+#   source:
+#     upload: {}
+#   pvc:
+#     accessModes:
+#       - ReadWriteMany
+#     storageClassName: nfs-golden
+#     resources:
+#       requests:
+#         storage: 32Gi
