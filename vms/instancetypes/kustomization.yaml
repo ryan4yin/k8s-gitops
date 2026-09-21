@@ -6,7 +6,9 @@ resources:
   # -- 1:1 --
   - instancetype-tiny-2vcpu-2gb-oc60.yaml
   # -- 1:2 --
+  - instancetype-highcpu-2vcpu-4gb.yaml
   - instancetype-highcpu-4vcpu-8gb.yaml
+  - instancetype-highcpu-4vcpu-8gb-oc50.yaml
   - instancetype-highcpu-4vcpu-8gb-dedicated.yaml
   # -- 1:4 --
   - instancetype-standard-2vcpu-8gb.yaml

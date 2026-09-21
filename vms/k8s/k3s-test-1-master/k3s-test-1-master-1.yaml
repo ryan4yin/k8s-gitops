@@ -12,6 +12,8 @@ spec:
       labels:
         kubevirt.io/vm: k3s-test-1-master-1
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: kubevirt-shoryu
       volumes:
         - dataVolume:
             name: k3s-test-1-master-1-disk
