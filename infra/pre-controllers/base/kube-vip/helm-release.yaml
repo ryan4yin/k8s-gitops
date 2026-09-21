@@ -40,11 +40,9 @@ spec:
     # control-plane VIP, from the reserved k8s VIP block
     config:
       address: "192.168.5.193"
-    # Required for a DaemonSet install: use the kube-vip ServiceAccount for
-    # in-cluster config, and confine the pods to the control-plane nodes.
-    extraArgs:
-      inCluster: null
-      taint: null
+    # kube-vip v1.x detects the in-cluster config from the pod's ServiceAccount
+    # (the `--inCluster`/`--taint` flags are gone). Confine it to the
+    # control-plane nodes.
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
