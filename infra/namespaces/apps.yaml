@@ -11,12 +11,3 @@ metadata:
     # redirect all ambient mode traffic to the "waypoint" instance in this namespace
     # https://istio.io/latest/docs/ambient/usage/waypoint/#waypoint-traffic-types
     istio.io/use-waypoint: waypoint
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: prod
-  labels:
-    eventing.knative.dev/injection: enabled
-    istio.io/dataplane-mode: ambient
-    # istio.io/use-waypoint: waypoint

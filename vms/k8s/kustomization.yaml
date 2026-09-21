@@ -5,5 +5,3 @@ namespace: vms
 resources:
   - ./k3s-test-1-master/
   - ./k3s-test-1-worker/
-  # - ./k3s-prod-1-master/
-  # - ./k3s-prod-1-worker/
