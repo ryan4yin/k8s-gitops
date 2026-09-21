@@ -70,7 +70,7 @@ spec:
           type: kubernetes
           # Stable per-cluster label; keeps series stable across vmagent restarts
           # (the receiver also dedups; see the VictoriaMetrics dedup fix).
-          cluster: kubevirt-lab-1
+          cluster: k3s-test-1
         extraArgs:
           # vmagent automatically switches to VictoriaMetrics remote write protocol when it sends data to VictoriaMetrics components
           remoteWrite.forceVMProto: "true"
