@@ -1,0 +1,12 @@
+---
+apiVersion: instancetype.kubevirt.io/v1beta1
+kind: VirtualMachineClusterInstancetype
+metadata:
+  name: standard-2vcpu-8gb
+spec:
+  cpu:
+    guest: 2
+    model: host-model
+  memory:
+    guest: 8Gi
+    maxGuest: 8Gi

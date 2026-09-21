@@ -1,0 +1,14 @@
+---
+apiVersion: instancetype.kubevirt.io/v1beta1
+kind: VirtualMachineClusterInstancetype
+metadata:
+  name: standard-4vcpu-16gb-oc50
+spec:
+  cpu:
+    guest: 4
+    model: host-model
+  memory:
+    guest: 16Gi
+    maxGuest: 16Gi
+    # request only 50% of the guest memory (see vms/instancetypes/README.md)
+    overcommitPercent: 50

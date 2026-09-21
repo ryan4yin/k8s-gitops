@@ -80,3 +80,39 @@ spec:
   resources:
     requests:
       storage: 32Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-k3s-test-1-worker-1
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 32Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-k3s-test-1-worker-2
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 32Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-k3s-test-1-worker-3
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 32Gi
