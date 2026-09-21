@@ -45,8 +45,6 @@ spec:
           # NOTE: lock down the volume name to avoid creating a new one
           # This should only be used when you want to reuse the volume(like recreating the VM).
           # volumeName: ''
-        # clone the golden image (shared NFS store) into the local disk
+        # the disk is populated once with `just upload-vm` (a CDI upload)
         source:
-          pvc:
-            name: golden-aquamarine
-            namespace: vms
+          upload: {}

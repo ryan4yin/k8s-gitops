@@ -28,8 +28,6 @@ spec:
           resources:
             requests:
               storage: 50Gi
-        # clone the golden image (shared NFS store) into the local disk
+        # the disk is populated once with `just upload-vm` (a CDI upload)
         source:
-          pvc:
-            name: golden-k3s-test-1-worker-2
-            namespace: vms
+          upload: {}
