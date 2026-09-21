@@ -12,6 +12,8 @@ spec:
       labels:
         kubevirt.io/vm: k3s-test-1-worker-3
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: kubevirt-shushou
       volumes:
         - dataVolume:
             name: k3s-test-1-worker-3-disk
