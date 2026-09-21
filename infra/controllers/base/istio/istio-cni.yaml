@@ -22,5 +22,10 @@ spec:
     # https://istio.io/latest/docs/ambient/install/platform-prerequisites/#k3s
     global:
       platform: k3s
-      # In order to use native nftable rules instead of iptable rules, set this flag to true.
-      nativeNftables: true
+      # The native nftables backend hits an upstream bug on k3s (istio#61078):
+      # its kubelet UID detection only matches processes named `kubelet` or
+      # `kubelite`, but k3s embeds kubelet in the `k3s` process, so the CNI node
+      # agent crashloops ("error initializing the host rules for health checks")
+      # and the ambient stack never comes up. The fix (accept `k3s`) is merged
+      # upstream but not in a release yet, so use the iptables backend.
+      nativeNftables: false
