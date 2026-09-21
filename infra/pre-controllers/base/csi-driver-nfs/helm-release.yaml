@@ -36,3 +36,10 @@ spec:
     # The nfs-golden StorageClass is managed in infra/configs/base/storageclasses.
     storageClass:
       create: false
+    # The k3s-test control-plane nodes are tainted, but the node plugin (which
+    # mounts/unmounts NFS) must run on every node.
+    node:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
