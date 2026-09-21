@@ -1,7 +1,0 @@
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-namespace: vms
-# golden-images.yaml is kept only as a commented record, so nothing is included.
-# The VMs now populate their own disk with `just upload-vm` (source: upload).
-resources: []
