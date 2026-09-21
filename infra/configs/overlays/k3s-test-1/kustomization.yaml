@@ -6,4 +6,3 @@ resources:
   - ../../base/storageclasses/
   - ../../base/istio/
   - ../../base/victoria-metrics/
-  - ./cnpg-timescale.yaml
