@@ -1,0 +1,17 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-golden
+provisioner: nfs.csi.k8s.io
+parameters:
+  # golden-image store exported by kubevirt-youko (nix-config: nfs-golden.nix).
+  # fsid=0 is set on the export, so it is the NFSv4 pseudo-root ("/").
+  server: 192.168.5.183
+  share: /
+# Never delete golden images automatically.
+reclaimPolicy: Retain
+# RWX and not node-bound, so it can be mounted anywhere.
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+mountOptions:
+  - nfsvers=4.1

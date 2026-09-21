@@ -15,4 +15,7 @@ resources:
   # ========================================
   - ./cdi-cr-v1.66.1.yaml
 
+  # NodePort for the CDI upload proxy (golden-image uploads from the build host)
+  - ./cdi-uploadproxy-nodeport.yaml
+
   - ./kubevirt-metrics.yaml

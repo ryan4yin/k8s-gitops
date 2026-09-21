@@ -1,0 +1,23 @@
+# Expose the CDI upload proxy on a NodePort so the build host can push golden
+# images into the `golden-*` PVCs with `virtctl image-upload` (see `just
+# upload-vm`) without needing an Ingress or a port-forward.
+#
+# CDI creates its own ClusterIP Service (cdi-uploadproxy); this is an extra
+# Service selecting the same pods. The proxy is token-authenticated, and the
+# cluster lives on a trusted LAN.
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cdi-uploadproxy-nodeport
+  namespace: cdi
+spec:
+  type: NodePort
+  selector:
+    cdi.kubevirt.io: cdi-uploadproxy
+  ports:
+    - name: https
+      port: 443
+      targetPort: 8443
+      protocol: TCP
+      nodePort: 30443

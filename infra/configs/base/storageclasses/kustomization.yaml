@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - ./local-path-test.yaml
   - ./local-path-critical.yaml
+  - ./nfs-golden.yaml

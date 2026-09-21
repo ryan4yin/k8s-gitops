@@ -31,6 +31,8 @@ spec:
           # NOTE: lock down the volume name to avoid creating a new one
           # This should only be used when you want to reuse the volume(like recreating the VM).
           # volumeName: ''
+        # clone the golden image (shared NFS store) into the local disk
         source:
-          http:
-            url: http://kubevirt-file.writefor.fun/vms/kubevirt-k3s-prod-1-worker-3.qcow2
+          pvc:
+            name: golden-k3s-prod-1-worker-3
+            namespace: vms
