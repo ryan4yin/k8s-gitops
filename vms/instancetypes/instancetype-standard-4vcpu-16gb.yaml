@@ -1,0 +1,12 @@
+---
+apiVersion: instancetype.kubevirt.io/v1beta1
+kind: VirtualMachineClusterInstancetype
+metadata:
+  name: standard-4vcpu-16gb
+spec:
+  cpu:
+    guest: 4
+    model: host-model
+  memory:
+    guest: 16Gi
+    maxGuest: 16Gi

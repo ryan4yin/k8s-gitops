@@ -1,0 +1,16 @@
+---
+apiVersion: instancetype.kubevirt.io/v1beta1
+kind: VirtualMachineClusterInstancetype
+metadata:
+  # deliberately non-standard 1:1.375 ratio: the VM runs on `youko`
+  # (22 GiB total) and must be sized for real memory rather than overcommitted.
+  name: mixed-8vcpu-11gb-dedicated
+spec:
+  cpu:
+    guest: 8
+    model: host-passthrough
+    dedicatedCPUPlacement: true
+    isolateEmulatorThread: true
+  memory:
+    guest: 11Gi
+    maxGuest: 11Gi

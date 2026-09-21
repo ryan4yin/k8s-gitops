@@ -6,7 +6,7 @@ metadata:
 spec:
   instancetype:
     kind: VirtualMachineClusterInstancetype
-    name: m-4vcpu-16gb
+    name: standard-2vcpu-8gb
   template:
     metadata:
       labels:

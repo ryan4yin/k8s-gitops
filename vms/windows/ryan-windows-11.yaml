@@ -24,7 +24,7 @@ metadata:
 spec:
   instancetype:
     kind: VirtualMachineClusterInstancetype
-    name: hpc-4vcpu-8gb
+    name: highcpu-4vcpu-8gb-dedicated
   preference:
     kind: VirtualMachineClusterPreference
     name: windows
