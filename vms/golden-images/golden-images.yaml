@@ -7,11 +7,10 @@
 # `virtctl image-upload` into a DataVolume (or a CDI-managed upload PVC); the
 # DataVolume creates a PVC of the same name, which the VMs clone via source.pvc.
 #
-# NOTE: only the k3s-test-1 worker goldens are declared for now, so the `vms`
-# health check does not block on the empty upload targets. The other six
-# (golden-aquamarine / -kana / -ruby / -k3s-test-1-master-{1,2,3}) are the
-# clone sources the *running* VMs already used; add them back once their images
-# have been uploaded.
+# Only the goldens that are still useful are declared: every VM is an individual
+# NixOS build with its own image, so an existing VM is never re-created from its
+# golden a second time. The goldens we already consumed are kept commented out
+# below, as a record of what was used.
 ---
 apiVersion: cdi.kubevirt.io/v1beta1
 kind: DataVolume
@@ -57,3 +56,99 @@ spec:
     resources:
       requests:
         storage: 32Gi
+
+# =============================================================================
+# Consumed already -- kept here as a record (their VMs are running and are not
+# re-created from these).
+#
+# ---
+# apiVersion: cdi.kubevirt.io/v1beta1
+# kind: DataVolume
+# metadata:
+#   name: golden-aquamarine
+# spec:
+#   source:
+#     upload: {}
+#   pvc:
+#     accessModes:
+#       - ReadWriteMany
+#     storageClassName: nfs-golden
+#     resources:
+#       requests:
+#         storage: 32Gi
+# ---
+# apiVersion: cdi.kubevirt.io/v1beta1
+# kind: DataVolume
+# metadata:
+#   name: golden-kana
+# spec:
+#   source:
+#     upload: {}
+#   pvc:
+#     accessModes:
+#       - ReadWriteMany
+#     storageClassName: nfs-golden
+#     resources:
+#       requests:
+#         storage: 32Gi
+# ---
+# apiVersion: cdi.kubevirt.io/v1beta1
+# kind: DataVolume
+# metadata:
+#   name: golden-ruby
+# spec:
+#   source:
+#     upload: {}
+#   pvc:
+#     accessModes:
+#       - ReadWriteMany
+#     storageClassName: nfs-golden
+#     resources:
+#       requests:
+#         storage: 32Gi
+# ---
+# apiVersion: cdi.kubevirt.io/v1beta1
+# kind: DataVolume
+# metadata:
+#   name: golden-k3s-test-1-master-1
+# spec:
+#   source:
+#     upload: {}
+#   pvc:
+#     accessModes:
+#       - ReadWriteMany
+#     storageClassName: nfs-golden
+#     resources:
+#       requests:
+#         storage: 32Gi
+# ---
+# apiVersion: cdi.kubevirt.io/v1beta1
+# kind: DataVolume
+# metadata:
+#   name: golden-k3s-test-1-master-2
+# spec:
+#   source:
+#     upload: {}
+#   pvc:
+#     accessModes:
+#       - ReadWriteMany
+#     storageClassName: nfs-golden
+#     resources:
+#       requests:
+#         storage: 32Gi
+# ---
+# apiVersion: cdi.kubevirt.io/v1beta1
+# kind: DataVolume
+# metadata:
+#   name: golden-k3s-test-1-master-3
+# spec:
+#   source:
+#     upload: {}
+#   pvc:
+#     accessModes:
+#       - ReadWriteMany
+#     storageClassName: nfs-golden
+#     resources:
+#       requests:
+#         storage: 32Gi
+# =============================================================================
