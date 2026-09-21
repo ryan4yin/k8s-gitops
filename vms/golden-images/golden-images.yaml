@@ -1,0 +1,148 @@
+# Golden images: the pristine, read-mostly VM disks that new/recreated VMs are
+# cloned from. They live on the shared NFS store (nfs-golden) so every node can
+# clone them, and are populated out-of-band with `just upload-vm` (CDI upload).
+# The VMs' runtime disks stay on local-path (see the VirtualMachine manifests).
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-aquamarine
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 80Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-kana
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 100Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-ruby
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 100Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-k3s-test-1-master-1
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-k3s-test-1-master-2
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-k3s-test-1-master-3
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-k3s-prod-1-master-1
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-k3s-prod-1-master-2
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-k3s-prod-1-master-3
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-k3s-prod-1-worker-1
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-k3s-prod-1-worker-2
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: golden-k3s-prod-1-worker-3
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-golden
+  resources:
+    requests:
+      storage: 50Gi

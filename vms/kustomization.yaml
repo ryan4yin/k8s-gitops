@@ -6,6 +6,7 @@ resources:
   - ./network-bridge-conf.yaml
   - ./instancetypes/
   - ./preferences/
+  - ./golden-images/
   - ./k8s/
   # - ./windows/
   - ./nixos/
