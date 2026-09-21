@@ -19,8 +19,19 @@ spec:
         namespace: flux-system
       interval: 12h
       version: "4.*"
+  # The chart installs a controller Deployment plus a per-node DaemonSet. Give
+  # the Helm client room so its request rate limiter does not trip the action
+  # deadline, and retry transient install failures (Flux defaults to no retry).
+  timeout: 10m
   install:
     createNamespace: false
+    timeout: 10m
+    remediation:
+      retries: 3
+  upgrade:
+    timeout: 10m
+    remediation:
+      retries: 3
   values:
     # The nfs-golden StorageClass is managed in infra/configs/base/storageclasses.
     storageClass:
