@@ -14,5 +14,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: vmagent-victoria-metrics-k8s-stack
+        - name: vmagent-victoriametrics-vmks
           port: 8429
