@@ -18,7 +18,7 @@ spec:
         name: csi-driver-nfs
         namespace: flux-system
       interval: 12h
-      version: "4.*"
+      version: "4.13.4"
   # The chart installs a controller Deployment plus a per-node DaemonSet. Give
   # the Helm client room so its request rate limiter does not trip the action
   # deadline, and retry transient install failures (Flux defaults to no retry).
