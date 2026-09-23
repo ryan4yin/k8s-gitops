@@ -3,6 +3,40 @@ metadata:
   name: will-be-ignored
 spec:
   values:
+    # K3s embeds these components in its server process, so the chart's Pod
+    # selectors cannot discover them. Scrape the three server nodes directly.
+    kubeControllerManager:
+      endpoints: [192.168.5.114, 192.168.5.115, 192.168.5.116]
+      vmScrape:
+        spec:
+          endpoints:
+            - port: http-metrics
+              scheme: https
+              bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              tlsConfig:
+                caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                serverName: localhost
+    kubeScheduler:
+      endpoints: [192.168.5.114, 192.168.5.115, 192.168.5.116]
+      vmScrape:
+        spec:
+          endpoints:
+            - port: http-metrics
+              scheme: https
+              bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              tlsConfig:
+                caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                serverName: localhost
+    kubeEtcd:
+      endpoints: [192.168.5.114, 192.168.5.115, 192.168.5.116]
+      service:
+        port: 2381
+        targetPort: 2381
+      vmScrape:
+        spec:
+          endpoints:
+            - port: http-metrics
+              scheme: http
     vmagent:
       spec:
         scrapeInterval: 20s
