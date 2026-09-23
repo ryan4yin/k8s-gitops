@@ -5,4 +5,5 @@ resources:
   # the k3s API server's HA VIP
   - ../../base/kube-vip/
   - ../../base/cilium/
+  - ../../base/csi-driver-nfs/
   - ../../base/secrets/
