@@ -22,7 +22,7 @@ spec:
         name: kube-vip
         namespace: flux-system
       interval: 12h
-      version: "0.11.*"
+      version: "0.11.1"
   # Give the Helm client room so its request rate limiter does not trip the
   # action deadline, and retry transient install failures (Flux defaults to no
   # retry).
