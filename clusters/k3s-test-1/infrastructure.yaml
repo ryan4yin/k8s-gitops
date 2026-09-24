@@ -36,8 +36,6 @@ spec:
   # So, we should not prune them automatically!
   # Otherwise, the cluster will be broken!
   prune: false
-  # Force to update cilium network plugins and istio resources
-  force: true
   wait: true
   # https://fluxcd.io/flux/components/kustomize/kustomizations/#decryption
   decryption:
