@@ -7,6 +7,12 @@ spec:
       # Enables authentication through the X-Scope-OrgID header, which must be present
       # if true. If false, the OrgID will always be set to 'fake'.
       auth_enabled: true
+      # Loki's local PV (storage-loki-0) is pinned to k3s-test-1-master-1, which is
+      # control-plane tainted, so the single-binary pod must tolerate that taint.
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
       schemaConfig:
         # https://grafana.com/docs/loki/latest/operations/storage/schema/
         configs:
