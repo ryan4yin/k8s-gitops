@@ -1,4 +1,3 @@
----
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -14,7 +13,7 @@ spec:
         kind: HelmRepository
         name: grafana-community
         namespace: flux-system
-      version: "17.1.*"
+      version: 17.1.*
       interval: 12h
   # https://github.com/grafana/loki/tree/main/production/helm/loki
   values:
@@ -23,19 +22,25 @@ spec:
     # ==========================================
     # For My Private CA Certs
     global:
-      extraVolumes: &extraVolumes
+      extraVolumes:
         - name: ca-certs
           secret:
             secretName: ca-certs
-      extraVolumeMounts: &extraVolumeMounts
+      extraVolumeMounts:
         - name: ca-certs
           mountPath: /data/ca-certs
           readOnly: true
     deploymentMode: Monolithic
     monolithic:
       replicas: 1
-      extraVolumes: *extraVolumes
-      extraVolumeMounts: *extraVolumeMounts
+      extraVolumes:
+        - name: ca-certs
+          secret:
+            secretName: ca-certs
+      extraVolumeMounts:
+        - name: ca-certs
+          mountPath: /data/ca-certs
+          readOnly: true
       resources:
         limits:
           cpu: 2
@@ -43,15 +48,13 @@ spec:
         requests:
           cpu: 1
           memory: 2Gi
-
-    # -- DEPRECATED Monitoring section 
+    # -- DEPRECATED Monitoring section
     monitoring:
       selfMonitoring:
         enabled: false
       # do not use grafana-agent-operator, we use victoriametrics & prometheus-operator's crd instead.
       grafanaAgent:
         installOperator: false
-
     # Zero out replica counts of other deployment modes
     # https://grafana.com/docs/loki/latest/get-started/deployment-modes/#simple-scalable
     # https://grafana.com/docs/loki/latest/get-started/components/
@@ -76,16 +79,14 @@ spec:
       # Contains:
       #   Distributer - handling incoming push requests from clients
       #   Ingester - persisting data and shipping it to long-term storage(gcs)
-      # 
+      #
       # To prevent data losing on rollouts, the ingester requires at least
       # `floor( replication_factor / 2 ) + 1` instances ready to write successfully.
       # By default, replication_factor is 3,
       # So we need at least 3 replicas here for high availability.
       replicas: 0 # 3
-
     minio:
       enabled: false
-
     ruler:
       # Ruler is an optional service for logs alerting, similar to prometheus's alerting rules.
       enabled: false
@@ -130,7 +131,6 @@ spec:
       persistence:
         # -- Enable creating PVCs for the chunks-cache
         enabled: false
-
     # Loki Canary is a standalone app that audits the log-capturing performance
     #  of a Grafana Loki cluster.
     # This component emits and periodically queries for logs, making sure that Loki
@@ -147,8 +147,14 @@ spec:
       lokiurl: null
       # -- The name of the label to look for at loki when doing the checks.
       labelname: pod
-      extraVolumes: *extraVolumes
-      extraVolumeMounts: *extraVolumeMounts
+      extraVolumes:
+        - name: ca-certs
+          secret:
+            secretName: ca-certs
+      extraVolumeMounts:
+        - name: ca-certs
+          mountPath: /data/ca-certs
+          readOnly: true
       resources:
         limits:
           cpu: 50m
@@ -156,7 +162,6 @@ spec:
         requests:
           cpu: 20m
           memory: 40Mi
-
     # ==========================================
     # Loki's Config
     # ==========================================
@@ -184,10 +189,9 @@ spec:
         retention_enabled: true
         retention_delete_delay: 2h
         retention_delete_worker_count: 150
-        # chunks are on the filesystem (storage.type above), so keep delete
-        # requests there too. It used to point at MinIO (minio.writefor.fun),
-        # which no longer exists, making the compactor crashloop on startup.
-        delete_request_store: filesystem
+        # chunks are on s3 (storage.type above), so keep delete requests there
+        # too. The endpoint is RustFS at s3.writefor.fun (it replaced MinIO).
+        delete_request_store: s3
       limits_config:
         reject_old_samples: true
         reject_old_samples_max_age: 168h
@@ -247,26 +251,26 @@ spec:
           http_config:
             insecure_skip_verify: false # skip verifying the certificate chain and hostname.
             ca_file: /data/ca-certs/ca.crt
-          endpoint: https://minio.writefor.fun
+          endpoint: https://s3.writefor.fun
           # Encrypt Command:
           #  sops --encrypt --age=${AGE_RECIPIENT}   --encrypted-regex 'Key' --in-place ./infra/controllers/overlays/k3s-test-1/helmrelease-loki.yaml
           #
           # Access Key
-          accessKeyId: ENC[AES256_GCM,data:HrJOr3O+xaYCKpAwJrkqpbG/+N0=,iv:QbOKinnwmLgYtEmWrFJfnDjFXiNX4epU9ip7kGexzRs=,tag:kmoFR2dGj3uWLp1nWi7C5A==,type:str]
+          accessKeyId: ENC[AES256_GCM,data:FGGydg==,iv:g0f2b+qUyz63NXrLWHkpX5KmYn4JTzT0puN+hE0ZrWg=,tag:iTGC8LA+WVloNp0n+vK9Qw==,type:str]
           # Secret Key
-          secretAccessKey: ENC[AES256_GCM,data:vvSaDBWP2bV1grXFYfeZH/GV4Cbi8+w8BQXQLGdmLPVazHId8gd5MA==,iv:iQxC4ekcqo2K3kOM54HFP7AH5VGuvlNhjzrbMZIpbq8=,tag:GruLo0gVQ1LXC5eYdlIa3A==,type:str]
+          secretAccessKey: ENC[AES256_GCM,data:5lUFPe70bzB2kIDFtBJUqlMfy2s/XNmL6hEo0EMWwxSEqTVHc6gZIA==,iv:cIJLjF+nNdTue7oM4hdN8vcRJOb74sRWvoQ4P9xchAE=,tag:EHpsrHUwsBQ4ZSBLH6eFDw==,type:str]
 sops:
   age:
-    - recipient: age15tr9ja4ll22ef3rw43v4mje47x8a03ruqap08f68hcu077tytq0q9e4h5y
-      enc: |
+    - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsZ05yVzJpWVByZGV4K1FL
-        bGY3bDFqMll5NHJPOHB0dzhrVG0yVmJzU2pZCmlZOG15NDJOdkFwRE0xcFJrUENJ
-        YUVHZmZmMm8zMERZUFk2c0psdDIwMU0KLS0tIExUb3hneS9ENEY0Y0RxWXB2QUlM
-        bzdybFJ4T2RPWTRZOWRkVVVrUitFdlkKLumgsNsFjaB4iADdHe30YNAHsBH+THUm
-        20aoWMAyMFyjOs9yKHXVSASch7iCv/ZqZHtH5Q3/pRhcZOomeMQEEQ==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBya3BSVkdMZVhWUEI1M1ZC
+        Q1JPb0hYbE5YbkdkNlgzT0MvOVViV1JzV3pRCm9oK0RPQ0JlbXoyQUwzeVFLR3dR
+        SHBFZnBqWkZKeTUxSUI0L2s5RGpnZmcKLS0tIFZEenhtdDY3SzFDbVF2REsySXV2
+        My9SQzVBQit0T0g2MEFuZldoMzFVbjgKRCvYdPaNj2pgmzvZq8fgCYp+4Bv+aY9L
+        7ZSJ/7oRo9pKYfHxBRUC93xFLlQW2vh/SLHm1/jv2xq0ac20iiy/+Q==
         -----END AGE ENCRYPTED FILE-----
-  lastmodified: "2025-06-08T06:26:11Z"
-  mac: ENC[AES256_GCM,data:ZIwFmbycsnam3yKW0NfC1jh9FNwuRrgyZtMsAbXGjd6Jr/QYsCdRduTcUEYdvphK3qnDTf9D/dCLJhc6/Cq9RgYU+Oxph2E3QuprhVxXy4MRaW2Ui50aQEsBkFKsi1hAgIxYAv43NL/33RgnaApy8bd9BcKuyhTrxOhinoz5mcg=,iv:W2h0ayx6bcfrWxsINL+jOoUFgwSFUXEy3FA5HmZixss=,tag:S/LOr0GxUw2rYHvKPKA+Tg==,type:str]
+      recipient: age15tr9ja4ll22ef3rw43v4mje47x8a03ruqap08f68hcu077tytq0q9e4h5y
   encrypted_regex: Key
-  version: 3.10.2
+  lastmodified: "2026-09-25T04:46:02Z"
+  mac: ENC[AES256_GCM,data:YtZ+y3vVhtOLu6wr+a8LwT6Qfbcge0/2T/lWh/ww3aD0dZeCDrmQUmvYGj3SMVqH+tTHxmce6hrRy4S7mQAHT4gsuHaA2wqTKogocSTDy6URd6RfYL+AIt/mSZF0Fwq9+GuRF9MIxwGs/yWeDoBwuKLQOTZ5OAP8vkJ4odT1tak=,iv:GLTVwBwgkQVLYIx0xQqI5I06lFvsbC8KOtHuNcmi+Gk=,tag:7b1tyjbXVQ2sgyYdNvPmPA==,type:str]
+  version: 3.13.3
