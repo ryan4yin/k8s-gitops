@@ -50,6 +50,9 @@ data:
       maxReplicas: 1
 
   service: |
+    metadata:
+      annotations:
+        kube-vip.io/loadbalancerIPs: "192.168.5.194"
     spec:
       ipFamilyPolicy: PreferDualStack
       ports:
@@ -58,11 +61,9 @@ data:
         port: 80
         protocol: TCP
         targetPort: 80
-        nodePort: 80
       - appProtocol: https
         name: https
         port: 443
         protocol: TCP
         targetPort: 443
-        nodePort: 443
-      type: NodePort
+      type: LoadBalancer
