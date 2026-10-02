@@ -184,9 +184,8 @@ sops --decrypt /path/to/secrets.yaml
 ## Upgrading Components
 
 Controllers/operators sometimes change a CRD's `spec.versions` (Flux `v2.9` drops the
-image/OCI CRD `v1beta2`; KubeVirt `v1.9` moves the export API from `v1alpha1/v1beta1` to
-`v1/v1beta1`). Kubernetes rejects removing a version that was ever a storage version while
-`status.storedVersions` still lists it, so the apply fails with:
+image/OCI CRD `v1beta2`). Kubernetes rejects removing a version that was ever a storage
+version while `status.storedVersions` still lists it, so the apply fails with:
 
 ```
 status.storedVersions[0]: Invalid value: "vX": missing from spec.versions; ... must remain in
@@ -205,22 +204,18 @@ Procedure:
 
 Notes:
 
-- KubeVirt `virtualmachineexports.export.kubevirt.io` had no objects, so it was deleted
-  and the operator recreated it as `v1beta1 + v1`.
 - Keep the `network-attachment-definitions.k8s.cni.cncf.io` CRD: the VMs' secondary
   network depends on it. It used to be installed by CNAO; CNAO has been removed, so make
   sure it stays (or install the `rke2-multus-crd` chart).
 
 ## Cluster Networking
 
-`kubevirt-lab-1` runs a Cilium pod network with Multus for secondary networks and KubeVirt
-VMs:
+`k3s-test-1` runs a Cilium pod network with Multus for secondary networks and its VMs:
 
 - **Primary CNI: Cilium** (`infra/pre-controllers/base/cilium`); the k3s hosts run with
-  `--flannel-backend=none` (see the `kubevirt-*` hosts in nix-config). Pinned
-  `>= 1.19.5 < 1.20.0` (earlier 1.17-1.19 stomp the MTU of multus interfaces,
-  cilium/cilium#37824) with `cni.exclusive=false`, so Cilium does not rename Multus's
-  `00-multus.conf`.
+  `--flannel-backend=none` (see `hosts/k8s` in nix-config). Pinned `>= 1.19.5 < 1.20.0`
+  (earlier 1.17-1.19 stomp the MTU of multus interfaces, cilium/cilium#37824) with
+  `cni.exclusive=false`, so Cilium does not rename Multus's `00-multus.conf`.
 - **Secondary networks: rke2-multus in THIN mode** (`infra/pre-controllers/base/multus`)
   plus the reference CNI plugins. CNAO was removed: it only ships the thick plugin, which
   cannot work on k3s (since multus v4.1 it no longer chroots to `/hostroot`, so it cannot

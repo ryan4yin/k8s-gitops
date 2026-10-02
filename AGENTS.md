@@ -4,12 +4,11 @@
 
 This is a FluxCD GitOps repository for personal Kubernetes clusters. Cluster entrypoints
 live in `clusters/<cluster-name>/`, where Flux `Kustomization` resources wire together
-apps, infrastructure, and VM manifests. Reusable application manifests are under
-`apps/base/`, with environment-specific overlays under `apps/overlays/`. Infrastructure
-controllers and configuration live in `infra/controllers/`, `infra/pre-controllers/`,
-`infra/configs/`, and `infra/namespaces/`. KubeVirt VM manifests and instance preferences
-are in `vms/`. Utility scripts are in `scripts/` and root-level helper files such as
-`Justfile` and `gen_kustomization.nu`.
+apps and infrastructure. Reusable application manifests are under `apps/base/`, with
+environment-specific overlays under `apps/overlays/`. Infrastructure controllers and
+configuration live in `infra/controllers/`, `infra/pre-controllers/`, `infra/configs/`,
+and `infra/namespaces/`. Utility scripts are in `scripts/` and root-level helper files
+such as `Justfile` and `gen_kustomization.nu`.
 
 ## Build, Test, and Development Commands
 
