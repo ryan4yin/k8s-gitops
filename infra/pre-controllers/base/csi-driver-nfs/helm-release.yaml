@@ -1,5 +1,5 @@
 # NFS CSI driver. The golden-image store is served by an NFS export on
-# kubevirt-youko (see the nix-config host module), and this driver turns its
+# youko (see the nix-config host module), and this driver turns its
 # subdirectories into RWX PersistentVolumes that every node can mount.
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2

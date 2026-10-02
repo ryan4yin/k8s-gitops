@@ -56,38 +56,10 @@ So we have to add our CRs into `infra/configs` folder, and declare that it's dep
 `infra/controllers` in the `kustomization.yaml` file, so that Flux2 will delete the CRs
 first before the operators.
 
-### Special Cases - Kubevirt
-
-```bash
-› kubectl describe ns cert-managear
-...
-  NamespaceDeletionDiscoveryFailure            True    Tue, 19 Mar 2024 01:12:15 +0800  DiscoveryFailed         Discovery failed for some groups, 2 failing: unable t
-o retrieve the complete list of server APIs: subresources.kubevirt.io/v1: stale GroupVersion discovery: subresources.kubevirt.io/v1, subresources.kubevirt.io/v1alpha
-3: stale GroupVersion discovery: subresources.kubevirt.io/v1alpha3
-```
-
-```bash
-› kubectl get apiservice | grep False
-
-v1.subresources.kubevirt.io                          kubevirt/virt-api            False (ServiceNotFound)   2d21h
-v1alpha3.subresources.kubevirt.io                    kubevirt/virt-api            False (ServiceNotFound)   2d21h
-```
-
-Seems related to <https://github.com/kubevirt/kubevirt/issues/9725>.
-
-Workaround:
-
-```bash
-kubectl delete apiservice v1.subresources.kubevirt.io
-kubectl delete apiservice v1alpha3.subresources.kubevirt.io
-```
-
-And then wait for some minutes, the namespace will be deleted automatically.
-
 ### Special Cases - What if my operator has already been deleted?
 
-Here we use `kubevirt` as an example, the workflow is similar for other operators(such as
-longhorn).
+This uses the removed `kubevirt` operator as a historical example; the workflow is the
+same for any operator (such as longhorn).
 
 Find what remains in the namespace:
 
@@ -250,8 +222,6 @@ Solution:
 3. If the issue still persists, restart the node.
 
 Side effects: all the pods using longhorn volumes on the node will be restarted.
-
-
 
 ### How to merge multiple kubeconfigs
 
