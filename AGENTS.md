@@ -56,3 +56,14 @@ Never commit plaintext secrets. This repository uses SOPS and age; keep encrypte
 in place and use placeholders or documented secret references for examples. Be careful
 with resources that have finalizers, CRDs, admission webhooks, PVs, or PVCs. Prefer
 Flux-driven reconciliation and staged validation over manual cluster changes.
+
+## Related Repositories
+
+A change here often pairs with a change elsewhere:
+
+- [`ryan4yin/nix-config`](https://github.com/ryan4yin/nix-config) — defines the hosts and
+  VMs this cluster runs on (`hosts/k8s`, `hosts/12kingdoms-youko`: NFS golden store,
+  kube-vip block, `br0`). When a manifest assumes a host-side change, make the nix-config
+  edit too.
+- [`ryan4yin/containers`](https://github.com/ryan4yin/containers) — builds the images
+  these manifests reference; a tag bump is usually a two-repository change.
