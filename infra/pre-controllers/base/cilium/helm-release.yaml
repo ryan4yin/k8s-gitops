@@ -28,6 +28,17 @@ spec:
     # disable L7 Proxy
     l7Proxy: false
 
+    # eBPF datapath; requires k3s --disable-kube-proxy (nix-config#404).
+    kubeProxyReplacement: "true"
+    bpf:
+      masquerade: true
+    # must match k3s --service-node-port-range; Cilium wants "min,max"
+    nodePort:
+      range: "80,32767"
+    # DNS name, not VIP IP: the API cert SANs omit the VIP IP.
+    k8sServiceHost: test-cluster-1.writefor.fun
+    k8sServicePort: 6443
+
     # ============================  Dual Stack  ============================
     ipv6:
       enabled: true
