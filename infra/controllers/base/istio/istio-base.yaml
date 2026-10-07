@@ -27,4 +27,4 @@ spec:
         name: istio
         namespace: flux-system
       interval: 12h
-      version: "1.30.4"
+      version: "1.30.5"
