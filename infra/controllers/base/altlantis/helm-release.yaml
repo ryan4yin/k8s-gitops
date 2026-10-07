@@ -7,7 +7,7 @@ metadata:
   name: runatlantis
   namespace: runatlantis
 spec:
-  releaseName: cert-manager
+  releaseName: atlantis
   interval: 30m
   chart:
     spec:
