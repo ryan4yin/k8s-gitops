@@ -109,7 +109,6 @@ spec:
             memory: "500Mi"  
       ingress:
         enabled: false
-        ingressClassName: kong
 
     # disable this , we use a external vmcluster instead.
     vmcluster:
