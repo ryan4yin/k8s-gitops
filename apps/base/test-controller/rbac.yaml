@@ -11,10 +11,17 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: test-controller
 rules:
-  # read-only access to all core resources in the current namespace
+  # read-only access to the workload inventory in the current namespace.
+  # Deliberately NOT resources: ["*"] -- that would include Secrets.
   - apiGroups:
       - ""
-    resources: ["*"]
+    resources:
+      - pods
+      - services
+      - configmaps
+      - events
+      - endpoints
+      - persistentvolumeclaims
     verbs:
       - get
       - list
@@ -49,19 +56,21 @@ metadata:
     k8s-app: test-controller
   name: test-controller
 rules:
-  # read-only access to all core resources
+  # Read-only access to the cluster inventory the controller inspects.
+  # Deliberately NOT resources: ["*"] (which includes Secrets) and no node
+  # mutation: granting node delete/update should be a separate, reviewed step.
   - apiGroups:
       - ""
-    resources: ["*"]
+    resources:
+      - nodes
+      - namespaces
+      - pods
+      - services
+      - events
     verbs:
       - get
       - list
       - watch
-  # allow to delete abnormal nodes
-  - apiGroups:
-      - ""
-    resources: ["nodes"]
-    verbs: ["*"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
