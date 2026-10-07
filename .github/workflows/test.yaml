@@ -14,12 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Setup yq
-        uses: fluxcd/pkg/actions/yq@main
+        uses: fluxcd/pkg/actions/yq@45968bf818e2f7fd49a5eaf3c5f42d51fe48c189 # main
       - name: Setup kubeconform
-        uses: fluxcd/pkg/actions/kubeconform@main
+        uses: fluxcd/pkg/actions/kubeconform@45968bf818e2f7fd49a5eaf3c5f42d51fe48c189 # main
       - name: Setup kustomize
-        uses: fluxcd/pkg/actions/kustomize@main
+        uses: fluxcd/pkg/actions/kustomize@45968bf818e2f7fd49a5eaf3c5f42d51fe48c189 # main
       - name: Validate manifests
         run: ./scripts/validate.sh
