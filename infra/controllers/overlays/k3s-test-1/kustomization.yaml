@@ -8,6 +8,7 @@ resources:
   - ../../base/gateway-api/
   # - ../../base/kong-gateway/
   - ../../base/istio/
+  - ../../base/cilium-policies/
   - ../../base/kiali/
   - ../../base/k6/
   - ../../base/loki/
