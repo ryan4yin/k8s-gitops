@@ -21,7 +21,12 @@ spec:
         kinds:
           - kind: HTTPRoute
         namespaces:
-          from: All
+          from: Selector
+          selector:
+            matchExpressions:
+              - key: kubernetes.io/metadata.name
+                operator: In
+                values: ["staging", "monitoring", "kiali-operator"]
     - name: https
       protocol: HTTPS
       port: 443
@@ -36,7 +41,12 @@ spec:
         kinds:
           - kind: HTTPRoute
         namespaces:
-          from: All
+          from: Selector
+          selector:
+            matchExpressions:
+              - key: kubernetes.io/metadata.name
+                operator: In
+                values: ["staging", "monitoring", "kiali-operator"]
 ---
 apiVersion: v1
 kind: ConfigMap

@@ -9,7 +9,7 @@ spec:
   version: "default"
 
   auth:
-    strategy: "anonymous"
+    strategy: "token"
 
   deployment:
     ingress:
@@ -29,8 +29,7 @@ spec:
     - name: "ca-certs"
       mount: "/data/ca-certs"
       optional: false
-    service_type: "NodePort"
-    view_only_mode: false
+    view_only_mode: true
 
   external_services:
     istio:
@@ -91,6 +90,5 @@ spec:
   server:
     audit_log: true
     gzip_enabled: true
-    node_port: 32475
     port: 20001
     web_fqdn: ""
