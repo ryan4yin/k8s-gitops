@@ -23,6 +23,8 @@ spec:
               protocol: TCP
             - port: "2283"
               protocol: TCP
+            - port: "2379"
+              protocol: TCP
             - port: "5432"
               protocol: TCP
             - port: "5900"
