@@ -1,10 +1,16 @@
-# kube-vip provides the HA virtual IP for the k3s API server, replacing servicelb
-# (which the nix-config k3s module disables). The VIP comes from the dedicated
-# 192.168.5.192/27 block reserved in nix-config; k3s-test-1 uses 192.168.5.193.
+# kube-vip provides the HA control-plane VIP and Service type=LoadBalancer
+# addresses from the reserved 192.168.5.192/27 block (k3s-test-1 uses
+# 192.168.5.193 for the API and hands the rest to services).
 #
-# ARP mode: the leader master answers ARP for the VIP on its LAN interface
-# (enp0s6, the guest's virtio NIC attached to br0), so clients reach the API over
-# the same 192.168.5.0/24 as the nodes. `--taint` keeps kube-vip on the masters.
+# API endpoint: kube-vip must not reach the apiserver through the ClusterIP.
+# After a full cold start the ClusterIP only exists once Cilium runs, and
+# Cilium's own bootstrap needs this VIP — a deadlock (nix-config
+# WORKAROUNDS.md WA-043). Each pod therefore talks to its own node's apiserver
+# (`KUBERNETES_SERVICE_HOST` = status.hostIP, port 6443), which k3s serves
+# locally without any CNI.
+#
+# ARP mode: the leader master answers ARP for each address on its LAN interface
+# (enp0s6, the guest's virtio NIC attached to br0).
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -58,6 +64,10 @@ spec:
       # the guest's virtio NIC; all three masters use the same name
       vip_interface: "enp0s6"
       vip_subnet: "32"
+      # kube-vip runs with hostNetwork, and the kubelet honours pod-spec env over
+      # the injected service variables: this keeps its API client on the local
+      # apiserver instead of the ClusterIP.
+      KUBERNETES_SERVICE_PORT: "6443"
       cp_enable: "true"
       cp_namespace: "kube-system"
       vip_leaderelection: "true"
@@ -68,3 +78,9 @@ spec:
       svc_enable: "true"
       lb_enable: "true"
       lb_port: "6443"
+    envValueFrom:
+      KUBERNETES_SERVICE_HOST:
+        fieldRef:
+          # every pod takes its own node's address, so no VIP is needed for the
+          # API client during a cold start
+          fieldPath: status.hostIP
